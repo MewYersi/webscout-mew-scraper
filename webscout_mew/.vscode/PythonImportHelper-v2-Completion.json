@@ -1,0 +1,335 @@
+[
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "func",
+        "importPath": "sqlalchemy",
+        "description": "sqlalchemy",
+        "isExtraImport": true,
+        "detail": "sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "SQLAlchemy",
+        "importPath": "flask_sqlalchemy",
+        "description": "flask_sqlalchemy",
+        "isExtraImport": true,
+        "detail": "flask_sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "SQLAlchemy",
+        "importPath": "flask_sqlalchemy",
+        "description": "flask_sqlalchemy",
+        "isExtraImport": true,
+        "detail": "flask_sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "joinedload",
+        "importPath": "sqlalchemy.orm",
+        "description": "sqlalchemy.orm",
+        "isExtraImport": true,
+        "detail": "sqlalchemy.orm",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "Jugador",
+        "kind": 6,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "class Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))\n    posicion = db.Column(db.String(10))\n    minutos = db.Column(db.Integer)\n    liga = db.Column(db.String(50))      ",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "Valoracion",
+        "kind": 6,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "class Valoracion(db.Model):\n    __tablename__ = 'valoraciones'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    rol_principal = db.Column(db.String(20), index=True)\n    rtg_principal = db.Column(db.Float, index=True)\n    valor_deportivo = db.Column(db.Float) \n    rol_2 = db.Column(db.String(20))\nclass EstadisticasFBref(db.Model):\n    __tablename__ = 'estadisticas_fbref'",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "EstadisticasFBref",
+        "kind": 6,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "class EstadisticasFBref(db.Model):\n    __tablename__ = 'estadisticas_fbref'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    datos_crudos = db.Column(db.JSON)\n# ==========================================\n# 2. RUTAS BÁSICAS\n# ==========================================\n@app.route('/')\ndef dashboard():",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "dashboard",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def dashboard():\n    temporadas_disponibles = db.session.query(Jugador.temporada).distinct().order_by(Jugador.temporada.desc()).all()\n    temporadas_disponibles = [t[0] for t in temporadas_disponibles if t[0]]\n    temporada_actual = request.args.get('temporada')\n    if not temporada_actual and temporadas_disponibles:\n        temporada_actual = temporadas_disponibles[0]\n    total_jugadores = Jugador.query.filter_by(temporada=temporada_actual).count()\n    # CORRECCIÓN: Sumar valor_deportivo\n    valor_mercado_total = db.session.query(func.sum(Valoracion.valor_deportivo))\\\n        .join(Jugador).filter(Jugador.temporada == temporada_actual).scalar() or 0",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "players",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def players():\n    todos_los_jugadores = Jugador.query.join(Valoracion).options(joinedload(Jugador.valoracion)).order_by(Valoracion.rtg_principal.desc()).all()\n    return render_template('players.html', jugadores=todos_los_jugadores)\n@app.route('/jugador/<int:id>')\ndef player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    return render_template('profile.html', jugador=jugador, stats=stats)\n# ==========================================\n# 3. RUTAS DEL COMPARADOR AVANZADO",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "player_profile",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    return render_template('profile.html', jugador=jugador, stats=stats)\n# ==========================================\n# 3. RUTAS DEL COMPARADOR AVANZADO\n# ==========================================\ndef safe_float(val):\n    try: return float(val)\n    except (ValueError, TypeError): return 0.0",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "safe_float",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def safe_float(val):\n    try: return float(val)\n    except (ValueError, TypeError): return 0.0\nPESOS_JSON = {\n   \"DC\": { \"estadisticas\": { \"Defensa\": {\"Int\": 0.20, \"Clr\": 0.20, \"Recov\": 0.20, \"TklW\": 0.15, \"BallRec\": 0.15, \"TklDef3rd\": 0.10}, \"Aerial\": {\"AerialWon%\": 0.60, \"AerialWon\": 0.40}, \"Passing\": {\"Cmp%Total\": 0.25, \"PrgDist\": 0.20, \"Prog\": 0.20, \"LongCmp\": 0.20, \"Cmp%Long\": 0.15}, \"Possession\": {\"TouchesDef3rd\": 0.45, \"TouchesMid3rd\": 0.25, \"dispossesed\": 0.30} } },\n   \"LB_DEF\": { \"estadisticas\": { \"Defensa\": {\"TklW\": 0.25, \"Int\": 0.25, \"Recov\": 0.20, \"Clr\": 0.15, \"TklDef3rd\": 0.15}, \"Passing\": {\"Cmp%Total\": 0.35, \"PrgDist\": 0.25, \"Prog\": 0.25, \"IntoLast3rd\": 0.15}, \"Possession\": {\"TouchesDef3rd\": 0.40, \"TouchesMid3rd\": 0.30, \"dispossesed\": 0.30}, \"Aerial\": {\"AerialWon%\": 0.70, \"AerialWon\": 0.30} } },\n   \"LB_OFF\": { \"estadisticas\": { \"Passing\": {\"xA\": 0.30, \"CrsPA\": 0.25, \"KP\": 0.20, \"Prog\": 0.15, \"IntoLast3rd\": 0.10}, \"Possession\": {\"TouchesAtt3rd\": 0.40, \"PrgDist\": 0.30, \"DribSucc\": 0.20, \"dispossesed\": 0.10}, \"GAS\": {\"SCA\": 0.60, \"SCAPassLive\": 0.40}, \"Defensa\": {\"Recov\": 0.30, \"TklW\": 0.30, \"Int\": 0.25, \"BallRec\": 0.15} } },\n   \"MC_DEF\": { \"estadisticas\": { \"Defensa\": {\"Int\": 0.25, \"Recov\": 0.25, \"TklW\": 0.15, \"BallRec\": 0.10, \"BallRecProg\": 0.10, \"TklMid3rd\": 0.10, \"Tkl\": 0.05}, \"Passing\": {\"Cmp%Total\": 0.35, \"ShortCmp\": 0.15, \"Cmp%Short\": 0.15, \"MediumCmp\": 0.10, \"Prog\": 0.10, \"PrgDist\": 0.10, \"LongCmp\": 0.05}, \"Possession\": {\"dispossesed\": 0.40, \"TouchesMid3rd\": 0.30, \"TouchesDef3rd\": 0.20, \"BallRec\": 0.10}, \"Aerial\": {\"AerialWon%\": 1.00}, \"GAS\": {\"SCA\": 0.50, \"SCAPassLive\": 0.50}, \"Shooting\": {\"Gls\": 1.0} } },\n   \"MC_ORG\": { \"estadisticas\": { \"Passing\": {\"Prog\": 0.20, \"PrgDist\": 0.20, \"IntoLast3rd\": 0.15, \"Cmp%Total\": 0.15, \"KP\": 0.10, \"LongCmp\": 0.10, \"xA\": 0.05, \"xAG\": 0.05}, \"Possession\": {\"PrgDist\": 0.30, \"TouchesMid3rd\": 0.20, \"TouchesLive\": 0.15, \"dispossesed\": 0.12, \"DribSucc\": 0.13, \"TouchesDef3rd\": 0.10}, \"Defensa\": {\"Recov\": 0.35, \"Int\": 0.30, \"BallRec\": 0.20, \"TklMid3rd\": 0.15}, \"GAS\": {\"SCA\": 0.60, \"SCAPassLive\": 0.40}, \"Aerial\": {\"AerialWon%\": 1.0}, \"Shooting\": {\"Gls\": 0.50, \"npxG/Sh\": 0.50} } },\n   \"MC_EST\": { \"estadisticas\": { \"Passing\": {\"Prog\": 0.15, \"IntoLast3rd\": 0.15, \"PrgDist\": 0.15, \"xA\": 0.15, \"Cmp%Total\": 0.10, \"KP\": 0.10, \"PPA\": 0.10, \"Ast\": 0.10}, \"Defensa\": {\"Recov\": 0.25, \"TklMid3rd\": 0.20, \"TklW\": 0.20, \"Int\": 0.15, \"BallRec\": 0.10, \"BallRecProg\": 0.10}, \"Possession\": {\"TouchesMid3rd\": 0.20, \"TouchesAtt3rd\": 0.15, \"TouchesDef3rd\": 0.15, \"PrgDist\": 0.15, \"TouchesAttPen\": 0.10, \"DribSucc\": 0.10, \"dispossesed\": 0.10, \"BallRecProg\": 0.05}, \"GAS\": {\"SCA\": 0.35, \"SCAPassLive\": 0.30, \"GCA\": 0.20, \"SCADef\": 0.10, \"SCADrib\": 0.05}, \"Aerial\": {\"AerialWon%\": 0.60, \"AerialWon\": 0.40}, \"Shooting\": {\"Gls\": 0.30, \"npxG\": 0.25, \"G-xG\": 0.20, \"xG\": 0.15, \"SoT%\": 0.10} } },",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "compare",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def compare():\n    temporadas = [t[0] for t in db.session.query(Jugador.temporada).distinct().order_by(Jugador.temporada.desc()).all() if t[0]]\n    stats_list = [{'key': k, 'name': v} for k, v in NOMBRES_STATS.items()]\n    stats_list = sorted(stats_list, key=lambda x: x['name'])\n    return render_template('compare.html', temporadas=temporadas, stats_list=stats_list)\n@app.route('/api/scatter_data')\ndef api_scatter_data():\n    temporada = request.args.get('temporada', '')\n    stat_x = request.args.get('x', 'npxG')\n    stat_y = request.args.get('y', 'Gls')",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "api_scatter_data",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def api_scatter_data():\n    temporada = request.args.get('temporada', '')\n    stat_x = request.args.get('x', 'npxG')\n    stat_y = request.args.get('y', 'Gls')\n    rol_filter = request.args.get('rol', 'ALL')\n    min_minutos = int(request.args.get('minutos', 500))\n    query = Jugador.query.join(Valoracion).join(EstadisticasFBref).filter(\n        Jugador.temporada == temporada,\n        Jugador.minutos >= min_minutos\n    )",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "api_buscar_jugador",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def api_buscar_jugador():\n    query = request.args.get('q', '').lower()\n    temporada = request.args.get('temporada', '')\n    if len(query) < 2: return jsonify([])\n    jugadores = Jugador.query.filter(func.lower(Jugador.nombre).contains(query), Jugador.temporada == temporada).limit(8).all()\n    resultados = [{'id': j.id, 'nombre': j.nombre, 'club': j.club, 'temporada': j.temporada, 'rol': j.valoracion.rol_principal if j.valoracion else 'N/A'} for j in jugadores]\n    return jsonify(resultados)\n@app.route('/api/rivales_similares/<int:id>')\ndef api_rivales_similares(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion)).get_or_404(id)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "api_rivales_similares",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def api_rivales_similares(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion)).get_or_404(id)\n    temp = jugador.temporada\n    rol = jugador.valoracion.rol_principal if jugador.valoracion else 'MC'\n    rivales = Jugador.query.join(Valoracion).filter(\n        Jugador.temporada == temp, \n        Valoracion.rol_principal == rol,\n        Jugador.id != id\n    ).order_by(Valoracion.rtg_principal.desc()).limit(10).all()\n    return jsonify([{",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "api_radar_contexto",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def api_radar_contexto(id):\n    jugador = Jugador.query.options(joinedload(Jugador.estadisticas), joinedload(Jugador.valoracion)).get_or_404(id)\n    temp = jugador.temporada\n    rol = jugador.valoracion.rol_principal if jugador.valoracion else 'MC'\n    plantilla_solicitada = request.args.get('plantilla', 'completo')\n    # 1. Comparación Global (Todas las ligas)\n    rivales = Jugador.query.join(Valoracion).filter(Jugador.temporada == temp, Valoracion.rol_principal == rol).all()\n    # 2. El Mejor Jugador del Rol por RTG (Para ser el Gold Standard en TODO)\n    if rivales:\n        mejor_jugador = max(rivales, key=lambda j: j.valoracion.rtg_principal if j.valoracion else 0)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "app = Flask(__name__)\napp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scoutmew.db' \napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\n# ==========================================\n# 1. MODELOS OPTIMIZADOS\n# ==========================================\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "app.config['SQLALCHEMY_DATABASE_URI']",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scoutmew.db' \napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\n# ==========================================\n# 1. MODELOS OPTIMIZADOS\n# ==========================================\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "app.config['SQLALCHEMY_TRACK_MODIFICATIONS']",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\n# ==========================================\n# 1. MODELOS OPTIMIZADOS\n# ==========================================\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "db = SQLAlchemy(app)\n# ==========================================\n# 1. MODELOS OPTIMIZADOS\n# ==========================================\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "PESOS_JSON",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "PESOS_JSON = {\n   \"DC\": { \"estadisticas\": { \"Defensa\": {\"Int\": 0.20, \"Clr\": 0.20, \"Recov\": 0.20, \"TklW\": 0.15, \"BallRec\": 0.15, \"TklDef3rd\": 0.10}, \"Aerial\": {\"AerialWon%\": 0.60, \"AerialWon\": 0.40}, \"Passing\": {\"Cmp%Total\": 0.25, \"PrgDist\": 0.20, \"Prog\": 0.20, \"LongCmp\": 0.20, \"Cmp%Long\": 0.15}, \"Possession\": {\"TouchesDef3rd\": 0.45, \"TouchesMid3rd\": 0.25, \"dispossesed\": 0.30} } },\n   \"LB_DEF\": { \"estadisticas\": { \"Defensa\": {\"TklW\": 0.25, \"Int\": 0.25, \"Recov\": 0.20, \"Clr\": 0.15, \"TklDef3rd\": 0.15}, \"Passing\": {\"Cmp%Total\": 0.35, \"PrgDist\": 0.25, \"Prog\": 0.25, \"IntoLast3rd\": 0.15}, \"Possession\": {\"TouchesDef3rd\": 0.40, \"TouchesMid3rd\": 0.30, \"dispossesed\": 0.30}, \"Aerial\": {\"AerialWon%\": 0.70, \"AerialWon\": 0.30} } },\n   \"LB_OFF\": { \"estadisticas\": { \"Passing\": {\"xA\": 0.30, \"CrsPA\": 0.25, \"KP\": 0.20, \"Prog\": 0.15, \"IntoLast3rd\": 0.10}, \"Possession\": {\"TouchesAtt3rd\": 0.40, \"PrgDist\": 0.30, \"DribSucc\": 0.20, \"dispossesed\": 0.10}, \"GAS\": {\"SCA\": 0.60, \"SCAPassLive\": 0.40}, \"Defensa\": {\"Recov\": 0.30, \"TklW\": 0.30, \"Int\": 0.25, \"BallRec\": 0.15} } },\n   \"MC_DEF\": { \"estadisticas\": { \"Defensa\": {\"Int\": 0.25, \"Recov\": 0.25, \"TklW\": 0.15, \"BallRec\": 0.10, \"BallRecProg\": 0.10, \"TklMid3rd\": 0.10, \"Tkl\": 0.05}, \"Passing\": {\"Cmp%Total\": 0.35, \"ShortCmp\": 0.15, \"Cmp%Short\": 0.15, \"MediumCmp\": 0.10, \"Prog\": 0.10, \"PrgDist\": 0.10, \"LongCmp\": 0.05}, \"Possession\": {\"dispossesed\": 0.40, \"TouchesMid3rd\": 0.30, \"TouchesDef3rd\": 0.20, \"BallRec\": 0.10}, \"Aerial\": {\"AerialWon%\": 1.00}, \"GAS\": {\"SCA\": 0.50, \"SCAPassLive\": 0.50}, \"Shooting\": {\"Gls\": 1.0} } },\n   \"MC_ORG\": { \"estadisticas\": { \"Passing\": {\"Prog\": 0.20, \"PrgDist\": 0.20, \"IntoLast3rd\": 0.15, \"Cmp%Total\": 0.15, \"KP\": 0.10, \"LongCmp\": 0.10, \"xA\": 0.05, \"xAG\": 0.05}, \"Possession\": {\"PrgDist\": 0.30, \"TouchesMid3rd\": 0.20, \"TouchesLive\": 0.15, \"dispossesed\": 0.12, \"DribSucc\": 0.13, \"TouchesDef3rd\": 0.10}, \"Defensa\": {\"Recov\": 0.35, \"Int\": 0.30, \"BallRec\": 0.20, \"TklMid3rd\": 0.15}, \"GAS\": {\"SCA\": 0.60, \"SCAPassLive\": 0.40}, \"Aerial\": {\"AerialWon%\": 1.0}, \"Shooting\": {\"Gls\": 0.50, \"npxG/Sh\": 0.50} } },\n   \"MC_EST\": { \"estadisticas\": { \"Passing\": {\"Prog\": 0.15, \"IntoLast3rd\": 0.15, \"PrgDist\": 0.15, \"xA\": 0.15, \"Cmp%Total\": 0.10, \"KP\": 0.10, \"PPA\": 0.10, \"Ast\": 0.10}, \"Defensa\": {\"Recov\": 0.25, \"TklMid3rd\": 0.20, \"TklW\": 0.20, \"Int\": 0.15, \"BallRec\": 0.10, \"BallRecProg\": 0.10}, \"Possession\": {\"TouchesMid3rd\": 0.20, \"TouchesAtt3rd\": 0.15, \"TouchesDef3rd\": 0.15, \"PrgDist\": 0.15, \"TouchesAttPen\": 0.10, \"DribSucc\": 0.10, \"dispossesed\": 0.10, \"BallRecProg\": 0.05}, \"GAS\": {\"SCA\": 0.35, \"SCAPassLive\": 0.30, \"GCA\": 0.20, \"SCADef\": 0.10, \"SCADrib\": 0.05}, \"Aerial\": {\"AerialWon%\": 0.60, \"AerialWon\": 0.40}, \"Shooting\": {\"Gls\": 0.30, \"npxG\": 0.25, \"G-xG\": 0.20, \"xG\": 0.15, \"SoT%\": 0.10} } },\n   \"AM\": { \"estadisticas\": { \"Passing\": {\"xAG\": 0.20, \"xA\": 0.20, \"KP\": 0.20, \"PPA\": 0.15, \"Prog\": 0.15, \"IntoLast3rd\": 0.10}, \"GAS\": {\"SCA\": 0.30, \"SCAPassLive\": 0.30, \"GCA\": 0.20, \"SCAPassDead\": 0.10, \"SCADrib\": 0.10}, \"Shooting\": {\"Gls\": 0.30, \"npxG\": 0.30, \"np:G-xG\": 0.20, \"npxG/Sh\": 0.20}, \"Possession\": {\"TouchesAtt3rd\": 0.50, \"TouchesAttPen\": 0.50} } },\n   \"FW_WG\": { \"estadisticas\": { \"Possession\": {\"DribSucc\": 0.40, \"PrgDist\": 0.40, \"TouchesAtt3rd\": 0.20}, \"GAS\": {\"SCADrib\": 0.60, \"GCA\": 0.30, \"SCAFld\": 0.10}, \"Passing\": {\"CrsPA\": 0.50, \"xAG\": 0.30, \"IntoLast3rd\": 0.20}, \"Shooting\": {\"Gls\": 0.50, \"npxG\": 0.50} } },\n   \"FW_ST\": { \"estadisticas\": { \"Shooting\": {\"Gls\": 0.40, \"npxG\": 0.30, \"np:G-xG\": 0.20, \"npxG/Sh\": 0.10}, \"GAS\": {\"GCA\": 0.50, \"SCA\": 0.50}, \"Aerial\": {\"AerialWon\": 0.50, \"AerialWon%\": 0.50}, \"Passing\": {\"xA\": 0.50, \"Ast\": 0.50} } },",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "NOMBRES_STATS",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "NOMBRES_STATS = {\n    \"Int\": \"Intercepciones\", \"Clr\": \"Despejes\", \"Recov\": \"Recuperaciones\", \"TklW\": \"Tackles Ganados\",\n    \"BallRec\": \"Balones Rec.\", \"TklDef3rd\": \"Tackles Def 3º\", \"AerialWon%\": \"% Duelos Aéreos\",\n    \"AerialWon\": \"Aéreos Ganados\", \"Cmp%Total\": \"% Pases Comp.\", \"PrgDist\": \"Dist. Progresiva\",\n    \"Prog\": \"Pases Progresivos\", \"LongCmp\": \"Pases Largos Comp.\", \"Cmp%Long\": \"% Pases Largos\",\n    \"TouchesDef3rd\": \"Toques Def 3º\", \"TouchesMid3rd\": \"Toques Med 3º\", \"dispossesed\": \"Pérdidas (Inverso)\",\n    \"IntoLast3rd\": \"Pases Últ. 3º\", \"xA\": \"Asist. Esperadas (xA)\", \"CrsPA\": \"Centros al Área\",\n    \"KP\": \"Pases Clave\", \"TouchesAtt3rd\": \"Toques Ataque 3º\", \"DribSucc\": \"Regates Exitosos\",\n    \"SCA\": \"Creación (SCA)\", \"SCAPassLive\": \"SCA (Pase Vivo)\", \"BallRecProg\": \"Recup. Progresivas\",\n    \"TklMid3rd\": \"Tackles Med 3º\", \"Tkl\": \"Tackles Totales\", \"ShortCmp\": \"Pases Cortos\",",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "Jugador",
+        "kind": 6,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "class Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))\n    posicion = db.Column(db.String(10))\n    minutos = db.Column(db.Integer)\nclass Valoracion(db.Model):",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "Valoracion",
+        "kind": 6,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "class Valoracion(db.Model):\n    __tablename__ = 'valoraciones'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    rol_principal = db.Column(db.String(20))\n    rtg_principal = db.Column(db.Float)\n    valor_deportivo = db.Column(db.Float)\n    precio_mercado = db.Column(db.Float)\n    rol_2 = db.Column(db.String(20))\n    rtg_2 = db.Column(db.Float)",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "EstadisticasFBref",
+        "kind": 6,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "class EstadisticasFBref(db.Model):\n    __tablename__ = 'estadisticas_fbref'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    # MAGIA PURA: Una sola columna JSON que guardará TODAS tus +90 estadísticas\n    datos_crudos = db.Column(db.JSON)\n# ==========================================\n# 2. PROCESO ETL (Extraer y Cargar)\n# ==========================================\ndef migrar_datos():",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "migrar_datos",
+        "kind": 2,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "def migrar_datos():\n    csv_file = 'Premier_Valuation_Model_Final2.csv'\n    if not os.path.exists(csv_file):\n        print(f\"❌ No se encontró el archivo: {csv_file}\")\n        return\n    print(\"📊 Leyendo el CSV Maestro...\")\n    df = pd.read_csv(csv_file)\n    # Rellenar valores nulos (NaN) con 0 para evitar errores en la BD\n    df = df.fillna(0)\n    # Entramos al contexto de la aplicación para interactuar con la BD",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "app = Flask(__name__)\napp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scoutmew.db'\napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\n# ==========================================\n# 1. DEFINICIÓN DE LAS 3 TABLAS\n# ==========================================\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "app.config['SQLALCHEMY_DATABASE_URI']",
+        "kind": 5,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scoutmew.db'\napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\n# ==========================================\n# 1. DEFINICIÓN DE LAS 3 TABLAS\n# ==========================================\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "app.config['SQLALCHEMY_TRACK_MODIFICATIONS']",
+        "kind": 5,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\n# ==========================================\n# 1. DEFINICIÓN DE LAS 3 TABLAS\n# ==========================================\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "kind": 5,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "db = SQLAlchemy(app)\n# ==========================================\n# 1. DEFINICIÓN DE LAS 3 TABLAS\n# ==========================================\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)",
+        "detail": "migrar_bd",
+        "documentation": {}
+    }
+]

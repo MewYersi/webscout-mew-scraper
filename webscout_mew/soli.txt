@@ -1,0 +1,10 @@
+esto puede ser mejorable, mira ves este grafico? compara a un jugador con el resto de la base de datos(en nuestro caso en su posicion en esa temporada que escojamos)
+
+esto es de una pagina de fm de moneyball, pero lo que nos interesa son lo que te he enviado.
+
+como ves hay un grfico asi de teleraña, donde puedes escoger al jugador y se compara con el perceentil 5% de la liga(los mejores 5%), con el avrg de la liga, y 1 2 o 3 mas que escogas
+ademas si posas el cursor encima, te muestra estadisticas mas detalladas mas su lugar ene percentil. tmbn permite activa o desactivas la informacion que desees, como el jugador el percetil alto o el avrg y activarlo para que se meustre de nuevo cuando quieras.
+
+en las otras dos imgens muestra un grafico de dispersion que, ya interpretaras bien supong. este te permite seleccionar las estadisticas que desees en el eje y o x y ademas, si posas el cursor por enciam de uno de las boltis, te la informacion mas detallada de esa(ignora los valores, se trasladaron mal, es lo de menos), es muuy fluida e interactiva
+
+que opinas? puedes hacerlo?

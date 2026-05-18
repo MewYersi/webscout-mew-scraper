@@ -1,0 +1,468 @@
+{
+  "alpha_rol": {
+    "LB": {
+      "descripcion": "0 = totalmente defensivo, 1 = totalmente ofensivo",
+      "valor_por_defecto": 0.5
+    },
+    "FW": {
+      "descripcion": "Mezcla de roles",
+      "valores_por_defecto": {
+        "ST": 1.0,
+        "WG": 0.0,
+        "SS": 0.0
+      }
+    }
+  },
+  "AM": {
+    "categoria_pesos": {
+      "GAS": 0.35,
+      "Passing": 0.32,
+      "Possession": 0.15,
+      "Shooting": 0.14,
+      "Defensa": 0.04
+    },
+    "estadisticas": {
+      "GAS": {
+        "SCA": 0.05,
+        "SCAPassLive": 0.25,
+        "SCAPassDead": 0.1,
+        "SCADrib": 0.15,
+        "GCA": 0.15,
+        "GCAPassLive": 0.1,
+        "SCAFld": 0.1,
+        "SCASh": 0.1
+      },
+      "Passing": {
+        "xA": 0.2,
+        "Ast": 0.15,
+        "KP": 0.15,
+        "PPA": 0.15,
+        "IntoLast3rd": 0.1,
+        "Prog": 0.1,
+        "CrsPA": 0.1,
+        "PrgDist": 0.05
+      },
+      "Possession": {
+        "TouchesAtt3rd": 0.2,
+        "DribSucc": 0.2,
+        "DribSucc%": 0.1,
+        "TouchesAttPen": 0.15,
+        "Dispossesed": 0.2,
+        "BallRecProg": 0.15
+      },
+      "Shooting": {
+        "xG": 0.3,
+        "npxG": 0.2,
+        "Gls": 0.4,
+        "SoT%": 0.1
+      },
+      "Defensa": {
+        "TklW": 0.4,
+        "Int": 0.3,
+        "BallRec": 0.3
+      }
+    }
+  },
+  "FW_WG": {
+    "categoria_pesos": {
+      "GAS": 0.34,
+      "Possession": 0.26,
+      "Shooting": 0.2,
+      "Passing": 0.14,
+      "Defensa": 0.04,
+      "Aerial": 0.02
+    },
+    "estadisticas": {
+      "GAS": {
+        "SCA": 0.1,
+        "SCAPassLive": 0.2,
+        "SCADrib": 0.25,
+        "GCA": 0.15,
+        "SCASh": 0.1,
+        "GCAPassLive": 0.1,
+        "SCAPassDead": 0.05,
+        "GCADrib": 0.05
+      },
+      "Possession": {
+        "DribSucc": 0.2,
+        "TouchesAtt3rd": 0.2,
+        "TouchesAttPen": 0.15,
+        "DribSucc%": 0.15,
+        "TouchesMid3rd": 0.1,
+        "Dispossesed": 0.1,
+        "BallRecProg": 0.1
+      },
+      "Shooting": {
+        "Gls": 0.4,
+        "xG": 0.3,
+        "npxG": 0.2,
+        "SoT%": 0.1
+      },
+      "Passing": {
+        "xA": 0.2,
+        "Ast": 0.15,
+        "CrsPA": 0.2,
+        "KP": 0.15,
+        "Prog": 0.15,
+        "IntoLast3rd": 0.1,
+        "PPA": 0.05
+      },
+      "Defensa": {
+        "TklW": 0.3,
+        "BallRec": 0.3,
+        "Int": 0.2,
+        "TklAtt3rd": 0.2
+      },
+      "Aerial": {
+        "AerialWon%": 0.5,
+        "AerialWon": 0.5
+      }
+    }
+  },
+  "FW_SS": {
+    "categoria_pesos": {
+      "GAS": 0.32,
+      "Shooting": 0.28,
+      "Possession": 0.18,
+      "Passing": 0.15,
+      "Defensa": 0.05,
+      "Aerial": 0.02
+    },
+    "estadisticas": {
+      "GAS": {
+        "GCA": 0.2,
+        "SCA": 0.1,
+        "SCAPassLive": 0.25,
+        "SCADrib": 0.2,
+        "SCASh": 0.15,
+        "GCAPassLive": 0.1
+      },
+      "Shooting": {
+        "Gls": 0.4,
+        "xG": 0.3,
+        "npxG": 0.2,
+        "SoT%": 0.1
+      },
+      "Possession": {
+        "TouchesAtt3rd": 0.25,
+        "TouchesAttPen": 0.2,
+        "DribSucc": 0.15,
+        "Dispossesed": 0.2,
+        "TouchesMid3rd": 0.1,
+        "BallRecProg": 0.1
+      },
+      "Passing": {
+        "xA": 0.2,
+        "Ast": 0.15,
+        "KP": 0.2,
+        "PPA": 0.15,
+        "IntoLast3rd": 0.1,
+        "Prog": 0.1,
+        "CrsPA": 0.05,
+        "PrgDist": 0.05
+      },
+      "Defensa": {
+        "TklW": 0.4,
+        "BallRec": 0.4,
+        "Int": 0.2
+      },
+      "Aerial": {
+        "AerialWon%": 0.5,
+        "AerialWon": 0.5
+      }
+    }
+  },
+  "FW_ST": {
+    "categoria_pesos": {
+      "Shooting": 0.46,
+      "GAS": 0.21,
+      "Possession": 0.15,
+      "Passing": 0.09,
+      "Aerial": 0.07,
+      "Defensa": 0.02
+    },
+    "estadisticas": {
+      "Shooting": {
+        "Gls": 0.4,
+        "xG": 0.3,
+        "npxG": 0.2,
+        "SoT%": 0.05,
+        "Sh": 0.05
+      },
+      "GAS": {
+        "GCA": 0.25,
+        "SCA": 0.1,
+        "SCAPassLive": 0.2,
+        "SCASh": 0.15,
+        "SCADrib": 0.15,
+        "GCAPassLive": 0.15
+      },
+      "Possession": {
+        "TouchesAttPen": 0.4,
+        "TouchesAtt3rd": 0.2,
+        "DribSucc": 0.1,
+        "Dispossesed": 0.15,
+        "Touches": 0.15
+      },
+      "Passing": {
+        "KP": 0.3,
+        "xA": 0.2,
+        "Ast": 0.2,
+        "PPA": 0.15,
+        "Prog": 0.15
+      },
+      "Aerial": {
+        "AerialWon": 0.5,
+        "AerialWon%": 0.3,
+        "AerialLost": 0.2
+      },
+      "Defensa": {
+        "TklW": 0.5,
+        "BallRec": 0.5
+      }
+    }
+  },
+  "LB_OFF": {
+    "categoria_pesos": {
+      "Passing": 0.27,
+      "Defensa": 0.25,
+      "Possession": 0.23,
+      "GAS": 0.17,
+      "Aerial": 0.05,
+      "Shooting": 0.03
+    },
+    "estadisticas": {
+      "Passing": {
+        "CrsPA": 0.2,
+        "xA": 0.15,
+        "Ast": 0.1,
+        "Prog": 0.15,
+        "PrgDist": 0.1,
+        "IntoLast3rd": 0.15,
+        "KP": 0.1,
+        "Cmp%Total": 0.05
+      },
+      "Defensa": {
+        "TklW": 0.25,
+        "Int": 0.25,
+        "Recov": 0.2,
+        "Tkl": 0.15,
+        "BallRec": 0.15
+      },
+      "Possession": {
+        "TouchesAtt3rd": 0.2,
+        "DribSucc": 0.15,
+        "TouchesMid3rd": 0.15,
+        "Dispossesed": 0.15,
+        "BallRecProg": 0.15,
+        "Touches": 0.2
+      },
+      "GAS": {
+        "SCA": 0.2,
+        "SCAPassLive": 0.4,
+        "GCA": 0.2,
+        "GCAPassLive": 0.2
+      },
+      "Aerial": {
+        "AerialWon%": 0.6,
+        "AerialWon": 0.4
+      },
+      "Shooting": {
+        "xG": 0.5,
+        "Gls": 0.5
+      }
+    }
+  },
+  "LB_DEF": {
+    "categoria_pesos": {
+      "Defensa": 0.45,
+      "Passing": 0.25,
+      "Possession": 0.1,
+      "Aerial": 0.1,
+      "GAS": 0.07,
+      "Shooting": 0.03
+    },
+    "estadisticas": {
+      "Defensa": {
+        "TklW": 0.25,
+        "Int": 0.25,
+        "Recov": 0.2,
+        "Tkl": 0.15,
+        "BallRec": 0.15
+      },
+      "Passing": {
+        "Cmp%Total": 0.2,
+        "Prog": 0.15,
+        "PrgDist": 0.15,
+        "LongCmp": 0.1,
+        "IntoLast3rd": 0.1,
+        "CrsPA": 0.1,
+        "KP": 0.1,
+        "Ast": 0.05,
+        "xA": 0.05
+      },
+      "Possession": {
+        "Dispossesed": 0.25,
+        "TouchesDef3rd": 0.25,
+        "TouchesMid3rd": 0.25,
+        "BallRecProg": 0.25
+      },
+      "Aerial": {
+        "AerialWon%": 0.6,
+        "AerialWon": 0.4
+      },
+      "GAS": {
+        "SCA": 0.5,
+        "SCAPassLive": 0.5
+      },
+      "Shooting": {
+        "xG": 0.5,
+        "Gls": 0.5
+      }
+    }
+  },
+  "DC": {
+    "categoria_pesos": {
+      "Defensa": 0.4,
+      "Aerial": 0.2,
+      "Passing": 0.15,
+      "Possession": 0.1,
+      "GAS": 0.1,
+      "Shooting": 0.05
+    },
+    "estadisticas": {
+      "Defensa": {
+        "TklW": 0.2,
+        "Int": 0.2,
+        "Recov": 0.15,
+        "Clr": 0.15,
+        "BallRec": 0.1,
+        "TklDef3rd": 0.1,
+        "Tkl": 0.1
+      },
+      "Aerial": {
+        "AerialWon%": 0.6,
+        "AerialWon": 0.3,
+        "AerialLost": 0.1
+      },
+      "Passing": {
+        "PrgDist": 0.2,
+        "LongCmp": 0.15,
+        "Cmp%Long": 0.15,
+        "Cmp%Total": 0.2,
+        "Prog": 0.2,
+        "TotalCmp": 0.1
+      },
+      "Possession": {
+        "TouchesDef3rd": 0.4,
+        "TouchesDefPen": 0.3,
+        "Dispossesed": 0.3
+      },
+      "GAS": {
+        "SCAPassLive": 0.5,
+        "SCA": 0.5
+      },
+      "Shooting": {
+        "xG": 0.5,
+        "Gls": 0.5
+      }
+    }
+  },
+  "MC_DEF": {
+    "categoria_pesos": {
+      "Defensa": 0.48,
+      "Passing": 0.2,
+      "Possession": 0.15,
+      "Aerial": 0.12,
+      "GAS": 0.04,
+      "Shooting": 0.01
+    },
+    "estadisticas": {
+      "Defensa": {
+        "TklW": 0.25,
+        "Int": 0.25,
+        "Recov": 0.2,
+        "BallRec": 0.15,
+        "TklMid3rd": 0.1,
+        "TklDef3rd": 0.05
+      },
+      "Passing": {
+        "Cmp%Total": 0.2,
+        "PrgDist": 0.15,
+        "ShortCmp": 0.15,
+        "Cmp%Short": 0.1,
+        "MediumCmp": 0.15,
+        "Cmp%Medium": 0.1,
+        "Prog": 0.15
+      },
+      "Possession": {
+        "Dispossesed": 0.3,
+        "TouchesMid3rd": 0.3,
+        "BallRecProg": 0.2,
+        "Touches": 0.2
+      },
+      "Aerial": {
+        "AerialWon%": 0.6,
+        "AerialWon": 0.4
+      },
+      "GAS": {
+        "SCA": 0.5,
+        "SCAPassLive": 0.5
+      },
+      "Shooting": {
+        "xG": 0.5,
+        "Gls": 0.5
+      }
+    }
+  },
+  "MC_EST": {
+    "categoria_pesos": {
+      "Passing": 0.32,
+      "Defensa": 0.26,
+      "Possession": 0.22,
+      "GAS": 0.12,
+      "Aerial": 0.06,
+      "Shooting": 0.02
+    },
+    "estadisticas": {
+      "Passing": {
+        "Prog": 0.15,
+        "PrgDist": 0.15,
+        "Cmp%Total": 0.1,
+        "IntoLast3rd": 0.1,
+        "KP": 0.1,
+        "xA": 0.1,
+        "Ast": 0.1,
+        "PPA": 0.1,
+        "Cmp%Medium": 0.1
+      },
+      "Defensa": {
+        "TklW": 0.2,
+        "Int": 0.2,
+        "Recov": 0.2,
+        "BallRec": 0.2,
+        "TklMid3rd": 0.2
+      },
+      "Possession": {
+        "TouchesMid3rd": 0.25,
+        "Dispossesed": 0.2,
+        "BallRecProg": 0.2,
+        "DribSucc%": 0.15,
+        "Touches": 0.2
+      },
+      "GAS": {
+        "SCA": 0.3,
+        "SCAPassLive": 0.4,
+        "GCA": 0.3
+      },
+      "Aerial": {
+        "AerialWon%": 0.6,
+        "AerialWon": 0.4
+      },
+      "Shooting": {
+        "xG": 0.5,
+        "Gls": 0.5
+      }
+    }
+  }
+}

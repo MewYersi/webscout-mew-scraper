@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="flex-1 h-full p-6 flex flex-col gap-0 relative overflow-hidden">
+        
+   
+    
+    <header class="flex flex-col md:flex-row justify-between items-center gap-4 z-10 shrink-0 mb-2">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight">Base de Jugadores</h1>
+            <p class="text-white/50 text-sm">Explora, filtra y analiza el mercado continental.</p>
+        </div>
+        
+        <div class="glass-panel h-12 w-full md:w-[400px] !rounded-full flex items-center px-5 gap-3 transition-all focus-within:bg-white/10 group">
+            <i class="ph-bold ph-magnifying-glass text-lg text-white/60 group-focus-within:text-brand-pink transition-colors"></i>
+            <input type="text" id="searchInput" placeholder="Buscar por nombre..." class="bg-transparent border-none outline-none text-white placeholder-white/30 w-full h-full text-sm">
+            <div class="flex gap-2">
+                <button class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer">
+                    <i class="ph-bold ph-sliders text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-wrap items-center gap-3 mb-6 z-10 shrink-0 animate-fade-in">
+        
+        <!-- Filtro de Temporada -->
+        <div class="glass-panel px-4 py-2 !rounded-full text-xs font-medium flex items-center gap-2 hover:bg-white/10 transition-colors text-white/80 relative">
+            <select id="filterTemporada" class="bg-transparent appearance-none outline-none cursor-pointer pr-4 z-10">
+                <option value="ALL" class="text-black">Temporada: Todas</option>
+            </select>
+            <i class="ph-bold ph-caret-down text-xs opacity-50 absolute right-4 pointer-events-none"></i>
+        </div>
+
+        <div class="glass-panel px-4 py-2 !rounded-full text-xs font-medium flex items-center gap-2 hover:bg-white/10 transition-colors text-white/80 relative">
+            <select id="filterRol" class="bg-transparent appearance-none outline-none cursor-pointer pr-4 z-10">
+                <option value="ALL" class="text-black">Posición: Todas</option>
+                <option value="FW" class="text-black">Atacantes (FW)</option>
+                <option value="AM" class="text-black">Mediapuntas (AM)</option>
+                <option value="MC" class="text-black">Mediocentros (MC)</option>
+                <option value="DF" class="text-black">Defensas (DC/LB)</option>
+            </select>
+            <i class="ph-bold ph-caret-down text-xs opacity-50 absolute right-4 pointer-events-none"></i>
+        </div>
+
+        <div class="glass-panel px-4 py-2 !rounded-full text-xs font-medium flex items-center gap-2 hover:bg-white/10 transition-colors text-white/80 relative">
+            <select id="filterEdad" class="bg-transparent appearance-none outline-none cursor-pointer pr-4 z-10">
+                <option value="ALL" class="text-black">Edad: Todas</option>
+                <option value="U21" class="text-black">Sub-21 (Promesas)</option>
+                <option value="22-26" class="text-black">22 - 26 (Crecimiento)</option>
+                <option value="27-29" class="text-black">27 - 29 (Prime)</option>
+                <option value="30+" class="text-black">30+ (Veteranos)</option>
+            </select>
+            <i class="ph-bold ph-caret-down text-xs opacity-50 absolute right-4 pointer-events-none"></i>
+        </div>
+
+        <div class="glass-panel px-4 py-2 !rounded-full text-xs font-medium flex items-center gap-2 hover:bg-white/10 transition-colors text-white/80 relative">
+            <select id="filterPrecio" class="bg-transparent appearance-none outline-none cursor-pointer pr-4 z-10">
+                <option value="ALL" class="text-black">Precio: Todos</option>
+                <option value="<20" class="text-black">Menos de €20M</option>
+                <option value="20-50" class="text-black">€20M - €50M</option>
+                <option value="50-100" class="text-black">€50M - €100M</option>
+                <option value=">100" class="text-black">Más de €100M</option>
+            </select>
+            <i class="ph-bold ph-caret-down text-xs opacity-50 absolute right-4 pointer-events-none"></i>
+        </div>
+
+        <div class="glass-panel px-4 py-2 !rounded-full text-xs font-medium flex items-center gap-2 hover:bg-white/10 transition-colors text-white/80 relative">
+            <select id="filterClub" class="bg-transparent appearance-none outline-none cursor-pointer pr-4 z-10">
+                <option value="ALL" class="text-black">Club: Todos</option>
+            </select>
+            <i class="ph-bold ph-caret-down text-xs opacity-50 absolute right-4 pointer-events-none"></i>
+        </div>
+
+        <span id="playerCountLabel" class="text-xs text-brand-pink ml-auto font-mono font-bold bg-brand-pink/10 px-3 py-1.5 rounded-full border border-brand-pink/20">Mostrando 0 jugadores</span>
+    </div>
+
+    <div class="glass-panel flex-1 rounded-[2rem] overflow-hidden flex flex-col z-10 relative">
+        
+        <!-- ENCABEZADO DE TABLA (Ajustado a 12 columnas con Numeración y Valores separados) -->
+        <div class="bg-white/5 border-b border-white/10 px-6 py-4 grid grid-cols-12 gap-4 text-[10px] font-bold text-white/50 uppercase tracking-wider backdrop-blur-md sticky top-0 z-20">
+            <div class="col-span-1 text-center">#</div>
+            <div class="col-span-3">Jugador / Equipo</div>
+            <div class="col-span-1 text-center">Roles</div>
+            <div class="col-span-1 text-center">Edad</div>
+            <div class="col-span-2 text-center">Rendimiento (RTG)</div>
+            <div class="col-span-1 text-right" title="Valor Deportivo">V. Deport.</div>
+           
+            <div class="col-span-1 text-center">Ver</div>
+        </div>
+
+        <div class="overflow-y-auto flex-1 no-scrollbar p-2 space-y-1" id="playersContainer">
+            {% for jugador in jugadores %}
+            <div onclick="window.location.href='{{ url_for('player_profile', id=jugador.id) }}'"    
+                 class="player-row glass-row grid grid-cols-12 gap-4 items-center px-4 py-3 rounded-2xl border border-transparent transition-all cursor-pointer group hover:bg-white/5"
+                 style="display: none;" 
+                 data-nombre="{{ jugador.nombre | lower }}"
+                 data-club="{{ jugador.club }}"
+                 data-rol="{{ jugador.valoracion.rol_principal }}"
+                 data-edad="{{ jugador.edad }}"
+                 data-precio="{{ jugador.valoracion.valor_deportivo }}"
+                 data-temporada="{{ jugador.temporada }}"> <!-- Atributo necesario para el filtro -->
+                
+                <!-- Columna 1: Rank Number -->
+                <div class="col-span-1 text-center font-mono font-bold text-white/30 text-xs rank-number group-hover:text-brand-pink transition-colors"></div>
+
+                <!-- Columna 3: Jugador -->
+                <div class="col-span-3 flex items-center gap-3">
+                    <img src="https://ui-avatars.com/api/?name={{ jugador.nombre }}&background=random&color=fff&bold=true" class="w-9 h-9 rounded-full shadow-lg group-hover:scale-110 transition-transform shrink-0">
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 mb-0.5">
+                            <h3 class="font-bold text-sm text-white group-hover:text-brand-pink transition-colors truncate">{{ jugador.nombre }}</h3>
+                            <!-- Etiqueta de Temporada -->
+                            <span class="text-[9px] bg-white/10 text-white/60 px-1.5 py-0.5 rounded border border-white/5 whitespace-nowrap">{{ jugador.temporada }}</span>
+                        </div>
+                        <p class="text-[10px] text-white/40 flex items-center gap-1 truncate">
+                            <span class="bg-white/5 px-1 rounded text-white/60">{{ jugador.nacion }}</span> <span class="club-name">{{ jugador.club }}</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Columna 1: Roles -->
+                <div class="col-span-1 flex flex-col items-center justify-center gap-1">
+                    <span class="bg-blue-500/20 text-blue-200 border border-blue-500/30 px-2 py-0.5 rounded-full text-[9px] font-bold">{{ jugador.valoracion.rol_principal }}</span>
+                </div>
+                
+                <!-- Columna 1: Edad -->
+                <div class="col-span-1 text-center text-sm text-white/70 font-mono">{{ jugador.edad }}</div>
+                
+                <!-- Columna 2: Rendimiento -->
+                <div class="col-span-2 px-2">
+                    <div class="flex justify-between text-[10px] mb-1">
+                        <span class="font-bold text-white">{{ "{:.1f}".format(jugador.valoracion.rtg_principal) }}</span>
+                    </div>
+                    <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-blue-400 to-cyan-300 transition-all" style="width: {{ jugador.valoracion.rtg_principal }}%;"></div>
+                    </div>
+                </div>
+                
+                <!-- Columna 1: Valor Deportivo -->
+                <div class="col-span-1 flex items-center justify-end">
+                    <span class="text-xs font-bold text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.3)]">
+                        € {{ "{:,.1f}".format(jugador.valoracion.valor_deportivo / 1000000) }} M
+                    </span>
+                </div>
+
+    
+                
+                <!-- Columna 1: Acción -->
+                <div class="col-span-1 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button class="w-8 h-8 rounded-full bg-white/10 hover:bg-brand-pink hover:text-white flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-caret-right"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="bg-white/5 border-t border-white/10 px-6 py-3 flex justify-between items-center text-xs text-white/50 z-20">
+            <span id="pageInfo">Página 1 de 1</span>
+            <div class="flex gap-2">
+                <button id="btnPrev" class="px-3 py-1.5 rounded bg-white/5 hover:bg-white/20 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">Anterior</button>
+                <button id="btnNext" class="px-3 py-1.5 rounded bg-brand-pink/20 text-brand-pink hover:bg-brand-pink/40 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">Siguiente</button>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterTemporada = document.getElementById('filterTemporada');
+    const filterRol = document.getElementById('filterRol');
+    const filterEdad = document.getElementById('filterEdad');
+    const filterPrecio = document.getElementById('filterPrecio');
+    const filterClub = document.getElementById('filterClub');
+    const countLabel = document.getElementById('playerCountLabel');
+    const playerRows = Array.from(document.querySelectorAll('.player-row'));
+    
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const pageInfo = document.getElementById('pageInfo');
+
+    let filteredPlayers = [];
+    let currentPage = 1;
+    const playersPerPage = 25;
+
+    // 1. AUTO-LLENAR FILTROS (Clubes y Temporadas)
+    const clubesSet = new Set();
+    const tempSet = new Set();
+    
+    playerRows.forEach(row => {
+        clubesSet.add(row.getAttribute('data-club'));
+        tempSet.add(row.getAttribute('data-temporada'));
+    });
+
+    // Llenar Clubes
+    Array.from(clubesSet).sort().forEach(club => {
+        const option = document.createElement('option');
+        option.value = club;
+        option.text = club;
+        option.className = 'text-black';
+        filterClub.appendChild(option);
+    });
+
+    // Llenar Temporadas
+    const temporadas = Array.from(tempSet).sort().reverse(); // Las más recientes arriba
+    temporadas.forEach(temp => {
+        const option = document.createElement('option');
+        option.value = temp;
+        option.text = temp;
+        option.className = 'text-black';
+        filterTemporada.appendChild(option);
+    });
+
+    // Establecer la "21-22" por defecto si existe (O "2021-2022" dependiendo de cómo esté en tu base de datos)
+    if (temporadas.includes('21-22')) {
+        filterTemporada.value = '21-22';
+    } else if (temporadas.includes('2021-2022')) {
+        filterTemporada.value = '2021-2022';
+    } else if (temporadas.length > 0) {
+        // Si no existe, al menos agarra la más reciente
+        filterTemporada.value = temporadas[0]; 
+    }
+
+    // 2. FUNCIÓN DE FILTRADO
+    function ejecutarFiltros() {
+        const term = searchInput.value.toLowerCase();
+        const temporada = filterTemporada.value;
+        const rol = filterRol.value;
+        const edad = filterEdad.value;
+        const precio = filterPrecio.value;
+        const club = filterClub.value;
+
+        filteredPlayers = [];
+
+        playerRows.forEach(row => {
+            row.style.display = 'none';
+
+            const rNombre = row.getAttribute('data-nombre');
+            const rTemp = row.getAttribute('data-temporada');
+            const rRol = row.getAttribute('data-rol');
+            const rEdad = parseInt(row.getAttribute('data-edad'));
+            const rPrecio = parseFloat(row.getAttribute('data-precio')) / 1000000; 
+            const rClub = row.getAttribute('data-club');
+
+            let matchText = rNombre.includes(term);
+            let matchTemp = (temporada === 'ALL' || temporada === rTemp);
+
+            let matchRol = (rol === 'ALL');
+            if (rol === 'DF') matchRol = rRol.startsWith('DC') || rRol.startsWith('LB');
+            else if (rol !== 'ALL') matchRol = rRol.startsWith(rol);
+
+            let matchEdad = true;
+            if (edad === 'U21') matchEdad = rEdad <= 21;
+            else if (edad === '22-26') matchEdad = rEdad >= 22 && rEdad <= 26;
+            else if (edad === '27-29') matchEdad = rEdad >= 27 && rEdad <= 29;
+            else if (edad === '30+') matchEdad = rEdad >= 30;
+
+            let matchPrecio = true;
+            if (precio === '<20') matchPrecio = rPrecio < 20;
+            else if (precio === '20-50') matchPrecio = rPrecio >= 20 && rPrecio <= 50;
+            else if (precio === '50-100') matchPrecio = rPrecio > 50 && rPrecio <= 100;
+            else if (precio === '>100') matchPrecio = rPrecio > 100;
+
+            let matchClub = (club === 'ALL' || club === rClub);
+
+            if (matchText && matchTemp && matchRol && matchEdad && matchPrecio && matchClub) {
+                filteredPlayers.push(row);
+            }
+        });
+
+        countLabel.textContent = `Mostrando ${filteredPlayers.length} jugadores`;
+        currentPage = 1;
+        renderizarPagina();
+    }
+
+    // 3. RENDERIZADO CON NUMERACIÓN DINÁMICA
+    function renderizarPagina() {
+        filteredPlayers.forEach(row => row.style.display = 'none');
+
+        const startIndex = (currentPage - 1) * playersPerPage;
+        const endIndex = startIndex + playersPerPage;
+
+        const jugadoresEnPagina = filteredPlayers.slice(startIndex, endIndex);
+        jugadoresEnPagina.forEach((row, index) => {
+            row.style.display = ''; 
+            
+            // Aquí inyectamos el número (Rank) en la fila actual
+            const numFila = startIndex + index + 1;
+            row.querySelector('.rank-number').textContent = numFila;
+        });
+
+        const totalPages = Math.ceil(filteredPlayers.length / playersPerPage) || 1;
+        pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
+        
+        btnPrev.disabled = currentPage === 1;
+        btnNext.disabled = currentPage === totalPages;
+        
+        document.getElementById('playersContainer').scrollTop = 0;
+    }
+
+    // 4. EVENTOS
+    btnPrev.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderizarPagina();
+        }
+    });
+
+    btnNext.addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredPlayers.length / playersPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderizarPagina();
+        }
+    });
+
+    searchInput.addEventListener('input', ejecutarFiltros);
+    filterTemporada.addEventListener('change', ejecutarFiltros);
+    filterRol.addEventListener('change', ejecutarFiltros);
+    filterEdad.addEventListener('change', ejecutarFiltros);
+    filterPrecio.addEventListener('change', ejecutarFiltros);
+    filterClub.addEventListener('change', ejecutarFiltros);
+
+    // Ejecutar filtros al cargar por primera vez
+    ejecutarFiltros();
+});
+</script>
+{% endblock %}

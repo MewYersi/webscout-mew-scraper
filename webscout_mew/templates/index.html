@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<main class="flex-1 h-full p-6 flex flex-col gap-6 relative overflow-hidden no-scrollbar overflow-y-auto">
+    
+    <!-- HEADER -->
+    <header class="flex flex-col md:flex-row justify-between items-center gap-4 z-10 shrink-0">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight">ScoutMew <span class="text-brand-pink">Vision</span></h1>
+            <p class="text-white/60 text-sm">Inteligencia de Mercado y Rendimiento Global</p>
+        </div>
+        <div class="glass-panel h-12 w-full md:w-[400px] !rounded-full flex items-center px-6 gap-3 focus-within:bg-white/10 transition-all">
+            <i class="ph-bold ph-magnifying-glass text-white/40"></i>
+            <input type="text" placeholder="Buscar crack..." class="bg-transparent border-none outline-none text-sm w-full">
+        </div>
+    </header>
+    <!-- CARRUSEL DE TEMPORADAS -->
+    <div class="flex gap-3 overflow-x-auto no-scrollbar z-10 shrink-0 pb-2">
+        {% for temp in temporadas %}
+        <a href="{{ url_for('dashboard', temporada=temp) }}" 
+           class="px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all border flex items-center gap-2
+                  {% if temp == temporada_actual %}
+                  bg-brand-pink border-brand-pink text-white shadow-[0_0_15px_rgba(236,72,153,0.3)]
+                  {% else %}
+                  glass-panel border-white/10 text-white/50 hover:text-white hover:border-white/30 hover:bg-white/5
+                  {% endif %}">
+            {{ temp }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- FILA 1: KPI CARDS -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 z-10">
+        <div class="glass-panel p-5 flex flex-col justify-center border-l-4 border-l-brand-pink">
+            <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Universo Data</span>
+            <h3 class="text-2xl font-bold">{{ total }} <span class="text-sm font-medium text-white/20">Jugadores</span></h3>
+        </div>
+        <div class="glass-panel p-5 flex flex-col justify-center border-l-4 border-l-brand-accent">
+            <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Valor Volumétrico</span>
+            <h3 class="text-2xl font-bold">€ {{ "{:,.1f}".format(valor_total / 1000000000) }}B</h3>
+        </div>
+        <div class="glass-panel p-5 flex flex-col justify-center border-l-4 border-l-green-400">
+            <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Eficiencia Promedio</span>
+            <h3 class="text-2xl font-bold">84.2 <span class="text-sm font-medium text-white/20">RTG</span></h3>
+        </div>
+        <div class="glass-panel p-5 flex flex-col justify-center border-l-4 border-l-yellow-400">
+            <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Ligas Activas</span>
+            <h3 class="text-2xl font-bold">5 <span class="text-sm font-medium text-white/20">Big Five</span></h3>
+        </div>
+    </div>
+
+    <!-- FILA 2: GRÁFICO Y TOP LÍNEAS -->
+    <div class="flex-1 grid grid-cols-1 md:grid-cols-12 gap-6 z-10 min-h-0">
+        
+        <!-- COMPARATIVA DE LIGAS (GIGANTE) -->
+        <div class="glass-panel col-span-1 md:col-span-8 p-8 flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                    <i class="ph-bold ph-chart-bar text-brand-pink"></i> Análisis de Eficiencia por Liga
+                </h3>
+                <div class="flex gap-4 text-[10px] uppercase font-bold tracking-tighter">
+                    <span class="flex items-center gap-1 text-brand-accent"><div class="w-2 h-2 rounded-full bg-brand-accent"></div> V. Deportivo</span>
+                </div>
+            </div>
+            <div class="flex-1 min-h-[300px]">
+                <canvas id="leagueChart"></canvas>
+            </div>
+        </div>
+
+        <!-- LISTA LATERAL: MÁS VALIOSOS -->
+        <div class="glass-dark col-span-1 md:col-span-4 rounded-[2.5rem] flex flex-col overflow-hidden border border-white/5">
+            <div class="p-6 border-b border-white/5">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-white/60">Top Valor Deportivo</h3>
+            </div>
+            <div class="flex-1 overflow-y-auto no-scrollbar p-4 space-y-3">
+                {% for jugador in jugadores %}
+                <div onclick="window.location.href='{{ url_for('player_profile', id=jugador.id) }}'" 
+                     class="flex justify-between items-center p-3 rounded-2xl hover:bg-white/5 transition-all cursor-pointer group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center font-bold text-xs">
+                            {{ jugador.nombre[:2].upper() }}
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-bold text-sm group-hover:text-brand-pink transition-colors">{{ jugador.nombre }}</span>
+                            <span class="text-[10px] text-white/40">{{ jugador.club }}</span>
+                        </div>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-brand-accent">€{{ "{:,.0f}".format(jugador.valoracion.valor_deportivo / 1000000) }}M</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        
+        <!-- FILA 3: TOP POR POSICIÓN (BEST OF THE BEST) -->
+<div class="col-span-1 md:col-span-12 grid grid-cols-1 md:grid-cols-4 gap-6">
+    {% set labels = {'FW': 'ATAQUE', 'AM': 'CREACIÓN', 'MC': 'MEDULA', 'DF': 'DEFENSA'} %}
+    {% for cat, player in top_pos.items() %}
+        {% if player %}
+        <div class="glass-panel p-6 flex items-center gap-4 relative overflow-hidden group cursor-pointer"
+             onclick="window.location.href='{{ url_for('player_profile', id=player.id) }}'">
+            
+            <div class="absolute -right-4 -bottom-4 text-6xl font-black text-white/[0.03] italic">{{ labels[cat] }}</div>
+            
+            <img src="https://ui-avatars.com/api/?name={{ player.nombre }}&background=random&color=fff" class="w-14 h-14 rounded-2xl shadow-lg">
+            <div class="flex flex-col">
+                <span class="text-[10px] font-bold text-brand-pink uppercase tracking-widest">{{ labels[cat] }} ELITE</span>
+                <span class="text-sm font-bold truncate w-32">{{ player.nombre }}</span>
+                <span class="text-[9px] text-white/40 uppercase">{{ player.valoracion.rol_principal }} • {{ player.club }}</span>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('leagueChart').getContext('2d');
+    
+    // Datos desde Flask (Eliminamos dataPM)
+    const labels = [{% for s in stats_ligas %}"{{ s.liga }}",{% endfor %}];
+    const dataVD = [{% for s in stats_ligas %}{{ s.avg_vd / 1000000 }},{% endfor %}];
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'V. Deportivo (M€)',
+                    data: dataVD,
+                    backgroundColor: '#6e44ff',
+                    borderRadius: 8,
+                    barPercentage: 0.6,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { 
+                    grid: { color: 'rgba(255,255,255,0.05)' },
+                    ticks: { color: 'rgba(255,255,255,0.3)', font: { size: 10 } }
+                },
+                x: { 
+                    grid: { display: false },
+                    ticks: { color: 'white', font: { size: 11, weight: 'bold' } }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

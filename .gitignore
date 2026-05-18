@@ -1,0 +1,12 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Caché de Python
+__pycache__/
+*.pyc
+
+# Archivos pesados de Node.js (Web)
+webscout_mew/node_modules/
+

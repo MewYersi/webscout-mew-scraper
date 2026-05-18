@@ -1,0 +1,1223 @@
+[
+    {
+        "label": "streamlit",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "streamlit",
+        "description": "streamlit",
+        "detail": "streamlit",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "plotly.graph_objects",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "plotly.graph_objects",
+        "description": "plotly.graph_objects",
+        "detail": "plotly.graph_objects",
+        "documentation": {}
+    },
+    {
+        "label": "plotly.express",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "plotly.express",
+        "description": "plotly.express",
+        "detail": "plotly.express",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "warnings",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "warnings",
+        "description": "warnings",
+        "detail": "warnings",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "SQLAlchemy",
+        "importPath": "flask_sqlalchemy",
+        "description": "flask_sqlalchemy",
+        "isExtraImport": true,
+        "detail": "flask_sqlalchemy",
+        "documentation": {}
+    },
+    {
+        "label": "webdriver",
+        "importPath": "selenium",
+        "description": "selenium",
+        "isExtraImport": true,
+        "detail": "selenium",
+        "documentation": {}
+    },
+    {
+        "label": "webdriver",
+        "importPath": "selenium",
+        "description": "selenium",
+        "isExtraImport": true,
+        "detail": "selenium",
+        "documentation": {}
+    },
+    {
+        "label": "Options",
+        "importPath": "selenium.webdriver.firefox.options",
+        "description": "selenium.webdriver.firefox.options",
+        "isExtraImport": true,
+        "detail": "selenium.webdriver.firefox.options",
+        "documentation": {}
+    },
+    {
+        "label": "Options",
+        "importPath": "selenium.webdriver.firefox.options",
+        "description": "selenium.webdriver.firefox.options",
+        "isExtraImport": true,
+        "detail": "selenium.webdriver.firefox.options",
+        "documentation": {}
+    },
+    {
+        "label": "By",
+        "importPath": "selenium.webdriver.common.by",
+        "description": "selenium.webdriver.common.by",
+        "isExtraImport": true,
+        "detail": "selenium.webdriver.common.by",
+        "documentation": {}
+    },
+    {
+        "label": "By",
+        "importPath": "selenium.webdriver.common.by",
+        "description": "selenium.webdriver.common.by",
+        "isExtraImport": true,
+        "detail": "selenium.webdriver.common.by",
+        "documentation": {}
+    },
+    {
+        "label": "WebDriverWait",
+        "importPath": "selenium.webdriver.support.ui",
+        "description": "selenium.webdriver.support.ui",
+        "isExtraImport": true,
+        "detail": "selenium.webdriver.support.ui",
+        "documentation": {}
+    },
+    {
+        "label": "WebDriverWait",
+        "importPath": "selenium.webdriver.support.ui",
+        "description": "selenium.webdriver.support.ui",
+        "isExtraImport": true,
+        "detail": "selenium.webdriver.support.ui",
+        "documentation": {}
+    },
+    {
+        "label": "expected_conditions",
+        "importPath": "selenium.webdriver.support",
+        "description": "selenium.webdriver.support",
+        "isExtraImport": true,
+        "detail": "selenium.webdriver.support",
+        "documentation": {}
+    },
+    {
+        "label": "expected_conditions",
+        "importPath": "selenium.webdriver.support",
+        "description": "selenium.webdriver.support",
+        "isExtraImport": true,
+        "detail": "selenium.webdriver.support",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "cargar_datos",
+        "kind": 2,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "def cargar_datos():\n    archivo = 'Premier_Valuation_Model_V5_Final.csv'\n    if not os.path.exists(archivo):\n        return None\n    return pd.read_csv(archivo)\ndf = cargar_datos()\nif df is None:\n    st.error(\"❌ No encuentro el archivo de datos. Ejecuta primero el script de valoración.\")\n    st.stop()\n# =============================================================================",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "plot_radar",
+        "kind": 2,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "def plot_radar(jugador_row):\n    nombre = jugador_row['Player']\n    rol = jugador_row['Rol_Ideal']\n    pos = jugador_row['PosAdj']\n    cols = METRICAS_RADAR.get(rol, METRICAS_RADAR['AM'])\n    labels = [c.replace('_Score', '') for c in cols]\n    values_player = [jugador_row.get(c, 50) for c in cols]\n    values_player.append(values_player[0])\n    promedio = df[df['PosAdj'] == pos][cols].mean().tolist()\n    promedio.append(promedio[0])",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "plot_barras_percentiles",
+        "kind": 2,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "def plot_barras_percentiles(jugador_row):\n    rol = jugador_row['Rol_Ideal']\n    cols = METRICAS_RADAR.get(rol, METRICAS_RADAR['AM'])\n    data = {'Métrica': [c.replace('_Score', '') for c in cols], 'Percentil': [jugador_row.get(c, 0) for c in cols]}\n    df_bar = pd.DataFrame(data).sort_values('Percentil', ascending=True)\n    fig = px.bar(df_bar, x='Percentil', y='Métrica', orientation='h', text='Percentil',\n                 color='Percentil', color_continuous_scale=['#ff4b4b', '#ffff4b', '#4bff4b'], range_color=[0,100])\n    fig.update_layout(xaxis_range=[0, 100], height=350, showlegend=False, xaxis_title=\"\", yaxis_title=\"\")\n    return fig\ndef plot_scatter_dinamico(df_filtrado, x_col, y_col, jugador_destacado):",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "plot_scatter_dinamico",
+        "kind": 2,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "def plot_scatter_dinamico(df_filtrado, x_col, y_col, jugador_destacado):\n    \"\"\"\n    Scatter Plot PRO: Puntos pequeños para ver la densidad, estrella grande para el jugador.\n    \"\"\"\n    # 1. Crear la figura base con puntos pequeños\n    fig = px.scatter(\n        df_filtrado, \n        x=x_col, \n        y=y_col,\n        color='Squad', # Colores por equipo para identificar",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "df = cargar_datos()\nif df is None:\n    st.error(\"❌ No encuentro el archivo de datos. Ejecuta primero el script de valoración.\")\n    st.stop()\n# =============================================================================\n# 3. MAPEO DE MÉTRICAS Y PRESETS\n# =============================================================================\nMETRICAS_DISPLAY = {\n    'Goles': 'Gls', 'Asistencias': 'Ast', 'Goles Esperados (xG)': 'xG', 'Asistencias Esperadas (xA)': 'xA',\n    'Tiros Totales': 'Sh', 'Creación de Tiro (SCA)': 'SCA', 'Pases Clave': 'KP', 'Regates Exitosos': 'DribSucc',",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "METRICAS_DISPLAY",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "METRICAS_DISPLAY = {\n    'Goles': 'Gls', 'Asistencias': 'Ast', 'Goles Esperados (xG)': 'xG', 'Asistencias Esperadas (xA)': 'xA',\n    'Tiros Totales': 'Sh', 'Creación de Tiro (SCA)': 'SCA', 'Pases Clave': 'KP', 'Regates Exitosos': 'DribSucc',\n    'Toques en Área Rival': 'TouchesAttPen', 'Pases Progresivos': 'Prog', 'Tackles Ganados': 'TklW',\n    'Intercepciones': 'Int', 'Recuperaciones': 'Recov', 'Duelos Aéreos Ganados': 'AerialWon',\n    'Valor de Mercado': 'Precio_Mercado', 'Rating General': 'Rating_Final', 'Centros al Área': 'CrsPA',\n    'Distancia Progresiva': 'PrgDist', ' % Pase Total': 'Cmp%Total'\n}\nMETRICAS_REALES = {v: k for k, v in METRICAS_DISPLAY.items()}\n# Definición de Roles para Radar",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "METRICAS_REALES",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "METRICAS_REALES = {v: k for k, v in METRICAS_DISPLAY.items()}\n# Definición de Roles para Radar\nMETRICAS_RADAR = {\n    'FW_ST': ['Gls_Score', 'xG_Score', 'Sh_Score', 'TouchesAttPen_Score', 'AerialWon_Score', 'SCA_Score'],\n    'FW_WG': ['DribSucc_Score', 'PrgDist_Score', 'Gls_Score', 'Ast_Score', 'SCA_Score', 'CrsPA_Score'],\n    'AM':    ['SCA_Score', 'Ast_Score', 'xA_Score', 'KP_Score', 'PrgDist_Score', 'DribSucc_Score'],\n    'LB_OFF':['CrsPA_Score', 'SCA_Score', 'TklW_Score', 'Int_Score', 'PrgDist_Score', 'Ast_Score'],\n    'DC':    ['AerialWon_Score', 'Clr_Score', 'TklW_Score', 'Int_Score', 'PrgDist_Score', 'Recov_Score'],\n    'MC_DEF':['TklW_Score', 'Int_Score', 'Recov_Score', 'Cmp%Total_Score', 'PrgDist_Score', 'AerialWon_Score'],\n    'FW_SS': ['Gls_Score', 'xA_Score', 'SCA_Score', 'DribSucc_Score', 'TouchesAtt3rd_Score', 'SoT%_Score']",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "METRICAS_RADAR",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "METRICAS_RADAR = {\n    'FW_ST': ['Gls_Score', 'xG_Score', 'Sh_Score', 'TouchesAttPen_Score', 'AerialWon_Score', 'SCA_Score'],\n    'FW_WG': ['DribSucc_Score', 'PrgDist_Score', 'Gls_Score', 'Ast_Score', 'SCA_Score', 'CrsPA_Score'],\n    'AM':    ['SCA_Score', 'Ast_Score', 'xA_Score', 'KP_Score', 'PrgDist_Score', 'DribSucc_Score'],\n    'LB_OFF':['CrsPA_Score', 'SCA_Score', 'TklW_Score', 'Int_Score', 'PrgDist_Score', 'Ast_Score'],\n    'DC':    ['AerialWon_Score', 'Clr_Score', 'TklW_Score', 'Int_Score', 'PrgDist_Score', 'Recov_Score'],\n    'MC_DEF':['TklW_Score', 'Int_Score', 'Recov_Score', 'Cmp%Total_Score', 'PrgDist_Score', 'AerialWon_Score'],\n    'FW_SS': ['Gls_Score', 'xA_Score', 'SCA_Score', 'DribSucc_Score', 'TouchesAtt3rd_Score', 'SoT%_Score']\n}\n# Presets Tácticos COMPLETOS",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "PRESETS_TACTICOS",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "PRESETS_TACTICOS = {\n    'DC': {\n        '🛡️ El Muro (Solidez)': {'x': 'TklW', 'y': 'Int'},\n        '⚽ Salida de Balón': {'x': 'PrgDist', 'y': 'Cmp%Total'},\n        '✈️ Dominio Aéreo': {'x': 'AerialWon', 'y': 'AerialWon%'}\n    },\n    'LB_OFF': {\n        '🚀 Amenaza Ofensiva': {'x': 'SCA', 'y': 'CrsPA'},\n        '🏃‍♂️ Recorrido': {'x': 'PrgDist', 'y': 'TouchesAtt3rd'}\n    },",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "posiciones",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "posiciones = sorted(df['PosAdj'].unique())\npos_select = st.sidebar.selectbox(\"Posición:\", [\"Todos\"] + posiciones, index=0)\nequipos = sorted(df['Squad'].unique())\nequipo_select = st.sidebar.selectbox(\"Equipo:\", [\"Todos\"] + equipos)\n# Aplicar Filtros\ndf_filtrado = df.copy()\nif pos_select != \"Todos\": df_filtrado = df_filtrado[df_filtrado['PosAdj'] == pos_select]\nif equipo_select != \"Todos\": df_filtrado = df_filtrado[df_filtrado['Squad'] == equipo_select]\njugadores = sorted(df_filtrado['Player'].unique())\nif not jugadores:",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "pos_select",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "pos_select = st.sidebar.selectbox(\"Posición:\", [\"Todos\"] + posiciones, index=0)\nequipos = sorted(df['Squad'].unique())\nequipo_select = st.sidebar.selectbox(\"Equipo:\", [\"Todos\"] + equipos)\n# Aplicar Filtros\ndf_filtrado = df.copy()\nif pos_select != \"Todos\": df_filtrado = df_filtrado[df_filtrado['PosAdj'] == pos_select]\nif equipo_select != \"Todos\": df_filtrado = df_filtrado[df_filtrado['Squad'] == equipo_select]\njugadores = sorted(df_filtrado['Player'].unique())\nif not jugadores:\n    st.error(\"No hay jugadores con esos filtros.\")",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "equipos",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "equipos = sorted(df['Squad'].unique())\nequipo_select = st.sidebar.selectbox(\"Equipo:\", [\"Todos\"] + equipos)\n# Aplicar Filtros\ndf_filtrado = df.copy()\nif pos_select != \"Todos\": df_filtrado = df_filtrado[df_filtrado['PosAdj'] == pos_select]\nif equipo_select != \"Todos\": df_filtrado = df_filtrado[df_filtrado['Squad'] == equipo_select]\njugadores = sorted(df_filtrado['Player'].unique())\nif not jugadores:\n    st.error(\"No hay jugadores con esos filtros.\")\n    st.stop()",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "equipo_select",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "equipo_select = st.sidebar.selectbox(\"Equipo:\", [\"Todos\"] + equipos)\n# Aplicar Filtros\ndf_filtrado = df.copy()\nif pos_select != \"Todos\": df_filtrado = df_filtrado[df_filtrado['PosAdj'] == pos_select]\nif equipo_select != \"Todos\": df_filtrado = df_filtrado[df_filtrado['Squad'] == equipo_select]\njugadores = sorted(df_filtrado['Player'].unique())\nif not jugadores:\n    st.error(\"No hay jugadores con esos filtros.\")\n    st.stop()\njugador_select = st.sidebar.selectbox(\"👤 Seleccionar Jugador:\", jugadores)",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "df_filtrado",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "df_filtrado = df.copy()\nif pos_select != \"Todos\": df_filtrado = df_filtrado[df_filtrado['PosAdj'] == pos_select]\nif equipo_select != \"Todos\": df_filtrado = df_filtrado[df_filtrado['Squad'] == equipo_select]\njugadores = sorted(df_filtrado['Player'].unique())\nif not jugadores:\n    st.error(\"No hay jugadores con esos filtros.\")\n    st.stop()\njugador_select = st.sidebar.selectbox(\"👤 Seleccionar Jugador:\", jugadores)\njugador_data = df[df['Player'] == jugador_select].iloc[0]\n# --- MAIN PAGE ---",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "jugadores",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "jugadores = sorted(df_filtrado['Player'].unique())\nif not jugadores:\n    st.error(\"No hay jugadores con esos filtros.\")\n    st.stop()\njugador_select = st.sidebar.selectbox(\"👤 Seleccionar Jugador:\", jugadores)\njugador_data = df[df['Player'] == jugador_select].iloc[0]\n# --- MAIN PAGE ---\n# Encabezado Compacto\nc1, c2 = st.columns([1, 6])\nwith c2:",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "jugador_select",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "jugador_select = st.sidebar.selectbox(\"👤 Seleccionar Jugador:\", jugadores)\njugador_data = df[df['Player'] == jugador_select].iloc[0]\n# --- MAIN PAGE ---\n# Encabezado Compacto\nc1, c2 = st.columns([1, 6])\nwith c2:\n    st.title(f\"{jugador_data['Player']}\")\n    st.caption(f\"**{jugador_data['Squad']}** | {jugador_data['Age']} Años | {jugador_data['PosAdj']} ({jugador_data['Rol_Ideal']})\")\n# KPIs en Fila\nk1, k2, k3, k4 = st.columns(4)",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "jugador_data",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "jugador_data = df[df['Player'] == jugador_select].iloc[0]\n# --- MAIN PAGE ---\n# Encabezado Compacto\nc1, c2 = st.columns([1, 6])\nwith c2:\n    st.title(f\"{jugador_data['Player']}\")\n    st.caption(f\"**{jugador_data['Squad']}** | {jugador_data['Age']} Años | {jugador_data['PosAdj']} ({jugador_data['Rol_Ideal']})\")\n# KPIs en Fila\nk1, k2, k3, k4 = st.columns(4)\nk1.metric(\"Rating\", f\"{jugador_data['Rating_Final']:.1f}\")",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "diff",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "diff = jugador_data['Valor_Rendimiento_Puro'] - jugador_data['Precio_Mercado']\nk4.metric(\"Estado\", jugador_data['Estado_Mercado'])\nst.markdown(\"---\")\n# TABS PRINCIPALES\ntabs = st.tabs([\"📊 Perfil\", \"🔎 Análisis Táctico\", \"🆚 Comparador\", \"📋 Datos\"])\n# TAB 1: PERFIL\nwith tabs[0]:\n    col1, col2 = st.columns(2)\n    with col1:\n        st.subheader(\"Radar de Habilidades\")",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "tabs",
+        "kind": 5,
+        "importPath": "app_scouting",
+        "description": "app_scouting",
+        "peekOfCode": "tabs = st.tabs([\"📊 Perfil\", \"🔎 Análisis Táctico\", \"🆚 Comparador\", \"📋 Datos\"])\n# TAB 1: PERFIL\nwith tabs[0]:\n    col1, col2 = st.columns(2)\n    with col1:\n        st.subheader(\"Radar de Habilidades\")\n        st.plotly_chart(plot_radar(jugador_data), use_container_width=True)\n    with col2:\n        st.subheader(\"Percentiles Clave\")\n        st.plotly_chart(plot_barras_percentiles(jugador_data), use_container_width=True)",
+        "detail": "app_scouting",
+        "documentation": {}
+    },
+    {
+        "label": "archivo",
+        "kind": 5,
+        "importPath": "audi2",
+        "description": "audi2",
+        "peekOfCode": "archivo = 'DataFramev1.xlsx'\nprint(\"🔍 Iniciando Auditoría de Laterales (OFF vs DEF)...\\n\")\ndf = pd.read_excel(archivo, sheet_name='21-22')\n# Filtramos a los laterales (aquellos que pasaron nuestra aduana táctica de centros/toques)\nUMBRAL_CENTROS = 15.0\nUMBRAL_TOQUES_ATT = 12.0\ndf_clean = df[(df['Min'] >= 800) & (df['Pos'].str.contains('DF', na=False))].copy()\ndf_laterales = df_clean[(df_clean['Crs'] >= UMBRAL_CENTROS) | (df_clean['TouchesAtt3rd'] >= UMBRAL_TOQUES_ATT)].copy()\njugadores_test = [\n    'Trent Alexander-Arnold', 'João Cancelo',  # Los ofensivos top",
+        "detail": "audi2",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "audi2",
+        "description": "audi2",
+        "peekOfCode": "df = pd.read_excel(archivo, sheet_name='21-22')\n# Filtramos a los laterales (aquellos que pasaron nuestra aduana táctica de centros/toques)\nUMBRAL_CENTROS = 15.0\nUMBRAL_TOQUES_ATT = 12.0\ndf_clean = df[(df['Min'] >= 800) & (df['Pos'].str.contains('DF', na=False))].copy()\ndf_laterales = df_clean[(df_clean['Crs'] >= UMBRAL_CENTROS) | (df_clean['TouchesAtt3rd'] >= UMBRAL_TOQUES_ATT)].copy()\njugadores_test = [\n    'Trent Alexander-Arnold', 'João Cancelo',  # Los ofensivos top\n    'César Azpilicueta', 'Ferland Mendy', 'Kyle Walker' # Los más defensivos/equilibrados\n]",
+        "detail": "audi2",
+        "documentation": {}
+    },
+    {
+        "label": "UMBRAL_CENTROS",
+        "kind": 5,
+        "importPath": "audi2",
+        "description": "audi2",
+        "peekOfCode": "UMBRAL_CENTROS = 15.0\nUMBRAL_TOQUES_ATT = 12.0\ndf_clean = df[(df['Min'] >= 800) & (df['Pos'].str.contains('DF', na=False))].copy()\ndf_laterales = df_clean[(df_clean['Crs'] >= UMBRAL_CENTROS) | (df_clean['TouchesAtt3rd'] >= UMBRAL_TOQUES_ATT)].copy()\njugadores_test = [\n    'Trent Alexander-Arnold', 'João Cancelo',  # Los ofensivos top\n    'César Azpilicueta', 'Ferland Mendy', 'Kyle Walker' # Los más defensivos/equilibrados\n]\nfiltro = df_laterales['Player'].apply(lambda x: any(j in str(x) for j in jugadores_test))\ndf_test = df_laterales[filtro]",
+        "detail": "audi2",
+        "documentation": {}
+    },
+    {
+        "label": "UMBRAL_TOQUES_ATT",
+        "kind": 5,
+        "importPath": "audi2",
+        "description": "audi2",
+        "peekOfCode": "UMBRAL_TOQUES_ATT = 12.0\ndf_clean = df[(df['Min'] >= 800) & (df['Pos'].str.contains('DF', na=False))].copy()\ndf_laterales = df_clean[(df_clean['Crs'] >= UMBRAL_CENTROS) | (df_clean['TouchesAtt3rd'] >= UMBRAL_TOQUES_ATT)].copy()\njugadores_test = [\n    'Trent Alexander-Arnold', 'João Cancelo',  # Los ofensivos top\n    'César Azpilicueta', 'Ferland Mendy', 'Kyle Walker' # Los más defensivos/equilibrados\n]\nfiltro = df_laterales['Player'].apply(lambda x: any(j in str(x) for j in jugadores_test))\ndf_test = df_laterales[filtro]\n# Métricas clave donde sospecho que el LB_DEF se queda corto",
+        "detail": "audi2",
+        "documentation": {}
+    },
+    {
+        "label": "df_clean",
+        "kind": 5,
+        "importPath": "audi2",
+        "description": "audi2",
+        "peekOfCode": "df_clean = df[(df['Min'] >= 800) & (df['Pos'].str.contains('DF', na=False))].copy()\ndf_laterales = df_clean[(df_clean['Crs'] >= UMBRAL_CENTROS) | (df_clean['TouchesAtt3rd'] >= UMBRAL_TOQUES_ATT)].copy()\njugadores_test = [\n    'Trent Alexander-Arnold', 'João Cancelo',  # Los ofensivos top\n    'César Azpilicueta', 'Ferland Mendy', 'Kyle Walker' # Los más defensivos/equilibrados\n]\nfiltro = df_laterales['Player'].apply(lambda x: any(j in str(x) for j in jugadores_test))\ndf_test = df_laterales[filtro]\n# Métricas clave donde sospecho que el LB_DEF se queda corto\nstats_defensa = ['TklW', 'Int', 'Recov', 'TklDef3rd']",
+        "detail": "audi2",
+        "documentation": {}
+    },
+    {
+        "label": "df_laterales",
+        "kind": 5,
+        "importPath": "audi2",
+        "description": "audi2",
+        "peekOfCode": "df_laterales = df_clean[(df_clean['Crs'] >= UMBRAL_CENTROS) | (df_clean['TouchesAtt3rd'] >= UMBRAL_TOQUES_ATT)].copy()\njugadores_test = [\n    'Trent Alexander-Arnold', 'João Cancelo',  # Los ofensivos top\n    'César Azpilicueta', 'Ferland Mendy', 'Kyle Walker' # Los más defensivos/equilibrados\n]\nfiltro = df_laterales['Player'].apply(lambda x: any(j in str(x) for j in jugadores_test))\ndf_test = df_laterales[filtro]\n# Métricas clave donde sospecho que el LB_DEF se queda corto\nstats_defensa = ['TklW', 'Int', 'Recov', 'TklDef3rd']\nstats_ataque = ['xA', 'Prog', 'PrgDist', 'CrsPA']",
+        "detail": "audi2",
+        "documentation": {}
+    },
+    {
+        "label": "jugadores_test",
+        "kind": 5,
+        "importPath": "audi2",
+        "description": "audi2",
+        "peekOfCode": "jugadores_test = [\n    'Trent Alexander-Arnold', 'João Cancelo',  # Los ofensivos top\n    'César Azpilicueta', 'Ferland Mendy', 'Kyle Walker' # Los más defensivos/equilibrados\n]\nfiltro = df_laterales['Player'].apply(lambda x: any(j in str(x) for j in jugadores_test))\ndf_test = df_laterales[filtro]\n# Métricas clave donde sospecho que el LB_DEF se queda corto\nstats_defensa = ['TklW', 'Int', 'Recov', 'TklDef3rd']\nstats_ataque = ['xA', 'Prog', 'PrgDist', 'CrsPA']\nprint(\"\\n=== 🚨 ANÁLISIS DE TECHOS (P95) PARA LATERALES 🚨 ===\")",
+        "detail": "audi2",
+        "documentation": {}
+    },
+    {
+        "label": "filtro",
+        "kind": 5,
+        "importPath": "audi2",
+        "description": "audi2",
+        "peekOfCode": "filtro = df_laterales['Player'].apply(lambda x: any(j in str(x) for j in jugadores_test))\ndf_test = df_laterales[filtro]\n# Métricas clave donde sospecho que el LB_DEF se queda corto\nstats_defensa = ['TklW', 'Int', 'Recov', 'TklDef3rd']\nstats_ataque = ['xA', 'Prog', 'PrgDist', 'CrsPA']\nprint(\"\\n=== 🚨 ANÁLISIS DE TECHOS (P95) PARA LATERALES 🚨 ===\")\ntechos = {}\nfor stat in stats_defensa + stats_ataque:\n    if stat in df_laterales.columns:\n        df_laterales[stat] = pd.to_numeric(df_laterales[stat], errors='coerce').fillna(0)",
+        "detail": "audi2",
+        "documentation": {}
+    },
+    {
+        "label": "df_test",
+        "kind": 5,
+        "importPath": "audi2",
+        "description": "audi2",
+        "peekOfCode": "df_test = df_laterales[filtro]\n# Métricas clave donde sospecho que el LB_DEF se queda corto\nstats_defensa = ['TklW', 'Int', 'Recov', 'TklDef3rd']\nstats_ataque = ['xA', 'Prog', 'PrgDist', 'CrsPA']\nprint(\"\\n=== 🚨 ANÁLISIS DE TECHOS (P95) PARA LATERALES 🚨 ===\")\ntechos = {}\nfor stat in stats_defensa + stats_ataque:\n    if stat in df_laterales.columns:\n        df_laterales[stat] = pd.to_numeric(df_laterales[stat], errors='coerce').fillna(0)\n        _min = df_laterales[stat].min()",
+        "detail": "audi2",
+        "documentation": {}
+    },
+    {
+        "label": "stats_defensa",
+        "kind": 5,
+        "importPath": "audi2",
+        "description": "audi2",
+        "peekOfCode": "stats_defensa = ['TklW', 'Int', 'Recov', 'TklDef3rd']\nstats_ataque = ['xA', 'Prog', 'PrgDist', 'CrsPA']\nprint(\"\\n=== 🚨 ANÁLISIS DE TECHOS (P95) PARA LATERALES 🚨 ===\")\ntechos = {}\nfor stat in stats_defensa + stats_ataque:\n    if stat in df_laterales.columns:\n        df_laterales[stat] = pd.to_numeric(df_laterales[stat], errors='coerce').fillna(0)\n        _min = df_laterales[stat].min()\n        _max_real = df_laterales[stat].quantile(0.95)\n        techos[stat] = {'min': _min, 'max': _max_real}",
+        "detail": "audi2",
+        "documentation": {}
+    },
+    {
+        "label": "stats_ataque",
+        "kind": 5,
+        "importPath": "audi2",
+        "description": "audi2",
+        "peekOfCode": "stats_ataque = ['xA', 'Prog', 'PrgDist', 'CrsPA']\nprint(\"\\n=== 🚨 ANÁLISIS DE TECHOS (P95) PARA LATERALES 🚨 ===\")\ntechos = {}\nfor stat in stats_defensa + stats_ataque:\n    if stat in df_laterales.columns:\n        df_laterales[stat] = pd.to_numeric(df_laterales[stat], errors='coerce').fillna(0)\n        _min = df_laterales[stat].min()\n        _max_real = df_laterales[stat].quantile(0.95)\n        techos[stat] = {'min': _min, 'max': _max_real}\n        print(f\"  {stat:15} -> P95: {_max_real:.2f}\")",
+        "detail": "audi2",
+        "documentation": {}
+    },
+    {
+        "label": "techos",
+        "kind": 5,
+        "importPath": "audi2",
+        "description": "audi2",
+        "peekOfCode": "techos = {}\nfor stat in stats_defensa + stats_ataque:\n    if stat in df_laterales.columns:\n        df_laterales[stat] = pd.to_numeric(df_laterales[stat], errors='coerce').fillna(0)\n        _min = df_laterales[stat].min()\n        _max_real = df_laterales[stat].quantile(0.95)\n        techos[stat] = {'min': _min, 'max': _max_real}\n        print(f\"  {stat:15} -> P95: {_max_real:.2f}\")\nprint(\"\\n=== 🔬 RENDIMIENTO CRUDO VS TECHOS 🔬 ===\")\nfor index, row in df_test.iterrows():",
+        "detail": "audi2",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_pesos_planos",
+        "kind": 2,
+        "importPath": "audi3",
+        "description": "audi3",
+        "peekOfCode": "def obtener_pesos_planos(rol):\n    config = PESOS_JSON[rol]\n    pesos_planos = {}\n    for cat, peso_cat in config['categoria_pesos'].items():\n        if cat in config['estadisticas']:\n            for stat, peso_stat in config['estadisticas'][cat].items():\n                pesos_planos[stat] = pesos_planos.get(stat, 0) + (peso_cat * peso_stat)\n    return pesos_planos\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\nstats_inversas = ['Dispossesed', 'AerialLost']",
+        "detail": "audi3",
+        "documentation": {}
+    },
+    {
+        "label": "archivo",
+        "kind": 5,
+        "importPath": "audi3",
+        "description": "audi3",
+        "peekOfCode": "archivo = 'DataFramev1.xlsx'\nprint(\"🔍 Iniciando Auditoría de Mediocentros (Radiografía de Bonos y Techos)...\\n\")\n# Configuración básica de MC para la auditoría\nPESOS_JSON = {\n    \"MC_DEF\": {\n        \"categoria_pesos\": { \"Defensa\": 0.55, \"Passing\": 0.25, \"Possession\": 0.12, \"Aerial\": 0.05, \"GAS\": 0.02, \"Shooting\": 0.01 },\n        \"estadisticas\": {\n            \"Defensa\": { \"Int\": 0.25, \"Recov\": 0.25, \"TklW\": 0.15, \"BallRec\": 0.10, \"BallRecProg\": 0.10, \"TklMid3rd\": 0.10, \"Tkl\": 0.05 },\n            \"Passing\": { \"Cmp%Total\": 0.35, \"ShortCmp\": 0.15, \"Cmp%Short\": 0.15, \"MediumCmp\": 0.10, \"Prog\": 0.10, \"PrgDist\": 0.10, \"LongCmp\": 0.05 },\n            \"Possession\": { \"Dispossesed\": 0.40, \"TouchesMid3rd\": 0.30, \"TouchesDef3rd\": 0.20, \"BallRec\": 0.10 },",
+        "detail": "audi3",
+        "documentation": {}
+    },
+    {
+        "label": "PESOS_JSON",
+        "kind": 5,
+        "importPath": "audi3",
+        "description": "audi3",
+        "peekOfCode": "PESOS_JSON = {\n    \"MC_DEF\": {\n        \"categoria_pesos\": { \"Defensa\": 0.55, \"Passing\": 0.25, \"Possession\": 0.12, \"Aerial\": 0.05, \"GAS\": 0.02, \"Shooting\": 0.01 },\n        \"estadisticas\": {\n            \"Defensa\": { \"Int\": 0.25, \"Recov\": 0.25, \"TklW\": 0.15, \"BallRec\": 0.10, \"BallRecProg\": 0.10, \"TklMid3rd\": 0.10, \"Tkl\": 0.05 },\n            \"Passing\": { \"Cmp%Total\": 0.35, \"ShortCmp\": 0.15, \"Cmp%Short\": 0.15, \"MediumCmp\": 0.10, \"Prog\": 0.10, \"PrgDist\": 0.10, \"LongCmp\": 0.05 },\n            \"Possession\": { \"Dispossesed\": 0.40, \"TouchesMid3rd\": 0.30, \"TouchesDef3rd\": 0.20, \"BallRec\": 0.10 },\n            \"Aerial\": { \"AerialWon%\": 1.00 },\n            \"GAS\": { \"SCA\": 0.50, \"SCAPassLive\": 0.50 },\n            \"Shooting\": { \"Gls\": 1.0 }",
+        "detail": "audi3",
+        "documentation": {}
+    },
+    {
+        "label": "metricas_defensivas",
+        "kind": 5,
+        "importPath": "audi3",
+        "description": "audi3",
+        "peekOfCode": "metricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\nstats_inversas = ['Dispossesed', 'AerialLost']\n# Vamos a rastrear a la élite de tu lista\njugadores_test = ['Joshua Kimmich', 'Thiago Alcántara', 'Marcelo Brozović', 'Sergio Busquets', 'Jorginho', 'Wendell', 'Toni Kroos']\nif os.path.exists(archivo):\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    print(f\"{'JUGADOR (TEMP)':<25} | {'ROL':<7} | {'DEF%':<6} | {'PAS%':<6} | {'GAS%':<6} | {'BONO?':<6} | {'NOTA BASE':<10} | {'FINAL'}\")\n    print(\"-\" * 95)\n    for sheet_name in xls.sheet_names:\n        df = pd.read_excel(xls, sheet_name=sheet_name)",
+        "detail": "audi3",
+        "documentation": {}
+    },
+    {
+        "label": "stats_inversas",
+        "kind": 5,
+        "importPath": "audi3",
+        "description": "audi3",
+        "peekOfCode": "stats_inversas = ['Dispossesed', 'AerialLost']\n# Vamos a rastrear a la élite de tu lista\njugadores_test = ['Joshua Kimmich', 'Thiago Alcántara', 'Marcelo Brozović', 'Sergio Busquets', 'Jorginho', 'Wendell', 'Toni Kroos']\nif os.path.exists(archivo):\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    print(f\"{'JUGADOR (TEMP)':<25} | {'ROL':<7} | {'DEF%':<6} | {'PAS%':<6} | {'GAS%':<6} | {'BONO?':<6} | {'NOTA BASE':<10} | {'FINAL'}\")\n    print(\"-\" * 95)\n    for sheet_name in xls.sheet_names:\n        df = pd.read_excel(xls, sheet_name=sheet_name)\n        df_clean = df[df['Min'] >= 800].copy()",
+        "detail": "audi3",
+        "documentation": {}
+    },
+    {
+        "label": "jugadores_test",
+        "kind": 5,
+        "importPath": "audi3",
+        "description": "audi3",
+        "peekOfCode": "jugadores_test = ['Joshua Kimmich', 'Thiago Alcántara', 'Marcelo Brozović', 'Sergio Busquets', 'Jorginho', 'Wendell', 'Toni Kroos']\nif os.path.exists(archivo):\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    print(f\"{'JUGADOR (TEMP)':<25} | {'ROL':<7} | {'DEF%':<6} | {'PAS%':<6} | {'GAS%':<6} | {'BONO?':<6} | {'NOTA BASE':<10} | {'FINAL'}\")\n    print(\"-\" * 95)\n    for sheet_name in xls.sheet_names:\n        df = pd.read_excel(xls, sheet_name=sheet_name)\n        df_clean = df[df['Min'] >= 800].copy()\n        df_pos = df_clean[df_clean['Pos'].str.contains('MF', na=False)].copy()\n        if df_pos.empty: continue",
+        "detail": "audi3",
+        "documentation": {}
+    },
+    {
+        "label": "archivo",
+        "kind": 5,
+        "importPath": "auditores",
+        "description": "auditores",
+        "peekOfCode": "archivo = 'DataFramev1.xlsx'\nprint(\"Cargando datos de Centrales con el nuevo arsenal...\")\ndf = pd.read_excel(archivo, sheet_name='21-22') \ndf_clean = df[(df['Min'] >= 800) & (df['Pos'].str.contains('CB|DF', na=False))].copy()\njugadores_test = [\n    'Virgil van Dijk', 'Rúben Dias', 'Marquinhos', \n    'Grant Hanley', 'James Tarkowski', 'Mohammed Salisu'\n]\n# Definimos nuestras tres dimensiones basadas en TU lista\nstats_volumen = ['Clr', 'Int', 'Tkl']",
+        "detail": "auditores",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "auditores",
+        "description": "auditores",
+        "peekOfCode": "df = pd.read_excel(archivo, sheet_name='21-22') \ndf_clean = df[(df['Min'] >= 800) & (df['Pos'].str.contains('CB|DF', na=False))].copy()\njugadores_test = [\n    'Virgil van Dijk', 'Rúben Dias', 'Marquinhos', \n    'Grant Hanley', 'James Tarkowski', 'Mohammed Salisu'\n]\n# Definimos nuestras tres dimensiones basadas en TU lista\nstats_volumen = ['Clr', 'Int', 'Tkl']\nstats_eficacia = ['AerialWon%', 'Recov', 'BallRecProg'] \nstats_salida = ['Cmp%Total', 'Prog', 'PrgDist']",
+        "detail": "auditores",
+        "documentation": {}
+    },
+    {
+        "label": "df_clean",
+        "kind": 5,
+        "importPath": "auditores",
+        "description": "auditores",
+        "peekOfCode": "df_clean = df[(df['Min'] >= 800) & (df['Pos'].str.contains('CB|DF', na=False))].copy()\njugadores_test = [\n    'Virgil van Dijk', 'Rúben Dias', 'Marquinhos', \n    'Grant Hanley', 'James Tarkowski', 'Mohammed Salisu'\n]\n# Definimos nuestras tres dimensiones basadas en TU lista\nstats_volumen = ['Clr', 'Int', 'Tkl']\nstats_eficacia = ['AerialWon%', 'Recov', 'BallRecProg'] \nstats_salida = ['Cmp%Total', 'Prog', 'PrgDist']\nstats_inversas = ['Dispossesed'] # Menos es mejor",
+        "detail": "auditores",
+        "documentation": {}
+    },
+    {
+        "label": "jugadores_test",
+        "kind": 5,
+        "importPath": "auditores",
+        "description": "auditores",
+        "peekOfCode": "jugadores_test = [\n    'Virgil van Dijk', 'Rúben Dias', 'Marquinhos', \n    'Grant Hanley', 'James Tarkowski', 'Mohammed Salisu'\n]\n# Definimos nuestras tres dimensiones basadas en TU lista\nstats_volumen = ['Clr', 'Int', 'Tkl']\nstats_eficacia = ['AerialWon%', 'Recov', 'BallRecProg'] \nstats_salida = ['Cmp%Total', 'Prog', 'PrgDist']\nstats_inversas = ['Dispossesed'] # Menos es mejor\nstats_auditoria = stats_volumen + stats_eficacia + stats_salida + stats_inversas",
+        "detail": "auditores",
+        "documentation": {}
+    },
+    {
+        "label": "stats_volumen",
+        "kind": 5,
+        "importPath": "auditores",
+        "description": "auditores",
+        "peekOfCode": "stats_volumen = ['Clr', 'Int', 'Tkl']\nstats_eficacia = ['AerialWon%', 'Recov', 'BallRecProg'] \nstats_salida = ['Cmp%Total', 'Prog', 'PrgDist']\nstats_inversas = ['Dispossesed'] # Menos es mejor\nstats_auditoria = stats_volumen + stats_eficacia + stats_salida + stats_inversas\nprint(\"\\n=== 🚨 ANÁLISIS DEL TECHO EN CENTRALES (P95/P85) 🚨 ===\")\ntechos = {}\nfor stat in stats_auditoria:\n    if stat in df_clean.columns:\n        df_clean[stat] = pd.to_numeric(df_clean[stat], errors='coerce').fillna(0)",
+        "detail": "auditores",
+        "documentation": {}
+    },
+    {
+        "label": "stats_eficacia",
+        "kind": 5,
+        "importPath": "auditores",
+        "description": "auditores",
+        "peekOfCode": "stats_eficacia = ['AerialWon%', 'Recov', 'BallRecProg'] \nstats_salida = ['Cmp%Total', 'Prog', 'PrgDist']\nstats_inversas = ['Dispossesed'] # Menos es mejor\nstats_auditoria = stats_volumen + stats_eficacia + stats_salida + stats_inversas\nprint(\"\\n=== 🚨 ANÁLISIS DEL TECHO EN CENTRALES (P95/P85) 🚨 ===\")\ntechos = {}\nfor stat in stats_auditoria:\n    if stat in df_clean.columns:\n        df_clean[stat] = pd.to_numeric(df_clean[stat], errors='coerce').fillna(0)\n        _min = df_clean[stat].min()",
+        "detail": "auditores",
+        "documentation": {}
+    },
+    {
+        "label": "stats_salida",
+        "kind": 5,
+        "importPath": "auditores",
+        "description": "auditores",
+        "peekOfCode": "stats_salida = ['Cmp%Total', 'Prog', 'PrgDist']\nstats_inversas = ['Dispossesed'] # Menos es mejor\nstats_auditoria = stats_volumen + stats_eficacia + stats_salida + stats_inversas\nprint(\"\\n=== 🚨 ANÁLISIS DEL TECHO EN CENTRALES (P95/P85) 🚨 ===\")\ntechos = {}\nfor stat in stats_auditoria:\n    if stat in df_clean.columns:\n        df_clean[stat] = pd.to_numeric(df_clean[stat], errors='coerce').fillna(0)\n        _min = df_clean[stat].min()\n        # Usamos P85 para volumen defensivo (para no matar a la élite) y P95 para calidad",
+        "detail": "auditores",
+        "documentation": {}
+    },
+    {
+        "label": "stats_inversas",
+        "kind": 5,
+        "importPath": "auditores",
+        "description": "auditores",
+        "peekOfCode": "stats_inversas = ['Dispossesed'] # Menos es mejor\nstats_auditoria = stats_volumen + stats_eficacia + stats_salida + stats_inversas\nprint(\"\\n=== 🚨 ANÁLISIS DEL TECHO EN CENTRALES (P95/P85) 🚨 ===\")\ntechos = {}\nfor stat in stats_auditoria:\n    if stat in df_clean.columns:\n        df_clean[stat] = pd.to_numeric(df_clean[stat], errors='coerce').fillna(0)\n        _min = df_clean[stat].min()\n        # Usamos P85 para volumen defensivo (para no matar a la élite) y P95 para calidad\n        percentil = 0.85 if stat in stats_volumen else 0.95",
+        "detail": "auditores",
+        "documentation": {}
+    },
+    {
+        "label": "stats_auditoria",
+        "kind": 5,
+        "importPath": "auditores",
+        "description": "auditores",
+        "peekOfCode": "stats_auditoria = stats_volumen + stats_eficacia + stats_salida + stats_inversas\nprint(\"\\n=== 🚨 ANÁLISIS DEL TECHO EN CENTRALES (P95/P85) 🚨 ===\")\ntechos = {}\nfor stat in stats_auditoria:\n    if stat in df_clean.columns:\n        df_clean[stat] = pd.to_numeric(df_clean[stat], errors='coerce').fillna(0)\n        _min = df_clean[stat].min()\n        # Usamos P85 para volumen defensivo (para no matar a la élite) y P95 para calidad\n        percentil = 0.85 if stat in stats_volumen else 0.95\n        _max_real = df_clean[stat].quantile(percentil)",
+        "detail": "auditores",
+        "documentation": {}
+    },
+    {
+        "label": "techos",
+        "kind": 5,
+        "importPath": "auditores",
+        "description": "auditores",
+        "peekOfCode": "techos = {}\nfor stat in stats_auditoria:\n    if stat in df_clean.columns:\n        df_clean[stat] = pd.to_numeric(df_clean[stat], errors='coerce').fillna(0)\n        _min = df_clean[stat].min()\n        # Usamos P85 para volumen defensivo (para no matar a la élite) y P95 para calidad\n        percentil = 0.85 if stat in stats_volumen else 0.95\n        _max_real = df_clean[stat].quantile(percentil)\n        techos[stat] = {'min': _min, 'max': _max_real}\n        print(f\"  {stat:15} -> Techo: {_max_real:.2f}\")",
+        "detail": "auditores",
+        "documentation": {}
+    },
+    {
+        "label": "filtro",
+        "kind": 5,
+        "importPath": "auditores",
+        "description": "auditores",
+        "peekOfCode": "filtro = df_clean['Player'].apply(lambda x: any(j in str(x) for j in jugadores_test))\ndf_test = df_clean[filtro]\nfor index, row in df_test.iterrows():\n    print(f\"\\n🧱 {row['Player']} ({row['Squad']})\")\n    # 1. VOLUMEN\n    print(\"  --- VOLUMEN (Dominan equipos de bloque bajo) ---\")\n    for stat in stats_volumen:\n        if stat in row and stat in techos:\n            valor = row[stat]\n            _max = techos[stat]['max']",
+        "detail": "auditores",
+        "documentation": {}
+    },
+    {
+        "label": "df_test",
+        "kind": 5,
+        "importPath": "auditores",
+        "description": "auditores",
+        "peekOfCode": "df_test = df_clean[filtro]\nfor index, row in df_test.iterrows():\n    print(f\"\\n🧱 {row['Player']} ({row['Squad']})\")\n    # 1. VOLUMEN\n    print(\"  --- VOLUMEN (Dominan equipos de bloque bajo) ---\")\n    for stat in stats_volumen:\n        if stat in row and stat in techos:\n            valor = row[stat]\n            _max = techos[stat]['max']\n            _min = techos[stat]['min']",
+        "detail": "auditores",
+        "documentation": {}
+    },
+    {
+        "label": "archivo",
+        "kind": 5,
+        "importPath": "auditoria",
+        "description": "auditoria",
+        "peekOfCode": "archivo = 'DataFramev1.xlsx'\nprint(\"Cargando datos...\")\n# Leemos directamente la temporada 21-22 (o cambia el nombre a la pestaña que estés usando)\ndf = pd.read_excel(archivo, sheet_name='21-22') \ndf_clean = df[df['Min'] >= 800].copy()\n# 2. Nuestros conejillos de indias\njugadores_test = [\n    'Casemiro', 'Fabinho', 'N\\'Golo Kanté', \n    'Joshua Kimmich', 'John McGinn', 'Marcelo Brozović', 'Fabián Ruiz', \n    'Theo Hernández', 'João Cancelo', 'Trent Alexander-Arnold'",
+        "detail": "auditoria",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "auditoria",
+        "description": "auditoria",
+        "peekOfCode": "df = pd.read_excel(archivo, sheet_name='21-22') \ndf_clean = df[df['Min'] >= 800].copy()\n# 2. Nuestros conejillos de indias\njugadores_test = [\n    'Casemiro', 'Fabinho', 'N\\'Golo Kanté', \n    'Joshua Kimmich', 'John McGinn', 'Marcelo Brozović', 'Fabián Ruiz', \n    'Theo Hernández', 'João Cancelo', 'Trent Alexander-Arnold'\n]\n# 3. Las métricas que queremos investigar\nstats_auditoria = ['TklW', 'Int', 'Recov', 'Clr', 'Prog', 'PrgDist', 'SCA', 'TouchesMid3rd']",
+        "detail": "auditoria",
+        "documentation": {}
+    },
+    {
+        "label": "df_clean",
+        "kind": 5,
+        "importPath": "auditoria",
+        "description": "auditoria",
+        "peekOfCode": "df_clean = df[df['Min'] >= 800].copy()\n# 2. Nuestros conejillos de indias\njugadores_test = [\n    'Casemiro', 'Fabinho', 'N\\'Golo Kanté', \n    'Joshua Kimmich', 'John McGinn', 'Marcelo Brozović', 'Fabián Ruiz', \n    'Theo Hernández', 'João Cancelo', 'Trent Alexander-Arnold'\n]\n# 3. Las métricas que queremos investigar\nstats_auditoria = ['TklW', 'Int', 'Recov', 'Clr', 'Prog', 'PrgDist', 'SCA', 'TouchesMid3rd']\nprint(\"\\n=== 🚨 EL TECHO DEL MODELO (Percentil 95 GLOBAL) 🚨 ===\")",
+        "detail": "auditoria",
+        "documentation": {}
+    },
+    {
+        "label": "jugadores_test",
+        "kind": 5,
+        "importPath": "auditoria",
+        "description": "auditoria",
+        "peekOfCode": "jugadores_test = [\n    'Casemiro', 'Fabinho', 'N\\'Golo Kanté', \n    'Joshua Kimmich', 'John McGinn', 'Marcelo Brozović', 'Fabián Ruiz', \n    'Theo Hernández', 'João Cancelo', 'Trent Alexander-Arnold'\n]\n# 3. Las métricas que queremos investigar\nstats_auditoria = ['TklW', 'Int', 'Recov', 'Clr', 'Prog', 'PrgDist', 'SCA', 'TouchesMid3rd']\nprint(\"\\n=== 🚨 EL TECHO DEL MODELO (Percentil 95 GLOBAL) 🚨 ===\")\nprint(\"Si el P95 es muy alto, nuestros élites sacarán malas notas.\")\ntechos = {}",
+        "detail": "auditoria",
+        "documentation": {}
+    },
+    {
+        "label": "stats_auditoria",
+        "kind": 5,
+        "importPath": "auditoria",
+        "description": "auditoria",
+        "peekOfCode": "stats_auditoria = ['TklW', 'Int', 'Recov', 'Clr', 'Prog', 'PrgDist', 'SCA', 'TouchesMid3rd']\nprint(\"\\n=== 🚨 EL TECHO DEL MODELO (Percentil 95 GLOBAL) 🚨 ===\")\nprint(\"Si el P95 es muy alto, nuestros élites sacarán malas notas.\")\ntechos = {}\nfor stat in stats_auditoria:\n    if stat in df_clean.columns:\n        _min = df_clean[stat].min()\n        _max_real = df_clean[stat].quantile(0.95)\n        techos[stat] = {'min': _min, 'max': _max_real}\n        print(f\"  {stat:15} -> P95: {_max_real:.2f} (Quien llegue a esto saca 100/100)\")",
+        "detail": "auditoria",
+        "documentation": {}
+    },
+    {
+        "label": "techos",
+        "kind": 5,
+        "importPath": "auditoria",
+        "description": "auditoria",
+        "peekOfCode": "techos = {}\nfor stat in stats_auditoria:\n    if stat in df_clean.columns:\n        _min = df_clean[stat].min()\n        _max_real = df_clean[stat].quantile(0.95)\n        techos[stat] = {'min': _min, 'max': _max_real}\n        print(f\"  {stat:15} -> P95: {_max_real:.2f} (Quien llegue a esto saca 100/100)\")\nprint(\"\\n=== 🔬 NOTAS NORMALIZADAS DE NUESTROS CRACKS 🔬 ===\")\n# Filtramos de forma flexible por si los nombres varían un poco en el Excel\nfiltro = df_clean['Player'].apply(lambda x: any(j in str(x) for j in jugadores_test))",
+        "detail": "auditoria",
+        "documentation": {}
+    },
+    {
+        "label": "filtro",
+        "kind": 5,
+        "importPath": "auditoria",
+        "description": "auditoria",
+        "peekOfCode": "filtro = df_clean['Player'].apply(lambda x: any(j in str(x) for j in jugadores_test))\ndf_test = df_clean[filtro]\nfor index, row in df_test.iterrows():\n    print(f\"\\n⚽ {row['Player']} ({row['Squad']}) - Pos: {row['Pos']}\")\n    for stat in stats_auditoria:\n        if stat in row and stat in techos:\n            valor_crudo = row[stat]\n            _min = techos[stat]['min']\n            _max_real = techos[stat]['max']\n            # Replicamos exactamente la normalización de tu motor V14",
+        "detail": "auditoria",
+        "documentation": {}
+    },
+    {
+        "label": "df_test",
+        "kind": 5,
+        "importPath": "auditoria",
+        "description": "auditoria",
+        "peekOfCode": "df_test = df_clean[filtro]\nfor index, row in df_test.iterrows():\n    print(f\"\\n⚽ {row['Player']} ({row['Squad']}) - Pos: {row['Pos']}\")\n    for stat in stats_auditoria:\n        if stat in row and stat in techos:\n            valor_crudo = row[stat]\n            _min = techos[stat]['min']\n            _max_real = techos[stat]['max']\n            # Replicamos exactamente la normalización de tu motor V14\n            if _max_real > _min:",
+        "detail": "auditoria",
+        "documentation": {}
+    },
+    {
+        "label": "calibrar_roles_fw_v2",
+        "kind": 2,
+        "importPath": "calibrador_roles",
+        "description": "calibrador_roles",
+        "peekOfCode": "def calibrar_roles_fw_v2():\n    # 1. Cargar Datos\n    carpeta = os.path.dirname(os.path.abspath(__file__))\n    archivo = [f for f in os.listdir(carpeta) if 'Premier20-21' in f][0]\n    if archivo.endswith('.xlsx'): df = pd.read_excel(os.path.join(carpeta, archivo), engine='openpyxl')\n    else: df = pd.read_csv(os.path.join(carpeta, archivo))\n    # 2. Filtrar solo Delanteros con minutos decentes\n    col_min = 'Min' if 'Min' in df.columns else 'Minutos'\n    df = df[(df['PosAdj'] == 'FW') & (df[col_min] >= 900)].copy() # Subí a 900 min para mayor fiabilidad\n    # 3. Métrica de \"Volumen Creativo\" (CORREGIDA)",
+        "detail": "calibrador_roles",
+        "documentation": {}
+    },
+    {
+        "label": "archivo",
+        "kind": 5,
+        "importPath": "cnlb",
+        "description": "cnlb",
+        "peekOfCode": "archivo = 'Premier20-21.xlsx'\nif os.path.exists(archivo):\n    print(\"Cargando datos para diagnóstico de Centros...\")\n    df = pd.read_excel(archivo, engine='openpyxl')\n    # 1. Filtramos solo Defensas con tiempo de juego decente\n    df_def = df[df['Pos'].str.contains('DF', na=False)].copy()\n    df_def = df_def[df_def['Min'] > 800].copy()\n    # 2. Creamos la métrica \"Centros por 90 minutos\"\n    # Es vital dividir por 90s, si no, el que juega más minutos siempre tendrá más centros\n    df_def['Crs_p90'] = df_def['Crs'] / df_def['90s']",
+        "detail": "cnlb",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_pesos_planos",
+        "kind": 2,
+        "importPath": "generar_pesosv2",
+        "description": "generar_pesosv2",
+        "peekOfCode": "def obtener_pesos_planos(rol):\n    if rol not in PESOS_JSON: return {}\n    config = PESOS_JSON[rol]\n    pesos_planos = {}\n    for cat, peso_cat in config['categoria_pesos'].items():\n        if cat in config['estadisticas']:\n            for stat, peso_stat in config['estadisticas'][cat].items():\n                pesos_planos[stat] = pesos_planos.get(stat, 0) + (peso_cat * peso_stat)\n    return pesos_planos\ndef calcular_rating_rol(df, rol_analisis):",
+        "detail": "generar_pesosv2",
+        "documentation": {}
+    },
+    {
+        "label": "calcular_rating_rol",
+        "kind": 2,
+        "importPath": "generar_pesosv2",
+        "description": "generar_pesosv2",
+        "peekOfCode": "def calcular_rating_rol(df, rol_analisis):\n    pesos = obtener_pesos_planos(rol_analisis)\n    cols_necesarias = list(pesos.keys())\n    cols_existentes = [c for c in cols_necesarias if c in df.columns]\n    df_calc = df.copy()\n    # Normalización Min-Max\n    for col in cols_existentes:\n        df_calc[col] = pd.to_numeric(df_calc[col], errors='coerce').fillna(0)\n        min_v, max_v = df_calc[col].min(), df_calc[col].max()\n        if max_v - min_v == 0:",
+        "detail": "generar_pesosv2",
+        "documentation": {}
+    },
+    {
+        "label": "PESOS_JSON",
+        "kind": 5,
+        "importPath": "generar_pesosv2",
+        "description": "generar_pesosv2",
+        "peekOfCode": "PESOS_JSON = {\n    \"DC\": {\n        \"categoria_pesos\": { \"Defensa\": 0.55, \"Aerial\": 0.25, \"Passing\": 0.15, \"Possession\": 0.05, \"GAS\": 0.00, \"Shooting\": 0.00 },\n        \"estadisticas\": {\n            \"Defensa\": { \"Clr\": 0.30, \"Int\": 0.25, \"Recov\": 0.20, \"TklW\": 0.15, \"TklDef3rd\": 0.10 },\n            \"Aerial\": { \"AerialWon%\": 0.60, \"AerialWon\": 0.40 },\n            \"Passing\": { \"Cmp%Total\": 0.40, \"PrgDist\": 0.30, \"LongCmp\": 0.30 },\n            \"Possession\": { \"Dispossessed\": 1.0 }\n        }\n    },",
+        "detail": "generar_pesosv2",
+        "documentation": {}
+    },
+    {
+        "label": "archivo",
+        "kind": 5,
+        "importPath": "generar_pesosv2",
+        "description": "generar_pesosv2",
+        "peekOfCode": "archivo = 'Premier20-21.xlsx'\nUMBRAL_MINUTOS = 800 \nUMBRAL_CENTROS = 0.75  # El número mágico para separar DC de LB\nif os.path.exists(archivo):\n    print(f\"Cargando base de datos: {archivo}\")\n    df_raw = pd.read_excel(archivo, engine='openpyxl')\n    # 1. Filtro Minutos\n    df_clean = df_raw[df_raw['Min'] >= UMBRAL_MINUTOS].copy()\n    print(f\"-> Jugadores >{UMBRAL_MINUTOS} min: {len(df_clean)}\")\n    writer = pd.ExcelWriter('Resultados_Tesis_Filtrado.xlsx', engine='openpyxl')",
+        "detail": "generar_pesosv2",
+        "documentation": {}
+    },
+    {
+        "label": "UMBRAL_MINUTOS",
+        "kind": 5,
+        "importPath": "generar_pesosv2",
+        "description": "generar_pesosv2",
+        "peekOfCode": "UMBRAL_MINUTOS = 800 \nUMBRAL_CENTROS = 0.75  # El número mágico para separar DC de LB\nif os.path.exists(archivo):\n    print(f\"Cargando base de datos: {archivo}\")\n    df_raw = pd.read_excel(archivo, engine='openpyxl')\n    # 1. Filtro Minutos\n    df_clean = df_raw[df_raw['Min'] >= UMBRAL_MINUTOS].copy()\n    print(f\"-> Jugadores >{UMBRAL_MINUTOS} min: {len(df_clean)}\")\n    writer = pd.ExcelWriter('Resultados_Tesis_Filtrado.xlsx', engine='openpyxl')\n    for rol in PESOS_JSON.keys():",
+        "detail": "generar_pesosv2",
+        "documentation": {}
+    },
+    {
+        "label": "UMBRAL_CENTROS",
+        "kind": 5,
+        "importPath": "generar_pesosv2",
+        "description": "generar_pesosv2",
+        "peekOfCode": "UMBRAL_CENTROS = 0.75  # El número mágico para separar DC de LB\nif os.path.exists(archivo):\n    print(f\"Cargando base de datos: {archivo}\")\n    df_raw = pd.read_excel(archivo, engine='openpyxl')\n    # 1. Filtro Minutos\n    df_clean = df_raw[df_raw['Min'] >= UMBRAL_MINUTOS].copy()\n    print(f\"-> Jugadores >{UMBRAL_MINUTOS} min: {len(df_clean)}\")\n    writer = pd.ExcelWriter('Resultados_Tesis_Filtrado.xlsx', engine='openpyxl')\n    for rol in PESOS_JSON.keys():\n        print(f\"\\n--- Analizando Rol: {rol} ---\")",
+        "detail": "generar_pesosv2",
+        "documentation": {}
+    },
+    {
+        "label": "Jugador",
+        "kind": 6,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "class Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))\n    posicion = db.Column(db.String(10))\n    minutos = db.Column(db.Integer)\n    liga = db.Column(db.String(50))      ",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "Valoracion",
+        "kind": 6,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "class Valoracion(db.Model):\n    __tablename__ = 'valoraciones'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    rol_principal = db.Column(db.String(20))\n    rtg_principal = db.Column(db.Float)\n    valor_deportivo = db.Column(db.Float)\n    # ELIMINADO: precio_mercado\n    rol_2 = db.Column(db.String(20))\n    rtg_2 = db.Column(db.Float)",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "EstadisticasFBref",
+        "kind": 6,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "class EstadisticasFBref(db.Model):\n    __tablename__ = 'estadisticas_fbref'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    datos_crudos = db.Column(db.JSON)\n# ==========================================\n# 2. PROCESO DE MIGRACIÓN MAESTRA\n# ==========================================\ndef migrar_datos():\n    csv_file = 'Scouting_Database_Final.csv'",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "migrar_datos",
+        "kind": 2,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "def migrar_datos():\n    csv_file = 'Scouting_Database_Final.csv'\n    if not os.path.exists(csv_file):\n        print(f\"❌ Error: No encuentro el archivo {csv_file}\")\n        return\n    print(\"📊 Cargando Base de Datos Maestra de Europa...\")\n    df = pd.read_csv(csv_file)\n    df = df.fillna(0)\n    # Nombres de las columnas que nuestro motor añadió al final y NO son estadísticas FBref\n    columnas_metadata = ['Valor_Deportivo', 'Rol_Principal', 'RTG_Principal', 'Rol_2', 'RTG_2', 'Rol_3', 'RTG_3', 'Rank']",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "app = Flask(__name__)\napp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scoutmew.db'\napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "app.config['SQLALCHEMY_DATABASE_URI']",
+        "kind": 5,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scoutmew.db'\napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "app.config['SQLALCHEMY_TRACK_MODIFICATIONS']",
+        "kind": 5,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))\n    posicion = db.Column(db.String(10))",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "kind": 5,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "db = SQLAlchemy(app)\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))\n    posicion = db.Column(db.String(10))\n    minutos = db.Column(db.Integer)",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_pesos_planos",
+        "kind": 2,
+        "importPath": "prueba_def",
+        "description": "prueba_def",
+        "peekOfCode": "def obtener_pesos_planos(rol):\n    if rol not in PESOS_JSON: return {}\n    config = PESOS_JSON[rol]\n    pesos_planos = {}\n    for cat, peso_cat in config['categoria_pesos'].items():\n        if cat in config['estadisticas']:\n            for stat, peso_stat in config['estadisticas'][cat].items():\n                pesos_planos[stat] = pesos_planos.get(stat, 0) + (peso_cat * peso_stat)\n    return pesos_planos\ndef calcular_valor_deportivo(row, col_rtg, nombre_rol):",
+        "detail": "prueba_def",
+        "documentation": {}
+    },
+    {
+        "label": "calcular_valor_deportivo",
+        "kind": 2,
+        "importPath": "prueba_def",
+        "description": "prueba_def",
+        "peekOfCode": "def calcular_valor_deportivo(row, col_rtg, nombre_rol):\n    rtg = row[col_rtg]\n    edad = row['Age']\n    minutos = row['Min']\n    liga = row['League']\n    # Curva Exponencial Base (Se mantiene: premia la élite)\n    precio_base = ((rtg / 10) ** 6) * 200  \n    # 1. EDAD: Aplanada. Ya no premiamos el potencial de venta. \n    # Solo aplicamos un micro-ajuste de fiabilidad física extrema.\n    factor_edad = 1.0",
+        "detail": "prueba_def",
+        "documentation": {}
+    },
+    {
+        "label": "PESOS_JSON",
+        "kind": 5,
+        "importPath": "prueba_def",
+        "description": "prueba_def",
+        "peekOfCode": "PESOS_JSON = {\n    \"DC\": {\n        \"categoria_pesos\": {\n            \"Defensa\": 0.40,\n            \"Aerial\": 0.20,\n            \"Passing\": 0.30,\n            \"Possession\": 0.10\n        },\n        \"estadisticas\": {\n            \"Defensa\": {",
+        "detail": "prueba_def",
+        "documentation": {}
+    },
+    {
+        "label": "archivo",
+        "kind": 5,
+        "importPath": "prueba_def",
+        "description": "prueba_def",
+        "peekOfCode": "archivo = 'DataFramev1.xlsx'\nUMBRAL_MINUTOS = 800\n# --- NUEVOS UMBRALES DE ADUANA TÁCTICA ---\nUMBRAL_CENTROS = 15.0 # Si tira más de 15 centros al año, sospechamos que es lateral\nUMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\nif os.path.exists(archivo):\n    print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    all_assessments = []",
+        "detail": "prueba_def",
+        "documentation": {}
+    },
+    {
+        "label": "UMBRAL_MINUTOS",
+        "kind": 5,
+        "importPath": "prueba_def",
+        "description": "prueba_def",
+        "peekOfCode": "UMBRAL_MINUTOS = 800\n# --- NUEVOS UMBRALES DE ADUANA TÁCTICA ---\nUMBRAL_CENTROS = 15.0 # Si tira más de 15 centros al año, sospechamos que es lateral\nUMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\nif os.path.exists(archivo):\n    print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    all_assessments = []\n    stats_inversas = ['Dispossesed', 'AerialLost']",
+        "detail": "prueba_def",
+        "documentation": {}
+    },
+    {
+        "label": "UMBRAL_CENTROS",
+        "kind": 5,
+        "importPath": "prueba_def",
+        "description": "prueba_def",
+        "peekOfCode": "UMBRAL_CENTROS = 15.0 # Si tira más de 15 centros al año, sospechamos que es lateral\nUMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\nif os.path.exists(archivo):\n    print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    all_assessments = []\n    stats_inversas = ['Dispossesed', 'AerialLost']\n    for sheet_name in xls.sheet_names:\n        print(f\"\\n📅 Procesando Temporada Global: {sheet_name}\")",
+        "detail": "prueba_def",
+        "documentation": {}
+    },
+    {
+        "label": "UMBRAL_TOQUES_ATT",
+        "kind": 5,
+        "importPath": "prueba_def",
+        "description": "prueba_def",
+        "peekOfCode": "UMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\nif os.path.exists(archivo):\n    print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    all_assessments = []\n    stats_inversas = ['Dispossesed', 'AerialLost']\n    for sheet_name in xls.sheet_names:\n        print(f\"\\n📅 Procesando Temporada Global: {sheet_name}\")\n        df_season = pd.read_excel(xls, sheet_name=sheet_name)",
+        "detail": "prueba_def",
+        "documentation": {}
+    },
+    {
+        "label": "metricas_defensivas",
+        "kind": 5,
+        "importPath": "prueba_def",
+        "description": "prueba_def",
+        "peekOfCode": "metricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\nif os.path.exists(archivo):\n    print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    all_assessments = []\n    stats_inversas = ['Dispossesed', 'AerialLost']\n    for sheet_name in xls.sheet_names:\n        print(f\"\\n📅 Procesando Temporada Global: {sheet_name}\")\n        df_season = pd.read_excel(xls, sheet_name=sheet_name)\n        df_clean = df_season[df_season['Min'] >= UMBRAL_MINUTOS].copy()",
+        "detail": "prueba_def",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_pesos_planos",
+        "kind": 2,
+        "importPath": "test1_econo",
+        "description": "test1_econo",
+        "peekOfCode": "def obtener_pesos_planos(rol):\n    if rol not in PESOS_JSON: return {}\n    config = PESOS_JSON[rol]\n    pesos_planos = {}\n    for cat, peso_cat in config['categoria_pesos'].items():\n        if cat in config['estadisticas']:\n            for stat, peso_stat in config['estadisticas'][cat].items():\n                pesos_planos[stat] = pesos_planos.get(stat, 0) + (peso_cat * peso_stat)\n    return pesos_planos\ndef calcular_precio(row, col_rtg, nombre_rol):",
+        "detail": "test1_econo",
+        "documentation": {}
+    },
+    {
+        "label": "calcular_precio",
+        "kind": 2,
+        "importPath": "test1_econo",
+        "description": "test1_econo",
+        "peekOfCode": "def calcular_precio(row, col_rtg, nombre_rol):\n    rtg = row[col_rtg]\n    edad = row['Age']\n    minutos = row['Min']\n    equipo = row['Squad']\n    # nacionalidad eliminada\n    # 1. BASE EXPONENCIAL CÚBICA\n    # Elevamos el RTG al cubo para diferenciar cracks de jugadores promedio\n    precio_base = (rtg ** 3) * 400 \n    # 2. FACTOR EDAD (Curva de Valor)",
+        "detail": "test1_econo",
+        "documentation": {}
+    },
+    {
+        "label": "calcular_rating_rol",
+        "kind": 2,
+        "importPath": "test1_econo",
+        "description": "test1_econo",
+        "peekOfCode": "def calcular_rating_rol(df, rol_analisis):\n    pesos = obtener_pesos_planos(rol_analisis)\n    cols_necesarias = list(pesos.keys())\n    cols_existentes = [c for c in cols_necesarias if c in df.columns]\n    df_calc = df.copy()\n    for col in cols_existentes:\n        df_calc[col] = pd.to_numeric(df_calc[col], errors='coerce').fillna(0)\n        min_v, max_v = df_calc[col].min(), df_calc[col].max()\n        if max_v - min_v == 0:\n            df_calc[f\"{col}_Norm\"] = 0",
+        "detail": "test1_econo",
+        "documentation": {}
+    },
+    {
+        "label": "PESOS_JSON",
+        "kind": 5,
+        "importPath": "test1_econo",
+        "description": "test1_econo",
+        "peekOfCode": "PESOS_JSON = {\n    \"DC\": {\n        \"categoria_pesos\": { \"Defensa\": 0.55, \"Aerial\": 0.25, \"Passing\": 0.15, \"Possession\": 0.05, \"GAS\": 0.00, \"Shooting\": 0.00 },\n        \"estadisticas\": {\n            \"Defensa\": { \"Clr\": 0.30, \"Int\": 0.25, \"Recov\": 0.20, \"TklW\": 0.15, \"TklDef3rd\": 0.10 },\n            \"Aerial\": { \"AerialWon%\": 0.60, \"AerialWon\": 0.40 },\n            \"Passing\": { \"Cmp%Total\": 0.40, \"PrgDist\": 0.30, \"LongCmp\": 0.30 },\n            \"Possession\": { \"Dispossessed\": 1.0 }\n        }\n    },",
+        "detail": "test1_econo",
+        "documentation": {}
+    },
+    {
+        "label": "archivo",
+        "kind": 5,
+        "importPath": "test1_econo",
+        "description": "test1_econo",
+        "peekOfCode": "archivo = 'Premier20-21.xlsx'\nUMBRAL_MINUTOS = 800 \nUMBRAL_CENTROS = 0.75\nif os.path.exists(archivo):\n    print(f\"Cargando base de datos...\")\n    df_raw = pd.read_excel(archivo, engine='openpyxl')\n    df_clean = df_raw[df_raw['Min'] >= UMBRAL_MINUTOS].copy()\n    writer = pd.ExcelWriter('Resultados_Tesis_Final.xlsx', engine='openpyxl')\n    for rol in PESOS_JSON.keys():\n        print(f\"\\n--- Analizando Rol: {rol} ---\")",
+        "detail": "test1_econo",
+        "documentation": {}
+    },
+    {
+        "label": "UMBRAL_MINUTOS",
+        "kind": 5,
+        "importPath": "test1_econo",
+        "description": "test1_econo",
+        "peekOfCode": "UMBRAL_MINUTOS = 800 \nUMBRAL_CENTROS = 0.75\nif os.path.exists(archivo):\n    print(f\"Cargando base de datos...\")\n    df_raw = pd.read_excel(archivo, engine='openpyxl')\n    df_clean = df_raw[df_raw['Min'] >= UMBRAL_MINUTOS].copy()\n    writer = pd.ExcelWriter('Resultados_Tesis_Final.xlsx', engine='openpyxl')\n    for rol in PESOS_JSON.keys():\n        print(f\"\\n--- Analizando Rol: {rol} ---\")\n        prefijo_rol = rol.split('_')[0]",
+        "detail": "test1_econo",
+        "documentation": {}
+    },
+    {
+        "label": "UMBRAL_CENTROS",
+        "kind": 5,
+        "importPath": "test1_econo",
+        "description": "test1_econo",
+        "peekOfCode": "UMBRAL_CENTROS = 0.75\nif os.path.exists(archivo):\n    print(f\"Cargando base de datos...\")\n    df_raw = pd.read_excel(archivo, engine='openpyxl')\n    df_clean = df_raw[df_raw['Min'] >= UMBRAL_MINUTOS].copy()\n    writer = pd.ExcelWriter('Resultados_Tesis_Final.xlsx', engine='openpyxl')\n    for rol in PESOS_JSON.keys():\n        print(f\"\\n--- Analizando Rol: {rol} ---\")\n        prefijo_rol = rol.split('_')[0]\n        # --- FILTROS DE POSICIÓN ESTRICTOS ---",
+        "detail": "test1_econo",
+        "documentation": {}
+    },
+    {
+        "label": "archivo_entrada",
+        "kind": 5,
+        "importPath": "tm_scraping",
+        "description": "tm_scraping",
+        "peekOfCode": "archivo_entrada = 'Scouting_Database_Final.csv'\narchivo_salida = 'Scouting_Database_con_TM.csv'\n# Si ya existe un archivo de progreso, lo cargamos para continuar donde nos quedamos\nif os.path.exists(archivo_salida):\n    print(f\"📂 Archivo de progreso detectado: {archivo_salida}. Retomando...\")\n    df = pd.read_csv(archivo_salida)\nelse:\n    print(f\"📂 Iniciando desde cero con: {archivo_entrada}\")\n    df = pd.read_csv(archivo_entrada)\n    # Creamos la columna TM_Value si no existe",
+        "detail": "tm_scraping",
+        "documentation": {}
+    },
+    {
+        "label": "archivo_salida",
+        "kind": 5,
+        "importPath": "tm_scraping",
+        "description": "tm_scraping",
+        "peekOfCode": "archivo_salida = 'Scouting_Database_con_TM.csv'\n# Si ya existe un archivo de progreso, lo cargamos para continuar donde nos quedamos\nif os.path.exists(archivo_salida):\n    print(f\"📂 Archivo de progreso detectado: {archivo_salida}. Retomando...\")\n    df = pd.read_csv(archivo_salida)\nelse:\n    print(f\"📂 Iniciando desde cero con: {archivo_entrada}\")\n    df = pd.read_csv(archivo_entrada)\n    # Creamos la columna TM_Value si no existe\n    if 'TM_Value' not in df.columns:",
+        "detail": "tm_scraping",
+        "documentation": {}
+    },
+    {
+        "label": "jugadores_pendientes",
+        "kind": 5,
+        "importPath": "tm_scraping",
+        "description": "tm_scraping",
+        "peekOfCode": "jugadores_pendientes = df.groupby('Player')['TM_Value'].sum()\njugadores_unicos = jugadores_pendientes[jugadores_pendientes == 0].index.tolist()\nprint(f\"📊 Jugadores únicos pendientes de procesar: {len(jugadores_unicos)}\")\nif len(jugadores_unicos) == 0:\n    print(\"✅ ¡Toda la base de datos ya ha sido procesada!\")\n    exit()\n# --- 2. CONFIGURACIÓN DEL NAVEGADOR ---\noptions = Options()\n# options.add_argument('--headless') # Recomiendo no usar headless aún para vigilarlo\ntry:",
+        "detail": "tm_scraping",
+        "documentation": {}
+    },
+    {
+        "label": "jugadores_unicos",
+        "kind": 5,
+        "importPath": "tm_scraping",
+        "description": "tm_scraping",
+        "peekOfCode": "jugadores_unicos = jugadores_pendientes[jugadores_pendientes == 0].index.tolist()\nprint(f\"📊 Jugadores únicos pendientes de procesar: {len(jugadores_unicos)}\")\nif len(jugadores_unicos) == 0:\n    print(\"✅ ¡Toda la base de datos ya ha sido procesada!\")\n    exit()\n# --- 2. CONFIGURACIÓN DEL NAVEGADOR ---\noptions = Options()\n# options.add_argument('--headless') # Recomiendo no usar headless aún para vigilarlo\ntry:\n    driver = webdriver.Firefox(options=options)",
+        "detail": "tm_scraping",
+        "documentation": {}
+    },
+    {
+        "label": "options",
+        "kind": 5,
+        "importPath": "tm_scraping",
+        "description": "tm_scraping",
+        "peekOfCode": "options = Options()\n# options.add_argument('--headless') # Recomiendo no usar headless aún para vigilarlo\ntry:\n    driver = webdriver.Firefox(options=options)\n    driver.set_script_timeout(15)\n    driver.set_window_size(1280, 800)\nexcept Exception as e:\n    print(f\"❌ Error al iniciar Firefox: {e}\")\n    exit()\n# Variable para controlar el primer aviso de cookies",
+        "detail": "tm_scraping",
+        "documentation": {}
+    },
+    {
+        "label": "primer_jugador_procesado",
+        "kind": 5,
+        "importPath": "tm_scraping",
+        "description": "tm_scraping",
+        "peekOfCode": "primer_jugador_procesado = False\n# --- 3. BUCLE PRINCIPAL (El motor de la fábrica) ---\nfor i, jugador in enumerate(jugadores_unicos, 1):\n    print(f\"\\n[{i}/{len(jugadores_unicos)}] 🔍 Buscando a: {jugador}...\")\n    try:\n        # PASO A: Búsqueda y Extracción del ID\n        search_url = f\"https://www.transfermarkt.com/schnellsuche/ergebnis/schnellsuche?query={jugador.replace(' ', '+')}\"\n        driver.get(search_url)\n        try:\n            WebDriverWait(driver, 6).until(EC.presence_of_element_located((By.CLASS_NAME, \"items\")))",
+        "detail": "tm_scraping",
+        "documentation": {}
+    },
+    {
+        "label": "es_transferencia_real",
+        "kind": 2,
+        "importPath": "trans_tm",
+        "description": "trans_tm",
+        "peekOfCode": "def es_transferencia_real(fee_str):\n    if not fee_str: \n        return False\n    fee_lower = str(fee_str).lower()\n    # 1. Descartar si contiene palabras relacionadas a préstamos o fichajes libres\n    palabras_basura = ['free', 'libre', 'cesión', 'cesion', 'loan', 'coste', 'cost', '-', '?']\n    for palabra in palabras_basura:\n        if palabra in fee_lower:\n            return False\n    # 2. Descartar si no contiene ningún número (ej. si dice \"Desconocido\")",
+        "detail": "trans_tm",
+        "documentation": {}
+    },
+    {
+        "label": "archivo_jugadores",
+        "kind": 5,
+        "importPath": "trans_tm",
+        "description": "trans_tm",
+        "peekOfCode": "archivo_jugadores = 'Scouting_Database_Final.csv' \narchivo_transferencias = 'Transferencias_DB.csv'  \ntry:\n    df_base = pd.read_csv(archivo_jugadores)\n    jugadores_unicos = df_base['Player'].unique().tolist()\nexcept Exception as e:\n    print(f\"❌ Error al leer el archivo base: {e}\")\n    exit()\njugadores_procesados = []\nif os.path.exists(archivo_transferencias):",
+        "detail": "trans_tm",
+        "documentation": {}
+    },
+    {
+        "label": "archivo_transferencias",
+        "kind": 5,
+        "importPath": "trans_tm",
+        "description": "trans_tm",
+        "peekOfCode": "archivo_transferencias = 'Transferencias_DB.csv'  \ntry:\n    df_base = pd.read_csv(archivo_jugadores)\n    jugadores_unicos = df_base['Player'].unique().tolist()\nexcept Exception as e:\n    print(f\"❌ Error al leer el archivo base: {e}\")\n    exit()\njugadores_procesados = []\nif os.path.exists(archivo_transferencias):\n    df_transfers = pd.read_csv(archivo_transferencias)",
+        "detail": "trans_tm",
+        "documentation": {}
+    },
+    {
+        "label": "jugadores_procesados",
+        "kind": 5,
+        "importPath": "trans_tm",
+        "description": "trans_tm",
+        "peekOfCode": "jugadores_procesados = []\nif os.path.exists(archivo_transferencias):\n    df_transfers = pd.read_csv(archivo_transferencias)\n    if not df_transfers.empty:\n        jugadores_procesados = df_transfers['Player'].unique().tolist()\n    print(f\"📂 Retomando: Se saltarán {len(jugadores_procesados)} jugadores ya procesados.\")\nelse:\n    print(f\"📂 Iniciando base de transferencias desde cero.\")\n    columnas = ['Player', 'Season', 'Date', 'Left_Club', 'Joined_Club', 'Market_Value', 'Fee']\n    pd.DataFrame(columns=columnas).to_csv(archivo_transferencias, index=False)",
+        "detail": "trans_tm",
+        "documentation": {}
+    },
+    {
+        "label": "jugadores_pendientes",
+        "kind": 5,
+        "importPath": "trans_tm",
+        "description": "trans_tm",
+        "peekOfCode": "jugadores_pendientes = [j for j in jugadores_unicos if j not in jugadores_procesados]\nprint(f\"📊 Jugadores pendientes de procesar: {len(jugadores_pendientes)}\")\nif not jugadores_pendientes:\n    print(\"✅ ¡Todas las transferencias han sido extraídas!\")\n    exit()\n# --- 2. NAVEGADOR ---\noptions = Options()\ntry:\n    driver = webdriver.Firefox(options=options)\n    driver.set_script_timeout(15)",
+        "detail": "trans_tm",
+        "documentation": {}
+    },
+    {
+        "label": "options",
+        "kind": 5,
+        "importPath": "trans_tm",
+        "description": "trans_tm",
+        "peekOfCode": "options = Options()\ntry:\n    driver = webdriver.Firefox(options=options)\n    driver.set_script_timeout(15)\nexcept Exception as e:\n    print(f\"❌ Error al iniciar Firefox: {e}\")\n    exit()\nprimer_jugador_procesado = False\n# --- FUNCIÓN DE FILTRADO (El Colador) ---\ndef es_transferencia_real(fee_str):",
+        "detail": "trans_tm",
+        "documentation": {}
+    },
+    {
+        "label": "primer_jugador_procesado",
+        "kind": 5,
+        "importPath": "trans_tm",
+        "description": "trans_tm",
+        "peekOfCode": "primer_jugador_procesado = False\n# --- FUNCIÓN DE FILTRADO (El Colador) ---\ndef es_transferencia_real(fee_str):\n    if not fee_str: \n        return False\n    fee_lower = str(fee_str).lower()\n    # 1. Descartar si contiene palabras relacionadas a préstamos o fichajes libres\n    palabras_basura = ['free', 'libre', 'cesión', 'cesion', 'loan', 'coste', 'cost', '-', '?']\n    for palabra in palabras_basura:\n        if palabra in fee_lower:",
+        "detail": "trans_tm",
+        "documentation": {}
+    },
+    {
+        "label": "get_base_value",
+        "kind": 2,
+        "importPath": "valor_pruebav1",
+        "description": "valor_pruebav1",
+        "peekOfCode": "def get_base_value(rating):\n    \"\"\"\n    Calcula el valor base en Millones solo por el Rating (0-100).\n    Ajustado para valorar más a la clase media alta (70-75).\n    \"\"\"\n    if rating < 50: return 2.0\n    # Jugadores de rotación (50-65) -> 5M a 20M\n    if rating < 65:\n        return 5 + (rating - 50) * 1.0\n    # Buenos titulares (65-75) -> 20M a 45M",
+        "detail": "valor_pruebav1",
+        "documentation": {}
+    },
+    {
+        "label": "get_age_factor",
+        "kind": 2,
+        "importPath": "valor_pruebav1",
+        "description": "valor_pruebav1",
+        "peekOfCode": "def get_age_factor(age):\n    \"\"\"\n    Ajuste de edad. \n    CORRECCIÓN: Se extiende el 'Prime' hasta los 30 años para no infravalorar veteranos buenos.\n    \"\"\"\n    if age <= 20: return 1.30  # Promesa joven (se paga futuro)\n    if age <= 24: return 1.15  # En desarrollo\n    if age <= 29: return 1.00  # Prime absoluto (Cairney entra aqui ahora)\n    if age <= 31: return 0.85  # Veterano util\n    if age <= 33: return 0.60  # Declive fisico",
+        "detail": "valor_pruebav1",
+        "documentation": {}
+    },
+    {
+        "label": "get_pos_factor",
+        "kind": 2,
+        "importPath": "valor_pruebav1",
+        "description": "valor_pruebav1",
+        "peekOfCode": "def get_pos_factor(rol_ideal):\n    # Los delanteros y extremos siempre cuestan más\n    if rol_ideal in ['FW_ST', 'FW_WG', 'FW_SS', 'AM']: return 1.15\n    if rol_ideal in ['LB_OFF', 'DC']: return 1.05\n    return 1.00\n# =============================================================================\n# 2. PESOS MAESTROS (SIN CAMBIOS)\n# =============================================================================\nPESOS_MAESTROS = {\n  \"FW_ST\": {",
+        "detail": "valor_pruebav1",
+        "documentation": {}
+    },
+    {
+        "label": "aplanar_pesos",
+        "kind": 2,
+        "importPath": "valor_pruebav1",
+        "description": "valor_pruebav1",
+        "peekOfCode": "def aplanar_pesos(jerarquia):\n    pesos_abs = {}\n    for rol, contenido in jerarquia.items():\n        pesos_abs[rol] = {}\n        cat_pesos = contenido.get('categoria_pesos', {})\n        stats_bloque = contenido.get('estadisticas', {})\n        for cat, peso_cat in cat_pesos.items():\n            if cat in stats_bloque:\n                stats = stats_bloque[cat]\n                suma_int = sum(stats.values())",
+        "detail": "valor_pruebav1",
+        "documentation": {}
+    },
+    {
+        "label": "calcular_todos_los_ratings",
+        "kind": 2,
+        "importPath": "valor_pruebav1",
+        "description": "valor_pruebav1",
+        "peekOfCode": "def calcular_todos_los_ratings(df, pesos_abs):\n    df_calc = df.copy()\n    for rol, weights in pesos_abs.items():\n        col_name = f'R_{rol}' \n        df_calc[col_name] = 0\n        for stat, peso in weights.items():\n            col_score = f\"{stat}_Score\"\n            if col_score in df_calc.columns:\n                val = df_calc[col_score].fillna(50) \n                df_calc[col_name] += val * peso",
+        "detail": "valor_pruebav1",
+        "documentation": {}
+    },
+    {
+        "label": "procesar_premier_valuation",
+        "kind": 2,
+        "importPath": "valor_pruebav1",
+        "description": "valor_pruebav1",
+        "peekOfCode": "def procesar_premier_valuation():\n    # A. Carga\n    carpeta_actual = os.path.dirname(os.path.abspath(__file__))\n    archivo_input = None\n    for f in os.listdir(carpeta_actual):\n        if 'Premier20-21' in f and (f.endswith('.xlsx') or f.endswith('.csv')):\n            archivo_input = os.path.join(carpeta_actual, f)\n            break\n    if not archivo_input:\n        print(\"[ERROR] Falta el archivo Premier20-21\")",
+        "detail": "valor_pruebav1",
+        "documentation": {}
+    },
+    {
+        "label": "TIER_MAP",
+        "kind": 5,
+        "importPath": "valor_pruebav1",
+        "description": "valor_pruebav1",
+        "peekOfCode": "TIER_MAP = {\n    'Manchester City': 1, 'Manchester Utd': 1, 'Liverpool': 1, 'Chelsea': 1, 'Tottenham': 1,\n    'Arsenal': 2, 'Leicester City': 2, 'Wolves': 2,\n    'Aston Villa': 3, 'West Ham': 3, 'Leeds United': 3, 'Everton': 3, 'Southampton': 3, 'Crystal Palace': 3,\n    'Newcastle Utd': 4, 'Brighton': 4, 'Burnley': 4,\n    'Fulham': 5, 'West Brom': 5, 'Sheffield Utd': 5\n}\nMULTIPLICADORES_TIER = {1: 1.4, 2: 1.2, 3: 1.0, 4: 0.9, 5: 0.8}\ndef get_base_value(rating):\n    \"\"\"",
+        "detail": "valor_pruebav1",
+        "documentation": {}
+    },
+    {
+        "label": "MULTIPLICADORES_TIER",
+        "kind": 5,
+        "importPath": "valor_pruebav1",
+        "description": "valor_pruebav1",
+        "peekOfCode": "MULTIPLICADORES_TIER = {1: 1.4, 2: 1.2, 3: 1.0, 4: 0.9, 5: 0.8}\ndef get_base_value(rating):\n    \"\"\"\n    Calcula el valor base en Millones solo por el Rating (0-100).\n    Ajustado para valorar más a la clase media alta (70-75).\n    \"\"\"\n    if rating < 50: return 2.0\n    # Jugadores de rotación (50-65) -> 5M a 20M\n    if rating < 65:\n        return 5 + (rating - 50) * 1.0",
+        "detail": "valor_pruebav1",
+        "documentation": {}
+    },
+    {
+        "label": "PESOS_MAESTROS",
+        "kind": 5,
+        "importPath": "valor_pruebav1",
+        "description": "valor_pruebav1",
+        "peekOfCode": "PESOS_MAESTROS = {\n  \"FW_ST\": {\n    \"categoria_pesos\": { \"Shooting\": 0.53, \"GAS\": 0.20, \"Possession\": 0.10, \"Passing\": 0.10, \"Aerial\": 0.05, \"Defensa\": 0.02 },\n    \"estadisticas\": {\n      \"Shooting\": { \"Gls\": 0.45, \"xG\": 0.30, \"npxG\": 0.20, \"SoT%\": 0.05 },\n      \"GAS\": { \"GCA\": 0.30, \"SCA\": 0.10, \"SCAPassLive\": 0.20, \"SCASh\": 0.15, \"SCADrib\": 0.10, \"GCAPassLive\": 0.15 },\n      \"Possession\": { \"TouchesAttPen\": 0.50, \"TouchesAtt3rd\": 0.20, \"DribSucc\": 0.10, \"Dispossesed\": 0.10, \"Touches\": 0.10 },\n      \"Passing\": { \"Ast\": 0.25, \"xA\": 0.20, \"KP\": 0.25, \"PPA\": 0.15, \"Prog\": 0.15 },\n      \"Aerial\": { \"AerialWon\": 0.50, \"AerialWon%\": 0.30, \"AerialLost\": 0.20 },\n      \"Defensa\": { \"TklW\": 0.50, \"BallRec\": 0.50 }",
+        "detail": "valor_pruebav1",
+        "documentation": {}
+    },
+    {
+        "label": "CANDIDATOS_ROLES",
+        "kind": 5,
+        "importPath": "valor_pruebav1",
+        "description": "valor_pruebav1",
+        "peekOfCode": "CANDIDATOS_ROLES = {\n    'FW': ['FW_ST', 'FW_WG', 'FW_SS'],\n    'AM': ['AM', 'FW_WG', 'FW_SS'],\n    'MF': ['MC_EST', 'MC_DEF', 'AM'],\n    'DM': ['MC_DEF', 'DC', 'LB_DEF', 'LB_OFF'],\n    'DF': ['DC', 'LB_DEF', 'LB_OFF'],\n    'FWMF': ['FW_WG', 'FW_SS', 'AM'],\n    'MFDF': ['MC_DEF', 'DC', 'LB_OFF'],\n    'DFFW': ['LB_OFF', 'FW_WG'], \n    'GK': [] ",
+        "detail": "valor_pruebav1",
+        "documentation": {}
+    },
+    {
+        "label": "crear_radar_fm",
+        "kind": 2,
+        "importPath": "visualizacion_fm",
+        "description": "visualizacion_fm",
+        "peekOfCode": "def crear_radar_fm(nombre_jugador):\n    \"\"\"\n    Genera un gráfico de radar comparando las métricas CLAVE del rol del jugador\n    contra el promedio de los jugadores en su misma posición.\n    \"\"\"\n    # 1. Buscar al jugador\n    jugador = df[df['Player'] == nombre_jugador].iloc[0]\n    if jugador.empty:\n        print(\"Jugador no encontrado.\")\n        return",
+        "detail": "visualizacion_fm",
+        "documentation": {}
+    },
+    {
+        "label": "crear_dispersion_fm",
+        "kind": 2,
+        "importPath": "visualizacion_fm",
+        "description": "visualizacion_fm",
+        "peekOfCode": "def crear_dispersion_fm(posicion_filtro, eje_x, eje_y, color_por='Precio_Mercado'):\n    \"\"\"\n    Crea un mapa de dispersión para encontrar \"Gangas\" o \"Outliers\".\n    Ejemplo: Eje X = Goles, Eje Y = Valor de Mercado.\n    \"\"\"\n    # Filtrar datos\n    data = df[df['PosAdj'] == posicion_filtro].copy()\n    # Crear gráfico interactivo\n    fig = px.scatter(\n        data, ",
+        "detail": "visualizacion_fm",
+        "documentation": {}
+    },
+    {
+        "label": "ARCHIVO_DATOS",
+        "kind": 5,
+        "importPath": "visualizacion_fm",
+        "description": "visualizacion_fm",
+        "peekOfCode": "ARCHIVO_DATOS = 'Premier_Valuation_Model_V5_Final.csv'\n# Si no encuentras el archivo generado, intenta cargarlo o avisa\nif not os.path.exists(ARCHIVO_DATOS):\n    print(f\" No encuentro {ARCHIVO_DATOS}. Asegúrate de haber corrido el script de valoración antes.\")\n    # Para pruebas, puedes comentar esto y cargar tu excel manual si prefieres\nelse:\n    df = pd.read_csv(ARCHIVO_DATOS)\n# =============================================================================\n# 1. GRÁFICO DE RADAR (ESTILO FOOTBALL MANAGER)\n# =============================================================================",
+        "detail": "visualizacion_fm",
+        "documentation": {}
+    }
+]

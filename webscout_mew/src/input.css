@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@theme {
+  /* Tipografía */
+  --font-sans: "Outfit", sans-serif;
+  
+
+  --color-brand-dark: #060b28;    /* Azul profundo */
+  --color-brand-surface: #0a134a; /* Azul eléctrico suave */
+  /* Fondo sugerido: Manchas Cian (#22d3ee) y Violeta (#6e44ff) */
+  /* Fondo sugerido: Manchas Cian (#22d3ee) y Violeta (#6e44ff) */
+
+  /* Tus Acentos Vibrantes (Intactos) */
+  --color-brand-purple: #44346d;
+  --color-brand-pink: #d6409f;
+  --color-brand-accent: #6e44ff;
+
+  /* Utilidades para Glassmorphism (Mejorado para fondo sólido) */
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-glass-surface: rgba(255, 255, 255, 0.03);
+
+  /* Animaciones */
+  --animate-fade-in: fadeIn 0.5s ease-out forwards;
+
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* 1. EL FONDO DEL BODY (Con un gradiente sutil para que el cristal funcione) */
+body {
+  /* Usamos el color oscuro base, pero le añadimos una luz diagonal muy suave */
+  background: radial-gradient(circle at top right, var(--color-brand-surface) 0%, var(--color-brand-dark) 70%);
+  background-color: var(--color-brand-dark);
+  background-attachment: fixed;
+  
+  @apply h-screen w-full flex overflow-hidden text-white selection:bg-brand-pink selection:text-white;
+}
+
+@layer components {
+  
+  /* 2. EL CRISTAL EVOLUCIONADO (Más "escarchado" y visible) */
+  .glass-panel {
+    /* Subimos la opacidad del blanco base de 0.05 a 0.08/0.03 para que se note el material */
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.10) 0%,
+      rgba(255, 255, 255, 0.02) 100%
+    );
+    
+    /* El desenfoque se mantiene fuerte */
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    
+    /* Bordes mucho más contrastados para simular el corte del cristal */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.30); /* Borde superior brillante */
+    border-left: 1px solid rgba(255, 255, 255, 0.20); /* Borde izquierdo brillante */
+    
+    /* Sombra exterior para separarlo del fondo */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+
+    @apply rounded-[2rem];
+  }
+
+  /* Paneles secundarios (Para listas o sub-elementos) */
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.2); /* Un poco de oscuridad extra para dar profundidad */
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  /* Navegación Activa: Neón interno sutil */
+  .nav-active {
+    background: linear-gradient(135deg, rgba(214, 64, 159, 0.1), rgba(110, 68, 255, 0.1));
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+        0 0 10px rgba(214, 64, 159, 0.1), 
+        inset 0 0 8px rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-row:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(4px); /* Pequeño desplazamiento lateral */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+
+  /* Scrollbar oculta */
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+
+  /* Filas de Tabla sobrias */
+  .glass-row {
+    @apply grid grid-cols-12 gap-4 items-center px-4 py-3 rounded-2xl border border-transparent transition-all cursor-pointer;
+  }
+  .glass-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  /* Dibujo de Cancha CSS (Adaptado para mayor sobriedad) */
+  .pitch-container { position: relative; width: 100%; max-width: 160px; aspect-ratio: 2/3; border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.01); margin: 0 auto; flex-shrink: 0; }
+  .pitch-line-center { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(255, 255, 255, 0.1); transform: translateY(-50%); }
+  .pitch-circle { position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 50%; transform: translate(-50%, -50%); }
+  .pitch-box-top, .pitch-box-bottom { position: absolute; left: 50%; width: 50%; height: 15%; border: 2px solid rgba(255, 255, 255, 0.1); transform: translateX(-50%); }
+  .pitch-box-top { top: 0; border-top: none; }
+  .pitch-box-bottom { bottom: 0; border-bottom: none; }
+  .role-dot { position: absolute; width: 24px; height: 24px; border-radius: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: white; box-shadow: 0 0 15px currentColor; }
+}
+
+/* Añade esto a tu input.css para los acentos del comparador */
+.player-color-1 { --tw-bg-opacity: 1; background-color: #d6409f; border-color: #d6409f; } /* brand-pink */
+.player-color-2 { --tw-bg-opacity: 1; background-color: #22d3ee; border-color: #22d3ee; } /* cyan-400 */
+.player-color-3 { --tw-bg-opacity: 1; background-color: #34d399; border-color: #34d399; } /* emerald-400 */
+.player-color-4 { --tw-bg-opacity: 1; background-color: #facc15; border-color: #facc15; } /* yellow-400 */
+.player-color-5 { --tw-bg-opacity: 1; background-color: #a78bfa; border-color: #a78bfa; } /* violet-400 */
+.player-color-6 { --tw-bg-opacity: 1; background-color: #fb923c; border-color: #fb923c; } /* orange-400 */
+
+.player-text-1 { color: #d6409f; }
+.player-text-2 { color: #22d3ee; }
+.player-text-3 { color: #34d399; }
+.player-text-4 { color: #facc15; }
+.player-text-5 { color: #a78bfa; }
+.player-text-6 { color: #fb923c; }
