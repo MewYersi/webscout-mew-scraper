@@ -84,8 +84,8 @@
             <div class="col-span-1 text-center">Roles</div>
             <div class="col-span-1 text-center">Edad</div>
             <div class="col-span-2 text-center">Rendimiento (RTG)</div>
-            <div class="col-span-1 text-right" title="Valor Deportivo">V. Deport.</div>
-           
+            <div class="col-span-1 text-right" title="Valor calculado por algoritmo">V. Algoritmo</div>
+            <div class="col-span-2 text-right pr-4" title="Valor en Transfermarkt">V. Mercado</div>
             <div class="col-span-1 text-center">Ver</div>
         </div>
 
@@ -99,18 +99,16 @@
                  data-rol="{{ jugador.valoracion.rol_principal }}"
                  data-edad="{{ jugador.edad }}"
                  data-precio="{{ jugador.valoracion.valor_deportivo }}"
-                 data-temporada="{{ jugador.temporada }}"> <!-- Atributo necesario para el filtro -->
+                 data-mercado="{{ jugador.valoracion.precio_mercado }}"
+                 data-temporada="{{ jugador.temporada }}"> 
                 
-                <!-- Columna 1: Rank Number -->
                 <div class="col-span-1 text-center font-mono font-bold text-white/30 text-xs rank-number group-hover:text-brand-pink transition-colors"></div>
 
-                <!-- Columna 3: Jugador -->
                 <div class="col-span-3 flex items-center gap-3">
                     <img src="https://ui-avatars.com/api/?name={{ jugador.nombre }}&background=random&color=fff&bold=true" class="w-9 h-9 rounded-full shadow-lg group-hover:scale-110 transition-transform shrink-0">
                     <div class="min-w-0">
                         <div class="flex items-center gap-2 mb-0.5">
                             <h3 class="font-bold text-sm text-white group-hover:text-brand-pink transition-colors truncate">{{ jugador.nombre }}</h3>
-                            <!-- Etiqueta de Temporada -->
                             <span class="text-[9px] bg-white/10 text-white/60 px-1.5 py-0.5 rounded border border-white/5 whitespace-nowrap">{{ jugador.temporada }}</span>
                         </div>
                         <p class="text-[10px] text-white/40 flex items-center gap-1 truncate">
@@ -119,15 +117,12 @@
                     </div>
                 </div>
                 
-                <!-- Columna 1: Roles -->
                 <div class="col-span-1 flex flex-col items-center justify-center gap-1">
                     <span class="bg-blue-500/20 text-blue-200 border border-blue-500/30 px-2 py-0.5 rounded-full text-[9px] font-bold">{{ jugador.valoracion.rol_principal }}</span>
                 </div>
                 
-                <!-- Columna 1: Edad -->
                 <div class="col-span-1 text-center text-sm text-white/70 font-mono">{{ jugador.edad }}</div>
                 
-                <!-- Columna 2: Rendimiento -->
                 <div class="col-span-2 px-2">
                     <div class="flex justify-between text-[10px] mb-1">
                         <span class="font-bold text-white">{{ "{:.1f}".format(jugador.valoracion.rtg_principal) }}</span>
@@ -137,16 +132,22 @@
                     </div>
                 </div>
                 
-                <!-- Columna 1: Valor Deportivo -->
                 <div class="col-span-1 flex items-center justify-end">
-                    <span class="text-xs font-bold text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.3)]">
+                    <span class="text-xs font-bold text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]">
                         € {{ "{:,.1f}".format(jugador.valoracion.valor_deportivo / 1000000) }} M
                     </span>
                 </div>
 
-    
+                <div class="col-span-2 flex items-center justify-end pr-4">
+                    {% if jugador.valoracion.precio_mercado and jugador.valoracion.precio_mercado > 0 %}
+                        <span class="text-xs font-bold text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.3)]">
+                            € {{ "{:,.1f}".format(jugador.valoracion.precio_mercado / 1000000) }} M
+                        </span>
+                    {% else %}
+                        <span class="text-xs text-white/30">-</span>
+                    {% endif %}
+                </div>
                 
-                <!-- Columna 1: Acción -->
                 <div class="col-span-1 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <button class="w-8 h-8 rounded-full bg-white/10 hover:bg-brand-pink hover:text-white flex items-center justify-center transition-colors">
                         <i class="ph-bold ph-caret-right"></i>
@@ -242,7 +243,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const rTemp = row.getAttribute('data-temporada');
             const rRol = row.getAttribute('data-rol');
             const rEdad = parseInt(row.getAttribute('data-edad'));
-            const rPrecio = parseFloat(row.getAttribute('data-precio')) / 1000000; 
+           // Filtramos basados en el valor de Transfermarkt en lugar del deportivo
+            const mercadoData = row.getAttribute('data-mercado');
+            const rPrecio = mercadoData ? (parseFloat(mercadoData) / 1000000) : 0; 
             const rClub = row.getAttribute('data-club');
 
             let matchText = rNombre.includes(term);

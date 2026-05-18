@@ -81,12 +81,12 @@
         "documentation": {}
     },
     {
-        "label": "pandas",
+        "label": "sqlite3",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "pandas",
-        "description": "pandas",
-        "detail": "pandas",
+        "importPath": "sqlite3",
+        "description": "sqlite3",
+        "detail": "sqlite3",
         "documentation": {}
     },
     {
@@ -96,6 +96,15 @@
         "importPath": "os",
         "description": "os",
         "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
         "documentation": {}
     },
     {
@@ -112,7 +121,16 @@
         "kind": 6,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "class Valoracion(db.Model):\n    __tablename__ = 'valoraciones'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    rol_principal = db.Column(db.String(20), index=True)\n    rtg_principal = db.Column(db.Float, index=True)\n    valor_deportivo = db.Column(db.Float) \n    rol_2 = db.Column(db.String(20))\nclass EstadisticasFBref(db.Model):\n    __tablename__ = 'estadisticas_fbref'",
+        "peekOfCode": "class Valoracion(db.Model):\n    __tablename__ = 'valoraciones'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    rol_principal = db.Column(db.String(20), index=True)\n    rtg_principal = db.Column(db.Float, index=True)\n    valor_deportivo = db.Column(db.Float)\n    precio_mercado = db.Column(db.Integer) \n    rol_2 = db.Column(db.String(20))\nclass Transferencia(db.Model):",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "Transferencia",
+        "kind": 6,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "class Transferencia(db.Model):\n    __tablename__ = 'transferencias'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_nombre = db.Column(db.String(100), index=True) \n    temporada = db.Column(db.String(20))\n    fecha = db.Column(db.String(20))\n    club_origen = db.Column(db.String(100))\n    club_destino = db.Column(db.String(100))\n    coste_texto = db.Column(db.String(20))\n    coste_num = db.Column(db.Integer)",
         "detail": "app",
         "documentation": {}
     },
@@ -139,7 +157,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def players():\n    todos_los_jugadores = Jugador.query.join(Valoracion).options(joinedload(Jugador.valoracion)).order_by(Valoracion.rtg_principal.desc()).all()\n    return render_template('players.html', jugadores=todos_los_jugadores)\n@app.route('/jugador/<int:id>')\ndef player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    return render_template('profile.html', jugador=jugador, stats=stats)\n# ==========================================\n# 3. RUTAS DEL COMPARADOR AVANZADO",
+        "peekOfCode": "def players():\n    todos_los_jugadores = Jugador.query.join(Valoracion).options(joinedload(Jugador.valoracion)).order_by(Valoracion.rtg_principal.desc()).all()\n    return render_template('players.html', jugadores=todos_los_jugadores)\n@app.route('/jugador/<int:id>')\ndef player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    # LÓGICA DE CRUCE (Inversión):\n    # El jugador tiene temporada \"2021\". Transfermarkt guarda \"21/22\".\n    # Extraemos los últimos dos dígitos del año (ej. \"21\") y buscamos la temporada que empiece con \"21/\"",
         "detail": "app",
         "documentation": {}
     },
@@ -148,7 +166,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    return render_template('profile.html', jugador=jugador, stats=stats)\n# ==========================================\n# 3. RUTAS DEL COMPARADOR AVANZADO\n# ==========================================\ndef safe_float(val):\n    try: return float(val)\n    except (ValueError, TypeError): return 0.0",
+        "peekOfCode": "def player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    # LÓGICA DE CRUCE (Inversión):\n    # El jugador tiene temporada \"2021\". Transfermarkt guarda \"21/22\".\n    # Extraemos los últimos dos dígitos del año (ej. \"21\") y buscamos la temporada que empiece con \"21/\"\n    año_corto = str(jugador.temporada)[-2:] \n    patron_temporada = f\"{año_corto}/%\"\n    # Buscamos en el historial si este jugador exacto fue comprado en ese mercado exacto\n    fichaje = Transferencia.query.filter(",
         "detail": "app",
         "documentation": {}
     },
@@ -258,6 +276,15 @@
         "description": "app",
         "peekOfCode": "NOMBRES_STATS = {\n    \"Int\": \"Intercepciones\", \"Clr\": \"Despejes\", \"Recov\": \"Recuperaciones\", \"TklW\": \"Tackles Ganados\",\n    \"BallRec\": \"Balones Rec.\", \"TklDef3rd\": \"Tackles Def 3º\", \"AerialWon%\": \"% Duelos Aéreos\",\n    \"AerialWon\": \"Aéreos Ganados\", \"Cmp%Total\": \"% Pases Comp.\", \"PrgDist\": \"Dist. Progresiva\",\n    \"Prog\": \"Pases Progresivos\", \"LongCmp\": \"Pases Largos Comp.\", \"Cmp%Long\": \"% Pases Largos\",\n    \"TouchesDef3rd\": \"Toques Def 3º\", \"TouchesMid3rd\": \"Toques Med 3º\", \"dispossesed\": \"Pérdidas (Inverso)\",\n    \"IntoLast3rd\": \"Pases Últ. 3º\", \"xA\": \"Asist. Esperadas (xA)\", \"CrsPA\": \"Centros al Área\",\n    \"KP\": \"Pases Clave\", \"TouchesAtt3rd\": \"Toques Ataque 3º\", \"DribSucc\": \"Regates Exitosos\",\n    \"SCA\": \"Creación (SCA)\", \"SCAPassLive\": \"SCA (Pase Vivo)\", \"BallRecProg\": \"Recup. Progresivas\",\n    \"TklMid3rd\": \"Tackles Med 3º\", \"Tkl\": \"Tackles Totales\", \"ShortCmp\": \"Pases Cortos\",",
         "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "db_path",
+        "kind": 5,
+        "importPath": "diagnostico",
+        "description": "diagnostico",
+        "peekOfCode": "db_path = 'instance/scoutmew.db'\nif not os.path.exists(db_path):\n    print(f\"❌ ERROR: No se encuentra la base de datos en {db_path}\")\nelse:\n    try:\n        conn = sqlite3.connect(db_path)\n        cur = conn.cursor()\n        # 1. Verificar el esquema de la tabla\n        cur.execute(\"PRAGMA table_info(valoraciones)\")\n        columnas = [col[1] for col in cur.fetchall()]",
+        "detail": "diagnostico",
         "documentation": {}
     },
     {

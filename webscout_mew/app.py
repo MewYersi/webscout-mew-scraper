@@ -34,9 +34,21 @@ class Valoracion(db.Model):
     jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))
     rol_principal = db.Column(db.String(20), index=True)
     rtg_principal = db.Column(db.Float, index=True)
-    valor_deportivo = db.Column(db.Float) 
+    valor_deportivo = db.Column(db.Float)
+    precio_mercado = db.Column(db.Integer) 
     
     rol_2 = db.Column(db.String(20))
+
+class Transferencia(db.Model):
+    __tablename__ = 'transferencias'
+    id = db.Column(db.Integer, primary_key=True)
+    jugador_nombre = db.Column(db.String(100), index=True) 
+    temporada = db.Column(db.String(20))
+    fecha = db.Column(db.String(20))
+    club_origen = db.Column(db.String(100))
+    club_destino = db.Column(db.String(100))
+    coste_texto = db.Column(db.String(20))
+    coste_num = db.Column(db.Integer)
 
 class EstadisticasFBref(db.Model):
     __tablename__ = 'estadisticas_fbref'
@@ -98,7 +110,21 @@ def players():
 def player_profile(id):
     jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)
     stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}
-    return render_template('profile.html', jugador=jugador, stats=stats)
+    
+    # LÓGICA DE CRUCE (Inversión):
+    # El jugador tiene temporada "2021". Transfermarkt guarda "21/22".
+    # Extraemos los últimos dos dígitos del año (ej. "21") y buscamos la temporada que empiece con "21/"
+    año_corto = str(jugador.temporada)[-2:] 
+    patron_temporada = f"{año_corto}/%"
+    
+    # Buscamos en el historial si este jugador exacto fue comprado en ese mercado exacto
+    fichaje = Transferencia.query.filter(
+        Transferencia.jugador_nombre == jugador.nombre,
+        Transferencia.temporada.like(patron_temporada)
+    ).first()
+
+    # Le pasamos la variable "fichaje" a tu HTML
+    return render_template('profile.html', jugador=jugador, stats=stats, traspaso=fichaje)
 
 
 # ==========================================

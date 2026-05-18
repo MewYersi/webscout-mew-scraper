@@ -72,6 +72,24 @@
         "documentation": {}
     },
     {
+        "label": "sqlite3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlite3",
+        "description": "sqlite3",
+        "detail": "sqlite3",
+        "documentation": {}
+    },
+    {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
         "label": "Flask",
         "importPath": "flask",
         "description": "flask",
@@ -780,11 +798,38 @@
         "documentation": {}
     },
     {
+        "label": "limpiar_dinero",
+        "kind": 2,
+        "importPath": "limpiador_datos",
+        "description": "limpiador_datos",
+        "peekOfCode": "def limpiar_dinero(valor):\n    # Si está vacío o es un texto inválido, devolvemos 0\n    if pd.isna(valor) or valor == 'N/A' or valor == '-' or valor == '?':\n        return 0\n    # Convertimos a minúsculas y quitamos el símbolo de euro y espacios\n    valor_str = str(valor).lower().replace('€', '').replace(' ', '')\n    # Algunos sistemas europeos usan coma para decimales (ej. 1,50m), lo pasamos a punto\n    valor_str = valor_str.replace(',', '.')\n    # Extraemos solo la parte numérica usando Expresiones Regulares\n    numeros = re.findall(r\"[-+]?\\d*\\.\\d+|\\d+\", valor_str)",
+        "detail": "limpiador_datos",
+        "documentation": {}
+    },
+    {
+        "label": "archivo_entrada",
+        "kind": 5,
+        "importPath": "limpiador_datos",
+        "description": "limpiador_datos",
+        "peekOfCode": "archivo_entrada = 'Transferencias_DB.csv'\narchivo_salida = 'Transferencias_DB_Limpio.csv'\n# Función matemática para convertir texto a número puro\ndef limpiar_dinero(valor):\n    # Si está vacío o es un texto inválido, devolvemos 0\n    if pd.isna(valor) or valor == 'N/A' or valor == '-' or valor == '?':\n        return 0\n    # Convertimos a minúsculas y quitamos el símbolo de euro y espacios\n    valor_str = str(valor).lower().replace('€', '').replace(' ', '')\n    # Algunos sistemas europeos usan coma para decimales (ej. 1,50m), lo pasamos a punto",
+        "detail": "limpiador_datos",
+        "documentation": {}
+    },
+    {
+        "label": "archivo_salida",
+        "kind": 5,
+        "importPath": "limpiador_datos",
+        "description": "limpiador_datos",
+        "peekOfCode": "archivo_salida = 'Transferencias_DB_Limpio.csv'\n# Función matemática para convertir texto a número puro\ndef limpiar_dinero(valor):\n    # Si está vacío o es un texto inválido, devolvemos 0\n    if pd.isna(valor) or valor == 'N/A' or valor == '-' or valor == '?':\n        return 0\n    # Convertimos a minúsculas y quitamos el símbolo de euro y espacios\n    valor_str = str(valor).lower().replace('€', '').replace(' ', '')\n    # Algunos sistemas europeos usan coma para decimales (ej. 1,50m), lo pasamos a punto\n    valor_str = valor_str.replace(',', '.')",
+        "detail": "limpiador_datos",
+        "documentation": {}
+    },
+    {
         "label": "Jugador",
         "kind": 6,
         "importPath": "migrar_bd",
         "description": "migrar_bd",
-        "peekOfCode": "class Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))\n    posicion = db.Column(db.String(10))\n    minutos = db.Column(db.Integer)\n    liga = db.Column(db.String(50))      ",
+        "peekOfCode": "class Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False, index=True) # Indexado para cruzar datos rápido\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))\n    posicion = db.Column(db.String(10))\n    minutos = db.Column(db.Integer)\n    liga = db.Column(db.String(50))      ",
         "detail": "migrar_bd",
         "documentation": {}
     },
@@ -793,7 +838,7 @@
         "kind": 6,
         "importPath": "migrar_bd",
         "description": "migrar_bd",
-        "peekOfCode": "class Valoracion(db.Model):\n    __tablename__ = 'valoraciones'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    rol_principal = db.Column(db.String(20))\n    rtg_principal = db.Column(db.Float)\n    valor_deportivo = db.Column(db.Float)\n    # ELIMINADO: precio_mercado\n    rol_2 = db.Column(db.String(20))\n    rtg_2 = db.Column(db.Float)",
+        "peekOfCode": "class Valoracion(db.Model):\n    __tablename__ = 'valoraciones'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    rol_principal = db.Column(db.String(20))\n    rtg_principal = db.Column(db.Float)\n    valor_deportivo = db.Column(db.Float)\n    precio_mercado = db.Column(db.Integer) # ¡Añadido! Valor en euros de esa temporada\n    rol_2 = db.Column(db.String(20))\n    rtg_2 = db.Column(db.Float)",
         "detail": "migrar_bd",
         "documentation": {}
     },
@@ -802,7 +847,25 @@
         "kind": 6,
         "importPath": "migrar_bd",
         "description": "migrar_bd",
-        "peekOfCode": "class EstadisticasFBref(db.Model):\n    __tablename__ = 'estadisticas_fbref'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    datos_crudos = db.Column(db.JSON)\n# ==========================================\n# 2. PROCESO DE MIGRACIÓN MAESTRA\n# ==========================================\ndef migrar_datos():\n    csv_file = 'Scouting_Database_Final.csv'",
+        "peekOfCode": "class EstadisticasFBref(db.Model):\n    __tablename__ = 'estadisticas_fbref'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    datos_crudos = db.Column(db.JSON)\n# NUEVA TABLA: Historial Financiero\nclass Transferencia(db.Model):\n    __tablename__ = 'transferencias'\n    id = db.Column(db.Integer, primary_key=True)\n    # Lo vinculamos por nombre porque un jugador tiene múltiples temporadas, ",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "Transferencia",
+        "kind": 6,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "class Transferencia(db.Model):\n    __tablename__ = 'transferencias'\n    id = db.Column(db.Integer, primary_key=True)\n    # Lo vinculamos por nombre porque un jugador tiene múltiples temporadas, \n    # pero es la misma persona física.\n    jugador_nombre = db.Column(db.String(100), index=True) \n    temporada = db.Column(db.String(20))\n    fecha = db.Column(db.String(20))\n    club_origen = db.Column(db.String(100))\n    club_destino = db.Column(db.String(100))",
+        "detail": "migrar_bd",
+        "documentation": {}
+    },
+    {
+        "label": "limpiar_dinero",
+        "kind": 2,
+        "importPath": "migrar_bd",
+        "description": "migrar_bd",
+        "peekOfCode": "def limpiar_dinero(valor):\n    if pd.isna(valor) or str(valor) == '0' or valor == 'N/A' or valor == '-' or valor == '?':\n        return 0\n    valor_str = str(valor).lower().replace('€', '').replace(' ', '').replace(',', '.')\n    numeros = re.findall(r\"[-+]?\\d*\\.\\d+|\\d+\", valor_str)\n    if not numeros: return 0\n    cantidad = float(numeros[0])\n    if 'm' in valor_str: return int(cantidad * 1000000)\n    elif 'k' in valor_str: return int(cantidad * 1000)\n    else: return int(cantidad)",
         "detail": "migrar_bd",
         "documentation": {}
     },
@@ -811,7 +874,7 @@
         "kind": 2,
         "importPath": "migrar_bd",
         "description": "migrar_bd",
-        "peekOfCode": "def migrar_datos():\n    csv_file = 'Scouting_Database_Final.csv'\n    if not os.path.exists(csv_file):\n        print(f\"❌ Error: No encuentro el archivo {csv_file}\")\n        return\n    print(\"📊 Cargando Base de Datos Maestra de Europa...\")\n    df = pd.read_csv(csv_file)\n    df = df.fillna(0)\n    # Nombres de las columnas que nuestro motor añadió al final y NO son estadísticas FBref\n    columnas_metadata = ['Valor_Deportivo', 'Rol_Principal', 'RTG_Principal', 'Rol_2', 'RTG_2', 'Rol_3', 'RTG_3', 'Rank']",
+        "peekOfCode": "def migrar_datos():\n    csv_maestro = 'Scouting_Database_con_TM.csv'\n    csv_fichajes = 'Transferencias_DB_Limpio.csv'\n    if not os.path.exists(csv_maestro):\n        print(f\"❌ Error: No encuentro el archivo maestro {csv_maestro}\")\n        return\n    with app.app_context():\n        print(\"🏗️ Destruyendo base de datos antigua y creando la nueva arquitectura...\")\n        db.drop_all()\n        db.create_all()",
         "detail": "migrar_bd",
         "documentation": {}
     },
@@ -820,7 +883,7 @@
         "kind": 5,
         "importPath": "migrar_bd",
         "description": "migrar_bd",
-        "peekOfCode": "app = Flask(__name__)\napp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scoutmew.db'\napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)",
+        "peekOfCode": "app = Flask(__name__)\napp.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scoutmew.db'\napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False, index=True) # Indexado para cruzar datos rápido\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)",
         "detail": "migrar_bd",
         "documentation": {}
     },
@@ -829,7 +892,7 @@
         "kind": 5,
         "importPath": "migrar_bd",
         "description": "migrar_bd",
-        "peekOfCode": "app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scoutmew.db'\napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))",
+        "peekOfCode": "app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///scoutmew.db'\napp.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False, index=True) # Indexado para cruzar datos rápido\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))",
         "detail": "migrar_bd",
         "documentation": {}
     },
@@ -838,7 +901,7 @@
         "kind": 5,
         "importPath": "migrar_bd",
         "description": "migrar_bd",
-        "peekOfCode": "app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))\n    posicion = db.Column(db.String(10))",
+        "peekOfCode": "app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False\ndb = SQLAlchemy(app)\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False, index=True) # Indexado para cruzar datos rápido\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))\n    posicion = db.Column(db.String(10))",
         "detail": "migrar_bd",
         "documentation": {}
     },
@@ -847,7 +910,7 @@
         "kind": 5,
         "importPath": "migrar_bd",
         "description": "migrar_bd",
-        "peekOfCode": "db = SQLAlchemy(app)\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False)\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))\n    posicion = db.Column(db.String(10))\n    minutos = db.Column(db.Integer)",
+        "peekOfCode": "db = SQLAlchemy(app)\nclass Jugador(db.Model):\n    __tablename__ = 'jugadores'\n    id = db.Column(db.Integer, primary_key=True)\n    nombre = db.Column(db.String(100), nullable=False, index=True) # Indexado para cruzar datos rápido\n    nacion = db.Column(db.String(10))\n    edad = db.Column(db.Integer)\n    club = db.Column(db.String(100))\n    posicion = db.Column(db.String(10))\n    minutos = db.Column(db.Integer)",
         "detail": "migrar_bd",
         "documentation": {}
     },
