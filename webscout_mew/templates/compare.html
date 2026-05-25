@@ -9,40 +9,20 @@
         <header class="flex flex-col md:flex-row justify-between items-center gap-4 shrink-0">
             <div>
                 <h1 class="text-3xl font-bold tracking-tight">Scouting: Comparativa Avanzada</h1>
-                <p class="text-white/50 text-sm mt-1">Evalúa jugadores vs Población Continental y el Gold Standard (Mejor RTG)</p>
+                <p class="text-white/50 text-sm mt-1">Evalúa jugadores vs Población Continental</p>
             </div>
-            
-            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                <div class="glass-panel h-12 px-4 !rounded-full flex items-center gap-2 relative z-20">
-                    <i class="ph-bold ph-calendar text-white/50"></i>
-                    <select id="seasonSelect" class="bg-transparent appearance-none outline-none text-white text-sm cursor-pointer pr-4 font-bold">
-                        {% for t in temporadas %}
-                            <option value="{{ t }}" class="text-black">{{ t }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="relative w-full sm:w-[300px] z-20">
-                    <div class="glass-panel h-12 w-full !rounded-full flex items-center px-5 gap-3 focus-within:bg-white/10 transition-all">
-                        <i class="ph-bold ph-magnifying-glass text-lg text-white/60"></i>
-                        <input type="text" id="searchInput" placeholder="Añadir jugador (Máx 4)..." autocomplete="off"
-                               class="bg-transparent border-none outline-none text-white placeholder-white/30 w-full h-full text-sm disabled:opacity-50">
-                    </div>
-                    <div id="searchResults" class="absolute top-14 left-0 w-full glass-dark rounded-2xl overflow-hidden hidden shadow-2xl border border-white/10"></div>
-                </div>
+            <div class="glass-panel h-12 px-4 !rounded-full flex items-center gap-2 relative z-20">
+                <i class="ph-bold ph-calendar text-white/50"></i>
+                <select id="seasonSelect" class="bg-transparent appearance-none outline-none text-white text-sm cursor-pointer pr-4 font-bold">
+                    {% for t in temporadas %}
+                        <option value="{{ t }}" class="text-black">{{ t }}</option>
+                    {% endfor %}
+                </select>
             </div>
         </header>
 
-        </header>
-
-        <div id="quick-suggestions-container" class="flex flex-wrap items-center gap-2 shrink-0 mb-4 hidden animate-fade-in">
-            <span class="text-[10px] font-bold text-white/50 uppercase tracking-wider mr-2">Sugerencias (Top RTG):</span>
-            <div id="quick-suggestions-list" class="flex flex-wrap gap-2"></div>
-        </div>
-
-        <div id="selected-players-container" class="flex flex-wrap gap-2 shrink-0 mb-2 hidden"></div>
-
-        <div id="selected-players-container" class="flex flex-wrap gap-2 shrink-0 mb-2 hidden"></div>
+        <div id="player-slots-container" class="grid grid-cols-2 lg:grid-cols-4 gap-4 shrink-0 animate-fade-in">
+            </div>
 
         <div class="flex gap-4 border-b border-white/10 shrink-0 mb-2">
             <button onclick="switchTab('radar')" id="btnTabRadar" class="pb-3 text-sm font-bold text-brand-pink border-b-2 border-brand-pink transition-all">
@@ -54,10 +34,8 @@
         </div>
 
         <div id="tabRadar" class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0 animate-fade-in">
-            
             <div class="lg:col-span-5 flex flex-col gap-6">
                 <div class="glass-panel rounded-[2rem] p-6 flex flex-col flex-1 min-h-[500px] relative border-t border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.3)]">
-                    
                     <div class="flex flex-col gap-4 mb-2 z-10">
                         <div class="flex justify-between items-center">
                             <h3 class="text-sm font-bold text-white/80 uppercase tracking-wider flex items-center gap-2">
@@ -80,22 +58,9 @@
                         <canvas id="contextRadar"></canvas>
                     </div>
 
-                    <div class="flex justify-center gap-6 mt-auto pt-4 border-t border-white/10">
-                        <label class="flex items-center gap-2 cursor-pointer group">
-                            <input type="checkbox" id="toggleAvg" checked class="hidden" onchange="toggleReferenceLines()">
-                            <div class="w-4 h-4 rounded-[4px] border border-[#a78bfa] flex items-center justify-center bg-[#a78bfa]/20 group-hover:bg-[#a78bfa]/40 transition-colors">
-                                <i class="ph-bold ph-check text-[10px] text-[#a78bfa] opacity-100 check-icon transition-opacity"></i>
-                            </div>
-                            <span class="text-xs font-bold text-white/70 group-hover:text-white transition-colors">Promedio Posición</span>
-                        </label>
-                        
-                        <label class="flex items-center gap-2 cursor-pointer group">
-                            <input type="checkbox" id="toggleTop" checked class="hidden" onchange="toggleReferenceLines()">
-                            <div class="w-4 h-4 rounded-[4px] border border-[#facc15] flex items-center justify-center bg-[#facc15]/20 group-hover:bg-[#facc15]/40 transition-colors">
-                                <i class="ph-bold ph-check text-[10px] text-[#facc15] opacity-100 check-icon transition-opacity"></i>
-                            </div>
-                            <span class="text-xs font-bold text-white/70 group-hover:text-white transition-colors">Gold Standard</span>
-                        </label>
+                    <div class="flex justify-center gap-6 mt-auto pt-4 border-t border-white/10 hidden">
+                        <input type="checkbox" id="toggleAvg" checked onchange="toggleReferenceLines()">
+                        <input type="checkbox" id="toggleTop" checked onchange="toggleReferenceLines()">
                     </div>
                 </div>
             </div>
@@ -105,52 +70,41 @@
                     <h3 class="text-lg font-bold text-white flex items-center gap-2">
                         <i class="ph-fill ph-list-dashes text-brand-accent"></i> Perfil de Rol Completo
                     </h3>
-                    <div class="bg-white/5 rounded-full p-1 border border-white/10 flex text-xs">
-                        <button id="btnModeRaw" onclick="toggleRadarMode('raw')" class="px-3 py-1 rounded-full font-bold bg-white/20 text-white transition-all">Valores Brutos</button>
-                        <button id="btnModePerc" onclick="toggleRadarMode('perc')" class="px-3 py-1 rounded-full font-bold text-white/50 hover:text-white transition-all">Ranking Percentil</button>
                     </div>
-                </div>
                 
                 <div class="grid grid-cols-12 gap-4 px-6 py-2 border-b border-white/5 text-[10px] font-bold text-white/40 uppercase tracking-wider bg-black/20">
-                    <div class="col-span-4">Estadística (Rol)</div>
-                    <div class="col-span-4 text-center">Percentil</div>
-                    <div class="col-span-4 text-right">Valor Crudo</div>
+                    <div class="col-span-6 pl-4">Estadística (Rol)</div>
+                    <div class="col-span-6 text-right pr-6">Valor Real (Percentil)</div>
                 </div>
 
                 <div id="stats-breakdown-container" class="flex-1 overflow-y-auto no-scrollbar pb-6 flex flex-col">
-                    <p class="text-white/40 text-sm text-center mt-10 w-full">Añade jugadores para desplegar su perfil estadístico.</p>
+                    <div class="flex flex-col items-center justify-center h-full opacity-50 mt-10">
+                        <i class="ph-bold ph-users text-4xl mb-2"></i>
+                        <p class="text-sm font-bold">Añade jugadores para iniciar</p>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="tabScatter" class="hidden flex-1 flex-col animate-fade-in gap-4 h-full min-h-[600px]">
-            
             <div class="glass-panel p-4 rounded-[1.5rem] flex flex-wrap gap-4 items-center shrink-0 border-t border-white/10 z-20">
                 <div class="flex items-center gap-2">
                     <span class="text-[10px] font-bold text-brand-pink uppercase">Eje X:</span>
                     <select id="scatterX" class="bg-black/40 border border-white/10 rounded-lg px-2 py-1 text-xs text-white/90 outline-none w-40 cursor-pointer">
-                        {% for s in stats_list %}
-                            <option value="{{ s.key }}" {% if s.key == 'xG' %}selected{% endif %}>{{ s.name }}</option>
-                        {% endfor %}
+                        {% for s in stats_list %}<option value="{{ s.key }}" {% if s.key == 'xG' %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="text-[10px] font-bold text-brand-accent uppercase">Eje Y:</span>
                     <select id="scatterY" class="bg-black/40 border border-white/10 rounded-lg px-2 py-1 text-xs text-white/90 outline-none w-40 cursor-pointer">
-                        {% for s in stats_list %}
-                            <option value="{{ s.key }}" {% if s.key == 'Gls' %}selected{% endif %}>{{ s.name }}</option>
-                        {% endfor %}
+                        {% for s in stats_list %}<option value="{{ s.key }}" {% if s.key == 'Gls' %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
                     </select>
                 </div>
                 <div class="w-px h-6 bg-white/10 mx-1 hidden md:block"></div>
                 <div class="flex items-center gap-2">
                     <span class="text-[10px] font-bold text-white/50 uppercase">Posición:</span>
                     <select id="scatterRol" class="bg-black/40 border border-white/10 rounded-lg px-2 py-1 text-xs text-white/90 outline-none cursor-pointer">
-                        <option value="ALL">Todas</option>
-                        <option value="FW">Atacantes (FW)</option>
-                        <option value="AM">Mediapuntas (AM)</option>
-                        <option value="MC">Mediocentros (MC)</option>
-                        <option value="DF">Defensas (DF/LB)</option>
+                        <option value="ALL">Todas</option><option value="FW">Atacantes (FW)</option><option value="AM">Mediapuntas (AM)</option><option value="MC">Mediocentros (MC)</option><option value="DF">Defensas (DF/LB)</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
@@ -161,38 +115,50 @@
                     <i class="ph-bold ph-arrows-clockwise mr-1"></i> Analizar
                 </button>
             </div>
-
             <div class="glass-panel flex-1 rounded-[2rem] p-6 relative flex flex-col min-h-[500px]">
                 <h3 class="text-sm font-bold text-white/80 uppercase tracking-wider flex items-center gap-2 mb-2 shrink-0">
                     <i class="ph-bold ph-chart-scatter text-brand-accent"></i> Matriz de Dispersión
                     <span id="scatterPoblacion" class="text-[10px] font-normal text-white/40 ml-2"></span>
                 </h3>
-                
                 <div class="relative flex-1 w-full h-full">
                     <canvas id="scatterChart"></canvas>
-                    
-                    <div id="scatterTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-200 z-50 glass-dark border border-white/10 rounded-xl p-3 shadow-[0_10px_30px_rgba(0,0,0,0.8)] flex flex-col gap-2 w-52" style="transform: translate(-50%, -100%); margin-top: -15px;">
-                        </div>
+                    <div id="scatterTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-200 z-50 glass-dark border border-white/10 rounded-xl p-3 shadow-[0_10px_30px_rgba(0,0,0,0.8)] flex flex-col gap-2 w-52" style="transform: translate(-50%, -100%); margin-top: -15px;"></div>
                 </div>
             </div>
         </div>
-
     </div>
 </main>
 
+<div id="searchModal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 hidden flex flex-col items-center pt-32 px-4 transition-opacity opacity-0">
+    <div class="w-full max-w-2xl flex flex-col gap-4 relative">
+        <button onclick="closeSearchModal()" class="absolute -top-12 right-0 text-white/50 hover:text-white text-3xl transition-colors"><i class="ph-bold ph-x"></i></button>
+        
+        <div class="glass-panel h-16 w-full !rounded-2xl flex items-center px-6 gap-4 shadow-2xl border-white/20 focus-within:border-brand-pink transition-colors">
+            <i class="ph-bold ph-magnifying-glass text-2xl text-brand-pink"></i>
+            <input type="text" id="modalSearchInput" placeholder="Busca un jugador para comparar..." autocomplete="off" class="bg-transparent border-none outline-none text-white placeholder-white/30 w-full h-full text-xl font-bold">
+        </div>
+
+        <div id="modalSearchResults" class="glass-dark rounded-2xl overflow-hidden shadow-2xl border border-white/10 hidden flex-col"></div>
+        
+        <div id="modalSuggestions" class="mt-4 hidden animate-fade-in flex flex-col items-center w-full">
+            <span class="text-xs font-bold text-white/50 uppercase tracking-wider mb-3">Todos los Rivales de este Rol</span>
+            <div id="modalSuggestionsList" class="flex flex-wrap justify-center gap-2 max-h-[300px] overflow-y-auto no-scrollbar w-full p-2 border-t border-b border-white/5"></div>
+        </div>
+    </div>
+</div>
+
 <script>
-let currentRadarMode = 'raw';
+// Variables Globales
 let compareList = []; 
 const MAX_PLAYERS = 4;
 
 const playerColors = [
-    { hex: '#d6409f', bg: 'rgba(214, 64, 159, 0.4)' }, // Rosa
-    { hex: '#22d3ee', bg: 'rgba(34, 211, 238, 0.4)' }, // Cian
-    { hex: '#34d399', bg: 'rgba(52, 211, 153, 0.4)' }, // Esmeralda
-    { hex: '#fb923c', bg: 'rgba(251, 146, 60, 0.4)' }  // Naranja
+    { hex: '#d6409f', bg: 'rgba(214, 64, 159, 0.4)' },
+    { hex: '#22d3ee', bg: 'rgba(34, 211, 238, 0.4)' },
+    { hex: '#34d399', bg: 'rgba(52, 211, 153, 0.4)' },
+    { hex: '#fb923c', bg: 'rgba(251, 146, 60, 0.4)' }
 ];
 
-// Semáforo de Percentiles
 function getPercentileColor(p) {
     if (p >= 90) return 'text-green-400 bg-green-400/10 border-green-400/20';
     if (p >= 75) return 'text-lime-400 bg-lime-400/10 border-lime-400/20';
@@ -208,13 +174,6 @@ function switchTab(tab) {
     document.getElementById('btnTabScatter').className = tab === 'scatter' ? "pb-3 text-sm font-bold text-brand-accent border-b-2 border-brand-accent transition-all" : "pb-3 text-sm font-bold text-white/50 hover:text-white transition-all";
 }
 
-function toggleRadarMode(mode) {
-    currentRadarMode = mode;
-    document.getElementById('btnModeRaw').className = mode === 'raw' ? "px-3 py-1 rounded-full font-bold bg-white/20 text-white transition-all" : "px-3 py-1 rounded-full font-bold text-white/50 hover:text-white transition-all";
-    document.getElementById('btnModePerc').className = mode === 'perc' ? "px-3 py-1 rounded-full font-bold bg-white/20 text-white transition-all" : "px-3 py-1 rounded-full font-bold text-white/50 hover:text-white transition-all";
-    if (compareList.length > 0) renderView();
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('contextRadar').getContext('2d');
     Chart.defaults.color = 'rgba(255, 255, 255, 0.5)';
@@ -222,26 +181,74 @@ document.addEventListener('DOMContentLoaded', function() {
     let radarChart = null;
     let suggestedRivals = [];
 
-    const searchInput = document.getElementById('searchInput');
-    const searchResults = document.getElementById('searchResults');
     const seasonSelect = document.getElementById('seasonSelect');
     const templateSelect = document.getElementById('templateSelect');
+    const searchModal = document.getElementById('searchModal');
+    const modalSearchInput = document.getElementById('modalSearchInput');
+    const modalSearchResults = document.getElementById('modalSearchResults');
     let searchTimeout;
 
+    window.openSearchModal = function() {
+        if (compareList.length >= MAX_PLAYERS) return;
+        searchModal.classList.remove('hidden');
+        setTimeout(() => { searchModal.classList.remove('opacity-0'); modalSearchInput.focus(); }, 10);
+        renderSuggestionsInModal();
+    };
+
+    window.closeSearchModal = function() {
+        searchModal.classList.add('opacity-0');
+        setTimeout(() => { searchModal.classList.add('hidden'); modalSearchInput.value = ''; modalSearchResults.innerHTML = ''; modalSearchResults.classList.add('hidden'); }, 300);
+    };
+
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSearchModal(); });
+
+    function renderSlots() {
+        const container = document.getElementById('player-slots-container');
+        container.innerHTML = '';
+        
+        for (let i = 0; i < MAX_PLAYERS; i++) {
+            if (i < compareList.length) {
+                const p = compareList[i];
+                const colorHex = playerColors[i].hex;
+                container.innerHTML += `
+                    <div class="glass-panel p-3 rounded-2xl border border-white/10 flex items-center justify-between shadow-lg relative overflow-hidden group">
+                        <div class="absolute left-0 top-0 bottom-0 w-1" style="background-color: ${colorHex}"></div>
+                        <div class="flex items-center gap-3 pl-2 w-full">
+                            <img src="https://ui-avatars.com/api/?name=${p.data.nombre}&background=random&color=fff&bold=true" class="w-10 h-10 rounded-full border border-white/20 shrink-0">
+                            <div class="min-w-0 flex-1">
+                                <p class="text-sm font-bold text-white truncate leading-tight">${p.data.nombre}</p>
+                                <p class="text-[10px] text-white/50 truncate leading-tight">${p.data.club}</p>
+                            </div>
+                            <button onclick="removePlayer(${p.id})" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:bg-red-500/20 hover:text-red-400 transition-colors shrink-0">
+                                <i class="ph-bold ph-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML += `
+                    <button onclick="openSearchModal()" class="glass-panel p-3 rounded-2xl border border-dashed border-white/20 hover:border-brand-pink/50 hover:bg-white/5 flex flex-col items-center justify-center gap-1 transition-all h-[66px] opacity-60 hover:opacity-100">
+                        <i class="ph-bold ph-plus text-lg text-white/50"></i>
+                        <span class="text-[10px] font-bold text-white/50 uppercase">Añadir Jugador</span>
+                    </button>
+                `;
+            }
+        }
+    }
+
     seasonSelect.addEventListener('change', () => {
-        searchInput.value = '';
         compareList = [];
+        suggestedRivals = [];
         if (radarChart) radarChart.destroy();
-        document.getElementById('stats-breakdown-container').innerHTML = '<p class="text-white/40 text-sm text-center mt-10 w-full">Añade jugadores para desplegar su perfil estadístico.</p>';
+        document.getElementById('stats-breakdown-container').innerHTML = '<div class="flex flex-col items-center justify-center h-full opacity-50 mt-10"><i class="ph-bold ph-users text-4xl mb-2"></i><p class="text-sm font-bold">Añade jugadores para iniciar</p></div>';
         document.getElementById('contextInfo').classList.add('hidden');
-        document.getElementById('selected-players-container').classList.add('hidden');
         templateSelect.disabled = true;
+        renderSlots();
     });
 
     templateSelect.addEventListener('change', () => {
         if (compareList.length > 0) {
             const currentTemplate = templateSelect.value;
-            // Solo actualizamos el Radar, la tabla de roles mantiene todas las stats de su JSON
             Promise.all(compareList.map(p => 
                 fetch(`/api/radar_contexto/${p.id}?plantilla=${currentTemplate}`).then(r => r.json())
             )).then(results => {
@@ -251,52 +258,57 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    searchInput.addEventListener('input', function() {
+    modalSearchInput.addEventListener('input', function() {
         clearTimeout(searchTimeout);
         const q = this.value.trim();
         const season = seasonSelect.value;
-        if (q.length < 2) { searchResults.classList.add('hidden'); return; }
+        let exactRole = '';
+        
+        if (compareList.length > 0) exactRole = compareList[0].data.rol;
+        
+        if (q.length < 2) { modalSearchResults.classList.add('hidden'); return; }
 
         searchTimeout = setTimeout(() => {
-            fetch(`/api/buscar_jugador?q=${q}&temporada=${season}`)
+            fetch(`/api/buscar_jugador?q=${q}&temporada=${season}&rol_exacto=${exactRole}`)
                 .then(res => res.json())
                 .then(data => {
-                    searchResults.innerHTML = '';
+                    modalSearchResults.innerHTML = '';
                     if (data.length === 0) {
-                        searchResults.innerHTML = '<div class="p-4 text-sm text-white/50 text-center">No hay resultados</div>';
+                        modalSearchResults.innerHTML = '<div class="p-6 text-sm text-white/50 text-center">No encontramos a ese jugador, o no pertenece a este rol exacto.</div>';
                     } else {
                         data.forEach(j => {
                             const div = document.createElement('div');
-                            div.className = 'p-3 hover:bg-white/10 cursor-pointer border-b border-white/5 flex justify-between items-center transition-colors';
-                            div.innerHTML = `<div><p class="text-sm font-bold text-white">${j.nombre}</p><p class="text-[10px] text-white/50">${j.club}</p></div><span class="text-[10px] bg-white/10 px-2 py-1 rounded text-white/70">${j.rol}</span>`;
+                            div.className = 'p-4 hover:bg-brand-pink/20 cursor-pointer border-b border-white/5 flex justify-between items-center transition-colors group';
+                            div.innerHTML = `
+                                <div>
+                                    <p class="text-base font-bold text-white group-hover:text-brand-pink transition-colors">${j.nombre}</p>
+                                    <p class="text-xs text-white/50">${j.club}</p>
+                                </div>
+                                <span class="text-[10px] bg-white/10 px-2 py-1 rounded font-bold text-white/70">${j.rol}</span>
+                            `;
                             div.onclick = () => {
                                 const currentTemplate = compareList.length > 0 ? templateSelect.value : 'completo';
                                 loadPlayerContext(j.id, currentTemplate);
                             };
-                            searchResults.appendChild(div);
+                            modalSearchResults.appendChild(div);
                         });
                     }
-                    searchResults.classList.remove('hidden');
+                    modalSearchResults.classList.remove('hidden');
                 });
         }, 300);
     });
 
-    document.addEventListener('click', (e) => {
-        if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) searchResults.classList.add('hidden');
-    });
-
-    function loadPlayerContext(id, plantilla) {
-        if (compareList.length >= MAX_PLAYERS) return alert("Has alcanzado el límite de 4 jugadores.");
-        if (compareList.find(p => p.id === id)) return alert("El jugador ya está en la comparativa.");
+    window.loadPlayerContext = function(id, plantilla) {
+        if (compareList.length >= MAX_PLAYERS) return;
+        if (compareList.find(p => p.id === id)) { closeSearchModal(); return alert("El jugador ya está en la comparativa."); }
         
-        searchResults.classList.add('hidden');
-        searchInput.value = '';
+        closeSearchModal();
         
         fetch(`/api/radar_contexto/${id}?plantilla=${plantilla}`)
             .then(res => res.json())
             .then(data => {
-                if (compareList.length > 0 && data.prefijo_rol !== compareList[0].data.prefijo_rol) {
-                    return alert(`Solo puedes comparar perfiles similares. El primer jugador es de línea: ${compareList[0].data.prefijo_rol}`);
+                if (compareList.length > 0 && data.rol !== compareList[0].data.rol) {
+                    return alert(`Solo puedes evaluar perfiles exactos. Tu base es de rol: ${compareList[0].data.rol}`);
                 }
 
                 compareList.push({ id: id, data: data });
@@ -305,53 +317,48 @@ document.addEventListener('DOMContentLoaded', function() {
                     updateTemplateOptions(data.prefijo_rol);
                     templateSelect.disabled = false;
                     templateSelect.value = 'completo'; 
-                    fetchSuggestions(id); // <-- NUEVA LÍNEA AQUÍ
-                } else {
-                    renderSuggestions(); // <-- NUEVA LÍNEA AQUÍ (Para refrescar la lista)
+                    fetchSuggestions(id);
                 }
+                
+                renderSlots();
                 renderView();
             });
     }
 
     window.removePlayer = function(id) {
         compareList = compareList.filter(p => p.id !== id);
+        renderSlots();
         
         if (compareList.length === 0) {
+            suggestedRivals = [];
             if (radarChart) radarChart.destroy();
-            document.getElementById('stats-breakdown-container').innerHTML = '<p class="text-white/40 text-sm text-center mt-10 w-full">Añade jugadores para desplegar su perfil estadístico.</p>';
+            document.getElementById('stats-breakdown-container').innerHTML = '<div class="flex flex-col items-center justify-center h-full opacity-50 mt-10"><i class="ph-bold ph-users text-4xl mb-2"></i><p class="text-sm font-bold">Añade jugadores para iniciar</p></div>';
             document.getElementById('contextInfo').classList.add('hidden');
-            document.getElementById('selected-players-container').classList.add('hidden');
-            document.getElementById('quick-suggestions-container').classList.add('hidden'); // Ocultar sugerencias
             templateSelect.disabled = true;
         } else {
             renderView();
-            renderSuggestions(); // Refrescar sugerencias si queda espacio
         }
     };
 
-    // --- SUGERENCIAS INTELIGENTES ---
     function fetchSuggestions(basePlayerId) {
         fetch(`/api/rivales_similares/${basePlayerId}`)
             .then(res => res.json())
             .then(data => {
                 suggestedRivals = data;
-                renderSuggestions();
             });
     }
 
-    function renderSuggestions() {
-        const container = document.getElementById('quick-suggestions-container');
-        const list = document.getElementById('quick-suggestions-list');
+    function renderSuggestionsInModal() {
+        const container = document.getElementById('modalSuggestions');
+        const list = document.getElementById('modalSuggestionsList');
         list.innerHTML = '';
 
-        // Si no hay jugadores, o llegamos al máximo, ocultamos las sugerencias
         if (compareList.length === 0 || compareList.length >= MAX_PLAYERS) {
             container.classList.add('hidden');
             return;
         }
 
-        // Filtramos los que ya están añadidos en compareList
-        const availableSuggestions = suggestedRivals.filter(s => !compareList.some(p => p.id === s.id)).slice(0, 5); // Mostramos max 5
+        const availableSuggestions = suggestedRivals.filter(s => !compareList.some(p => p.id === s.id));
 
         if (availableSuggestions.length === 0) {
             container.classList.add('hidden');
@@ -361,10 +368,9 @@ document.addEventListener('DOMContentLoaded', function() {
         availableSuggestions.forEach(s => {
             list.innerHTML += `
                 <button onclick="loadPlayerContext(${s.id}, document.getElementById('templateSelect').value)" 
-                        class="glass-panel px-3 py-1 flex items-center gap-2 rounded-full border border-white/5 hover:border-[#facc15]/50 hover:bg-[#facc15]/10 transition-all group">
-                    <span class="text-[10px] font-bold text-white/70 group-hover:text-white transition-colors">${s.nombre.split(' ').slice(-2).join(' ')}</span>
-                    <span class="text-[9px] text-[#facc15] font-mono">${s.rtg}</span>
-                    <i class="ph-bold ph-plus text-[10px] text-white/30 group-hover:text-[#facc15] transition-colors"></i>
+                        class="glass-panel px-4 py-2 flex flex-col items-center gap-1 rounded-xl border border-white/10 hover:border-brand-pink hover:bg-brand-pink/10 transition-all shrink-0">
+                    <span class="text-xs font-bold text-white">${s.nombre.split(' ').slice(-2).join(' ')}</span>
+                    <span class="text-[10px] text-[#facc15] font-mono font-bold"><i class="ph-fill ph-star"></i> ${s.rtg}</span>
                 </button>
             `;
         });
@@ -381,49 +387,23 @@ document.addEventListener('DOMContentLoaded', function() {
             opts[1].text = "Salida de Balón"; opts[2].text = "Muro Defensivo"; 
         }
     }
+
     function renderView() {
         const baseData = compareList[0].data;
         const infoDiv = document.getElementById('contextInfo');
         infoDiv.innerHTML = `${baseData.poblacion} ${baseData.rol} evaluados a nivel continental`;
         infoDiv.classList.remove('hidden');
 
-        renderPills();
         renderContextRadar(baseData);
         renderContextTable(baseData);
     }
 
-    function renderPills() {
-        const container = document.getElementById('selected-players-container');
-        container.innerHTML = '';
-        compareList.forEach((p, index) => {
-            const color = playerColors[index].hex;
-            container.innerHTML += `
-                <div class="glass-panel px-3 py-1 flex items-center gap-2 rounded-full border border-white/10" style="border-bottom: 2px solid ${color}">
-                    <span class="text-xs font-bold text-white">${p.data.nombre.split(' ').slice(-2).join(' ')}</span>
-                    <button onclick="removePlayer(${p.id})" class="text-white/50 hover:text-red-400 transition-colors">
-                        <i class="ph-bold ph-x text-[10px]"></i>
-                    </button>
-                </div>
-            `;
-        });
-        container.classList.remove('hidden');
-    }
-
-    // --- RADAR LIMPIO (Sin relleno) ---
     function renderContextRadar(baseData) {
         const labels = baseData.stats.map(s => s.label);
         let datasets = [];
 
         compareList.forEach((p, index) => {
-            let dataJugador;
-            if (currentRadarMode === 'raw') {
-                dataJugador = p.data.stats.map(s => {
-                    let maxRef = s.raw_mejor > 0 ? s.raw_mejor : 1; 
-                    return Math.min((s.raw_jugador / maxRef) * 100, 110); 
-                });
-            } else {
-                dataJugador = p.data.stats.map(s => s.perc_jugador);
-            }
+            let dataJugador = p.data.stats.map(s => s.perc_jugador);
             datasets.push({
                 label: p.data.nombre,
                 data: dataJugador,
@@ -432,30 +412,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 borderWidth: 2.5,
                 pointBackgroundColor: playerColors[index].hex,
                 pointHoverRadius: 6,
-                fill: false // Sin áreas manchadas
+                fill: false
             });
         });
 
-        datasets.push({
-            label: 'Promedio',
-            data: currentRadarMode === 'raw' ? baseData.stats.map(s => Math.min((s.raw_promedio / (s.raw_mejor||1)) * 100, 100)) : baseData.stats.map(() => 50),
-            backgroundColor: 'transparent',
-            borderColor: '#a78bfa',
-            borderWidth: 1.5,
-            borderDash: [4, 4],
-            pointRadius: 2,
-            fill: false
-        });
-        
-        datasets.push({
-            label: 'El Mejor',
-            data: baseData.stats.map(() => 100),
-            backgroundColor: 'transparent', 
-            borderColor: '#facc15',
-            borderWidth: 1.5,
-            pointRadius: 0,
-            fill: false
-        });
+        // Solo mantenemos la línea del mejor RTG (oculta por defecto si lo deseas, pero el checkbox no está)
+        // Eliminada la línea del promedio para no saturar.
 
         if (radarChart) radarChart.destroy();
 
@@ -469,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
                         grid: { color: 'rgba(255, 255, 255, 0.15)' },
                         pointLabels: { font: { size: 11, weight: '600' }, color: 'rgba(255, 255, 255, 0.8)' },
-                        ticks: { display: false, min: 0, max: 100 } 
+                        ticks: { display: false, min: 0, max: 100 }
                     }
                 },
                 plugins: {
@@ -482,11 +444,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 
                                 if (dsIndex < compareList.length) {
                                     const pStat = compareList[dsIndex].data.stats[statIndex];
-                                    return `${compareList[dsIndex].data.nombre}: ${pStat.raw_jugador.toFixed(2)} (P${pStat.perc_jugador})`;
-                                } else if (dsIndex === compareList.length) {
-                                    return `Promedio: ${baseData.stats[statIndex].raw_promedio.toFixed(2)}`;
-                                } else {
-                                    return `Mejor (${baseData.stats[statIndex].nombre_mejor}): ${baseData.stats[statIndex].raw_mejor.toFixed(2)}`;
+                                    return `${compareList[dsIndex].data.nombre}: ${pStat.raw_jugador.toFixed(2)} (Percentil ${pStat.perc_jugador})`;
                                 }
                             }
                         }
@@ -496,40 +454,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    window.toggleReferenceLines = function() {
-        if (!radarChart) return;
-        const showAvg = document.getElementById('toggleAvg').checked;
-        const showTop = document.getElementById('toggleTop').checked;
-        
-        // Efecto visual en los checkboxes falsos
-        document.querySelector('#toggleAvg + div .check-icon').style.opacity = showAvg ? '1' : '0';
-        document.querySelector('#toggleTop + div .check-icon').style.opacity = showTop ? '1' : '0';
-
-        // Ocultar/Mostrar los datasets en Chart.js (Sabemos que son los dos últimos)
-        const totalDatasets = radarChart.data.datasets.length;
-        if (totalDatasets >= 2) {
-            radarChart.getDatasetMeta(totalDatasets - 2).hidden = !showAvg;
-            radarChart.getDatasetMeta(totalDatasets - 1).hidden = !showTop;
-            radarChart.update();
-        }
-
-
-    };
-
-    // ==========================================
-    // LÓGICA DEL CAZADOR (SCATTER PLOT)
-    // ==========================================
+    // PLUGIN Y SCATTER... (Permanece igual)
     let scatterChart = null;
 
-    // Plugin personalizado para dibujar la Cruz de Cuadrantes (Promedios)
     const crosshairPlugin = {
         id: 'crosshair',
         afterDatasetsDraw: (chart) => {
+            if (chart.config.type !== 'scatter') return;
+            
             const {ctx, chartArea: {top, bottom, left, right}, scales: {x, y}} = chart;
             const data = chart.data.datasets[0].data;
             if(data.length === 0) return;
             
-            // Calculamos el promedio matemático del dataset actual
             const avgX = data.reduce((sum, d) => sum + d.x, 0) / data.length;
             const avgY = data.reduce((sum, d) => sum + d.y, 0) / data.length;
             
@@ -542,15 +478,12 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
             ctx.setLineDash([4, 4]);
 
-            // Línea Vertical (Promedio X)
             if (xPos >= left && xPos <= right) { ctx.moveTo(xPos, top); ctx.lineTo(xPos, bottom); }
-            // Línea Horizontal (Promedio Y)
             if (yPos >= top && yPos <= bottom) { ctx.moveTo(left, yPos); ctx.lineTo(right, yPos); }
             
             ctx.stroke();
             ctx.restore();
 
-            // Textos indicadores de la Cruz
             ctx.fillStyle = 'rgba(255,255,255,0.4)';
             ctx.font = '9px Outfit';
             ctx.fillText(`Promedio X: ${avgX.toFixed(2)}`, xPos + 5, bottom - 5);
@@ -560,15 +493,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     Chart.register(crosshairPlugin);
 
-    // Gestor del Tooltip HTML Personalizado
     const externalTooltipHandler = (context) => {
         const {chart, tooltip} = context;
         const tooltipEl = document.getElementById('scatterTooltip');
 
-        if (tooltip.opacity === 0) {
-            tooltipEl.style.opacity = 0;
-            return;
-        }
+        if (tooltip.opacity === 0) { tooltipEl.style.opacity = 0; return; }
 
         if (tooltip.body) {
             const p = tooltip.dataPoints[0].raw;
@@ -591,7 +520,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="flex justify-between items-center"><span class="text-white/60 truncate mr-2">${xLabel}:</span> <span class="text-brand-pink font-bold">${p.x.toFixed(2)}</span></div>
                     <div class="flex justify-between items-center"><span class="text-white/60 truncate mr-2">${yLabel}:</span> <span class="text-brand-accent font-bold">${p.y.toFixed(2)}</span></div>
                 </div>
-                <div class="text-[8px] text-center text-white/30 mt-2 uppercase tracking-widest">Clic para llevar al Radar</div>
+                <div class="text-[8px] text-center text-white/30 mt-2 uppercase tracking-widest">Clic para analizar</div>
             `;
         }
 
@@ -601,7 +530,6 @@ document.addEventListener('DOMContentLoaded', function() {
         tooltipEl.style.top = positionY + tooltip.caretY + 'px';
     };
 
-    // Función principal de carga (Se llama al apretar "Analizar")
     window.loadScatterData = function() {
         const xVal = document.getElementById('scatterX').value;
         const yVal = document.getElementById('scatterY').value;
@@ -616,7 +544,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(res => res.json())
             .then(data => {
                 document.getElementById('scatterPoblacion').innerText = `(${data.length} jugadores)`;
-                
                 if (scatterChart) scatterChart.destroy();
 
                 const sCtx = document.getElementById('scatterChart').getContext('2d');
@@ -624,110 +551,68 @@ document.addEventListener('DOMContentLoaded', function() {
                     type: 'scatter',
                     data: {
                         datasets: [{
-                            label: 'Jugadores',
-                            data: data,
-                            backgroundColor: 'rgba(110, 68, 255, 0.6)', // brand-accent
-                            borderColor: 'rgba(110, 68, 255, 1)',
-                            borderWidth: 1,
-                            pointRadius: 4,
-                            pointHoverRadius: 7,
-                            hoverBackgroundColor: '#d6409f', // Cambia a rosa al posar ratón
-                            hoverBorderColor: '#fff'
+                            label: 'Jugadores', data: data,
+                            backgroundColor: 'rgba(110, 68, 255, 0.6)', borderColor: 'rgba(110, 68, 255, 1)',
+                            borderWidth: 1, pointRadius: 4, pointHoverRadius: 7,
+                            hoverBackgroundColor: '#d6409f', hoverBorderColor: '#fff'
                         }]
                     },
                     options: {
                         responsive: true, maintainAspectRatio: false,
                         onClick: (e, elements) => {
-                            // MAGIA: Si das clic en un punto, lo lleva directo al Radar
                             if (elements.length > 0) {
-                                const index = elements[0].index;
-                                const player = scatterChart.data.datasets[0].data[index];
+                                const player = scatterChart.data.datasets[0].data[elements[0].index];
                                 switchTab('radar');
-                                // Si la lista de comparación está vacía, forzamos 'completo'
                                 const currentTemplate = compareList.length > 0 ? document.getElementById('templateSelect').value : 'completo';
                                 loadPlayerContext(player.id, currentTemplate);
                             }
                         },
                         scales: {
-                            x: { 
-                                title: { display: true, text: xLabel, color: 'rgba(255,255,255,0.5)', font: { size: 10, weight: 'bold' } },
-                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                                ticks: { color: 'rgba(255, 255, 255, 0.4)' }
-                            },
-                            y: { 
-                                title: { display: true, text: yLabel, color: 'rgba(255,255,255,0.5)', font: { size: 10, weight: 'bold' } },
-                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                                ticks: { color: 'rgba(255, 255, 255, 0.4)' }
-                            }
+                            x: { title: { display: true, text: xLabel, color: 'rgba(255,255,255,0.5)', font: { size: 10, weight: 'bold' } }, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: 'rgba(255, 255, 255, 0.4)' } },
+                            y: { title: { display: true, text: yLabel, color: 'rgba(255,255,255,0.5)', font: { size: 10, weight: 'bold' } }, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: 'rgba(255, 255, 255, 0.4)' } }
                         },
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                enabled: false, // Desactivamos el nativo
-                                external: externalTooltipHandler,
-                                mode: 'nearest', intersect: true
-                            }
-                        }
+                        plugins: { legend: { display: false }, tooltip: { enabled: false, external: externalTooltipHandler, mode: 'nearest', intersect: true } }
                     }
                 });
             });
     };
 
-    // Al cargar la página, forzamos un clic automático para que el scatter se pinte en la primera temporada
-    setTimeout(() => { if(document.getElementById('tabScatter')) loadScatterData(); }, 500);
+    setTimeout(() => { if(document.getElementById('tabScatter')) loadScatterData(); renderSlots(); }, 500);
 
-    // --- TABLA VERTICAL TIPO MONEYBALL ---
+    // TABLA REDISEÑADA: MUESTRA VALOR BRUTO Y PERCENTIL SIMULTÁNEAMENTE
     function renderContextTable(baseData) {
         const container = document.getElementById('stats-breakdown-container');
         container.innerHTML = '';
         
-        // Usamos la lista de role_stats (Todas las stats del JSON)
-        baseData.role_stats.forEach((s, statIndex) => {
-            
-            // Construimos las filas internas por cada jugador seleccionado
+        if (!baseData.role_stats || baseData.role_stats.length === 0) return;
+
+        baseData.role_stats.forEach((statObj) => {
+            const statKey = statObj.key;
+
             let playersHtml = compareList.map((p, pIndex) => {
-                let pStat = p.data.role_stats[statIndex];
-                let colorHex = playerColors[pIndex].hex;
-                let colorClass = getPercentileColor(pStat.perc_jugador);
+                // Buscamos la stat de forma segura por su llave (key)
+                const pStat = p.data.role_stats.find(s => s.key === statKey) || { raw_jugador: 0, perc_jugador: 0 };
+                const colorHex = playerColors[pIndex].hex;
+                const colorClass = getPercentileColor(pStat.perc_jugador);
                 
                 return `
-                    <div class="grid grid-cols-12 gap-4 items-center py-1.5 hover:bg-white/5 transition-colors group">
-                        <div class="col-span-4 flex items-center gap-2 pl-4">
-                            <span class="w-2 h-2 rounded-full" style="background-color: ${colorHex}"></span>
-                            <span class="text-[11px] font-bold text-white/80 truncate">${p.data.nombre.split(' ').slice(-1)}</span>
+                    <div class="grid grid-cols-12 gap-2 items-center py-2 hover:bg-white/5 transition-colors pl-4 pr-6">
+                        <div class="col-span-6 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full shadow-[0_0_8px_currentColor]" style="background-color: ${colorHex}; color: ${colorHex}"></span>
+                            <span class="text-xs font-bold text-white/90 truncate">${p.data.nombre}</span>
                         </div>
-                        <div class="col-span-4 flex justify-center">
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${colorClass}">
-                                P${pStat.perc_jugador}
-                            </span>
-                        </div>
-                        <div class="col-span-4 text-right pr-6">
-                            <span class="text-xs font-mono font-bold text-white">${pStat.raw_jugador.toFixed(2)}</span>
+                        <div class="col-span-6 flex items-center justify-end gap-4">
+                            <span class="text-sm font-mono font-bold text-white">${pStat.raw_jugador.toFixed(2)}</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded ${colorClass} text-black/90 w-12 text-center shadow-md">P${pStat.perc_jugador}</span>
                         </div>
                     </div>
                 `;
             }).join('');
 
-            // Fila del "Mejor" de referencia
-            let refHtml = `
-                <div class="grid grid-cols-12 gap-4 items-center py-1.5 mt-1 border-t border-white/5 opacity-60">
-                    <div class="col-span-8 flex items-center gap-2 pl-4">
-                        <i class="ph-fill ph-crown text-[#facc15] text-[10px]"></i>
-                        <span class="text-[10px] text-[#facc15] truncate" title="${s.nombre_mejor}">${s.nombre_mejor.split(' ').slice(-1)} (Mejor RTG)</span>
-                    </div>
-                    <div class="col-span-4 text-right pr-6">
-                        <span class="text-[11px] font-mono text-white/50">${s.raw_mejor.toFixed(2)}</span>
-                    </div>
-                </div>
-            `;
-
             container.innerHTML += `
-                <div class="border-b border-white/5 py-3 hover:bg-black/10 transition-colors">
-                    <h4 class="text-xs font-bold text-white uppercase tracking-wider pl-6 mb-2 border-l-2 border-brand-pink">${s.label}</h4>
-                    <div class="flex flex-col">
-                        ${playersHtml}
-                        ${refHtml}
-                    </div>
+                <div class="border-b border-white/5 py-3">
+                    <h4 class="text-xs font-bold text-white/60 uppercase tracking-wider mb-2 pl-4 border-l-2 border-brand-pink/50">${statObj.label}</h4>
+                    <div class="flex flex-col gap-1">${playersHtml}</div>
                 </div>
             `;
         });

@@ -148,7 +148,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def dashboard():\n    temporadas_disponibles = db.session.query(Jugador.temporada).distinct().order_by(Jugador.temporada.desc()).all()\n    temporadas_disponibles = [t[0] for t in temporadas_disponibles if t[0]]\n    temporada_actual = request.args.get('temporada')\n    if not temporada_actual and temporadas_disponibles:\n        temporada_actual = temporadas_disponibles[0]\n    total_jugadores = Jugador.query.filter_by(temporada=temporada_actual).count()\n    # CORRECCIÓN: Sumar valor_deportivo\n    valor_mercado_total = db.session.query(func.sum(Valoracion.valor_deportivo))\\\n        .join(Jugador).filter(Jugador.temporada == temporada_actual).scalar() or 0",
+        "peekOfCode": "def dashboard():\n    temporadas_disponibles = db.session.query(Jugador.temporada).distinct().order_by(Jugador.temporada.desc()).all()\n    temporadas_disponibles = [t[0] for t in temporadas_disponibles if t[0]]\n    temporada_actual = request.args.get('temporada')\n    if not temporada_actual and temporadas_disponibles:\n        temporada_actual = temporadas_disponibles[0]\n    total_jugadores = Jugador.query.filter_by(temporada=temporada_actual).count()\n    valor_mercado_total = db.session.query(func.sum(Valoracion.valor_deportivo))\\\n        .join(Jugador).filter(Jugador.temporada == temporada_actual).scalar() or 0\n    stats_ligas = db.session.query(",
         "detail": "app",
         "documentation": {}
     },
@@ -157,7 +157,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def players():\n    todos_los_jugadores = Jugador.query.join(Valoracion).options(joinedload(Jugador.valoracion)).order_by(Valoracion.rtg_principal.desc()).all()\n    return render_template('players.html', jugadores=todos_los_jugadores)\n@app.route('/jugador/<int:id>')\ndef player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    # LÓGICA DE CRUCE (Inversión):\n    # El jugador tiene temporada \"2021\". Transfermarkt guarda \"21/22\".\n    # Extraemos los últimos dos dígitos del año (ej. \"21\") y buscamos la temporada que empiece con \"21/\"",
+        "peekOfCode": "def players():\n    # Obtener temporadas únicas de la base de datos\n    temporadas_disponibles = db.session.query(Jugador.temporada).distinct().order_by(Jugador.temporada.desc()).all()\n    temporadas_disponibles = [t[0] for t in temporadas_disponibles if t[0]]\n    # Traer todos los jugadores\n    todos_los_jugadores = Jugador.query.join(Valoracion)\\\n        .options(joinedload(Jugador.valoracion))\\\n        .order_by(Valoracion.rtg_principal.desc()).all()\n    return render_template('players.html', jugadores=todos_los_jugadores, temporadas=temporadas_disponibles)\n@app.route('/jugador/<int:id>')",
         "detail": "app",
         "documentation": {}
     },
@@ -166,7 +166,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    # LÓGICA DE CRUCE (Inversión):\n    # El jugador tiene temporada \"2021\". Transfermarkt guarda \"21/22\".\n    # Extraemos los últimos dos dígitos del año (ej. \"21\") y buscamos la temporada que empiece con \"21/\"\n    año_corto = str(jugador.temporada)[-2:] \n    patron_temporada = f\"{año_corto}/%\"\n    # Buscamos en el historial si este jugador exacto fue comprado en ese mercado exacto\n    fichaje = Transferencia.query.filter(",
+        "peekOfCode": "def player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    año_corto = str(jugador.temporada)[-2:] \n    patron_temporada = f\"{año_corto}/%\"\n    fichaje = Transferencia.query.filter(\n        Transferencia.jugador_nombre == jugador.nombre,\n        Transferencia.temporada.like(patron_temporada)\n    ).first()\n    return render_template('profile.html', jugador=jugador, stats=stats, traspaso=fichaje)",
         "detail": "app",
         "documentation": {}
     },
@@ -202,7 +202,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def api_buscar_jugador():\n    query = request.args.get('q', '').lower()\n    temporada = request.args.get('temporada', '')\n    if len(query) < 2: return jsonify([])\n    jugadores = Jugador.query.filter(func.lower(Jugador.nombre).contains(query), Jugador.temporada == temporada).limit(8).all()\n    resultados = [{'id': j.id, 'nombre': j.nombre, 'club': j.club, 'temporada': j.temporada, 'rol': j.valoracion.rol_principal if j.valoracion else 'N/A'} for j in jugadores]\n    return jsonify(resultados)\n@app.route('/api/rivales_similares/<int:id>')\ndef api_rivales_similares(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion)).get_or_404(id)",
+        "peekOfCode": "def api_buscar_jugador():\n    query = request.args.get('q', '').lower()\n    temporada = request.args.get('temporada', '')\n    rol_exacto = request.args.get('rol_exacto', '') # Captura la restricción de rol\n    if len(query) < 2: return jsonify([])\n    q_filter = Jugador.query.join(Valoracion).filter(\n        func.lower(Jugador.nombre).contains(query), \n        Jugador.temporada == temporada\n    )\n    # Si ya hay un jugador seleccionado, filtramos el buscador",
         "detail": "app",
         "documentation": {}
     },
@@ -211,7 +211,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def api_rivales_similares(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion)).get_or_404(id)\n    temp = jugador.temporada\n    rol = jugador.valoracion.rol_principal if jugador.valoracion else 'MC'\n    rivales = Jugador.query.join(Valoracion).filter(\n        Jugador.temporada == temp, \n        Valoracion.rol_principal == rol,\n        Jugador.id != id\n    ).order_by(Valoracion.rtg_principal.desc()).limit(10).all()\n    return jsonify([{",
+        "peekOfCode": "def api_rivales_similares(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion)).get_or_404(id)\n    temp = jugador.temporada\n    rol = jugador.valoracion.rol_principal if jugador.valoracion else 'MC'\n    rivales = Jugador.query.join(Valoracion).filter(\n        Jugador.temporada == temp, \n        Valoracion.rol_principal == rol,\n        Jugador.id != id\n    ).order_by(Valoracion.rtg_principal.desc()).all() # <-- Eliminado el límite\n    return jsonify([{",
         "detail": "app",
         "documentation": {}
     },
@@ -220,7 +220,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def api_radar_contexto(id):\n    jugador = Jugador.query.options(joinedload(Jugador.estadisticas), joinedload(Jugador.valoracion)).get_or_404(id)\n    temp = jugador.temporada\n    rol = jugador.valoracion.rol_principal if jugador.valoracion else 'MC'\n    plantilla_solicitada = request.args.get('plantilla', 'completo')\n    # 1. Comparación Global (Todas las ligas)\n    rivales = Jugador.query.join(Valoracion).filter(Jugador.temporada == temp, Valoracion.rol_principal == rol).all()\n    # 2. El Mejor Jugador del Rol por RTG (Para ser el Gold Standard en TODO)\n    if rivales:\n        mejor_jugador = max(rivales, key=lambda j: j.valoracion.rtg_principal if j.valoracion else 0)",
+        "peekOfCode": "def api_radar_contexto(id):\n    jugador = Jugador.query.options(joinedload(Jugador.estadisticas), joinedload(Jugador.valoracion)).get_or_404(id)\n    temp = jugador.temporada\n    rol = jugador.valoracion.rol_principal if jugador.valoracion else 'MC'\n    plantilla_solicitada = request.args.get('plantilla', 'completo')\n    rivales = Jugador.query.join(Valoracion).filter(Jugador.temporada == temp, Valoracion.rol_principal == rol).all()\n    mejor_jugador = max(rivales, key=lambda j: j.valoracion.rtg_principal if j.valoracion else 0) if rivales else None\n    stats_mejor = mejor_jugador.estadisticas.datos_crudos if mejor_jugador and mejor_jugador.estadisticas else {}\n    nombre_mejor = mejor_jugador.nombre if mejor_jugador else \"N/A\"\n    jugador_st = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}",
         "detail": "app",
         "documentation": {}
     },

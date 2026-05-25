@@ -14,23 +14,20 @@ warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
 PESOS_JSON = {
     "DC": {
         "categoria_pesos": {
-            "Defensa": 0.40,
-            "Aerial": 0.20,
-            "Passing": 0.30,
-            "Possession": 0.10
+            "Defensa": 0.40,"Aerial": 0.20,"Passing": 0.30,"Possession": 0.10
         },
         "estadisticas": {
             "Defensa": {
-                "Int": 0.20,        # Lectura de juego
-                "Clr": 0.20,        # Despejes (esenciales, pero limitados al 20%)
-                "Recov": 0.20,      # Cobertura de espacios
-                "TklW": 0.15,       # Duelos ganados en el suelo
-                "BallRec": 0.15,    # Recuperación efectiva de posesión
-                "TklDef3rd": 0.10   # Entradas como último hombre
+                "Int": 0.20,        
+                "Clr": 0.20,        
+                "Recov": 0.20,     
+                "TklW": 0.15,       
+                "BallRec": 0.15,    
+                "TklDef3rd": 0.10   
             },
             "Aerial": {
-                "AerialWon%": 0.60, # Dominio aéreo (Calidad)
-                "AerialWon": 0.40   # Dominio aéreo (Volumen)
+                "AerialWon%": 0.60, 
+                "AerialWon": 0.40   
             },
             "Passing": {
                 "Cmp%Total": 0.25,  # Seguridad en salida
@@ -246,6 +243,8 @@ archivo = 'DataFramev1.xlsx'
 UMBRAL_MINUTOS = 800
 
 # --- NUEVOS UMBRALES DE ADUANA TÁCTICA ---
+
+
 UMBRAL_CENTROS = 15.0 # Si tira más de 15 centros al año, sospechamos que es lateral
 UMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral
 
@@ -288,6 +287,7 @@ if os.path.exists(archivo):
                 else:
                     # Eres lateral SI superas los centros O superas los toques en ataque
                     df_pos = df_temp[(df_temp['Crs'] >= UMBRAL_CENTROS) | (df_temp['TouchesAtt3rd'] >= UMBRAL_TOQUES_ATT)].copy()
+
             elif prefijo_rol in ["MC", "AM"]:
                 df_pos = df_clean[df_clean['Pos'].str.contains('MF', na=False)].copy()
             else:
@@ -311,6 +311,8 @@ if os.path.exists(archivo):
                     _min = col_vals.min()
                     
                     # --- NUEVO: TECHO INTELIGENTE (P85 para defensa, P95 para el resto) ---
+
+                    
                     if col in metricas_defensivas:
                         _max_real = col_vals.quantile(0.85)
                     else:

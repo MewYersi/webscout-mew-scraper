@@ -71,11 +71,9 @@ def dashboard():
 
     total_jugadores = Jugador.query.filter_by(temporada=temporada_actual).count()
     
-    # CORRECCIÓN: Sumar valor_deportivo
     valor_mercado_total = db.session.query(func.sum(Valoracion.valor_deportivo))\
         .join(Jugador).filter(Jugador.temporada == temporada_actual).scalar() or 0
     
-    # CORRECCIÓN: Promediar solo valor_deportivo
     stats_ligas = db.session.query(
         Jugador.liga, func.avg(Valoracion.valor_deportivo).label('avg_vd')
     ).join(Valoracion).filter(Jugador.liga != None, Jugador.liga != "", Jugador.temporada == temporada_actual)\
@@ -95,7 +93,6 @@ def dashboard():
         'DF': get_top_by_roles(['DC', 'LB_OFF', 'LB_DEF'], ids_excluidas)
     }
 
-    # CORRECCIÓN: Ordenar el Top 5 por valor_deportivo
     top_caros = Jugador.query.join(Valoracion).filter(Jugador.temporada == temporada_actual).order_by(Valoracion.valor_deportivo.desc()).limit(5).all()
 
     return render_template('index.html', jugadores=top_caros, total=total_jugadores, valor_total=valor_mercado_total, 
@@ -103,27 +100,30 @@ def dashboard():
 
 @app.route('/jugadores')
 def players():
-    todos_los_jugadores = Jugador.query.join(Valoracion).options(joinedload(Jugador.valoracion)).order_by(Valoracion.rtg_principal.desc()).all()
-    return render_template('players.html', jugadores=todos_los_jugadores)
+    # Obtener temporadas únicas de la base de datos
+    temporadas_disponibles = db.session.query(Jugador.temporada).distinct().order_by(Jugador.temporada.desc()).all()
+    temporadas_disponibles = [t[0] for t in temporadas_disponibles if t[0]]
+    
+    # Traer todos los jugadores
+    todos_los_jugadores = Jugador.query.join(Valoracion)\
+        .options(joinedload(Jugador.valoracion))\
+        .order_by(Valoracion.rtg_principal.desc()).all()
+        
+    return render_template('players.html', jugadores=todos_los_jugadores, temporadas=temporadas_disponibles)
 
 @app.route('/jugador/<int:id>')
 def player_profile(id):
     jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)
     stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}
     
-    # LÓGICA DE CRUCE (Inversión):
-    # El jugador tiene temporada "2021". Transfermarkt guarda "21/22".
-    # Extraemos los últimos dos dígitos del año (ej. "21") y buscamos la temporada que empiece con "21/"
     año_corto = str(jugador.temporada)[-2:] 
     patron_temporada = f"{año_corto}/%"
     
-    # Buscamos en el historial si este jugador exacto fue comprado en ese mercado exacto
     fichaje = Transferencia.query.filter(
         Transferencia.jugador_nombre == jugador.nombre,
         Transferencia.temporada.like(patron_temporada)
     ).first()
 
-    # Le pasamos la variable "fichaje" a tu HTML
     return render_template('profile.html', jugador=jugador, stats=stats, traspaso=fichaje)
 
 
@@ -219,9 +219,20 @@ def api_scatter_data():
 def api_buscar_jugador():
     query = request.args.get('q', '').lower()
     temporada = request.args.get('temporada', '')
+    rol_exacto = request.args.get('rol_exacto', '') # Captura la restricción de rol
+    
     if len(query) < 2: return jsonify([])
     
-    jugadores = Jugador.query.filter(func.lower(Jugador.nombre).contains(query), Jugador.temporada == temporada).limit(8).all()
+    q_filter = Jugador.query.join(Valoracion).filter(
+        func.lower(Jugador.nombre).contains(query), 
+        Jugador.temporada == temporada
+    )
+    
+    # Si ya hay un jugador seleccionado, filtramos el buscador
+    if rol_exacto:
+        q_filter = q_filter.filter(Valoracion.rol_principal == rol_exacto)
+        
+    jugadores = q_filter.limit(8).all()
     resultados = [{'id': j.id, 'nombre': j.nombre, 'club': j.club, 'temporada': j.temporada, 'rol': j.valoracion.rol_principal if j.valoracion else 'N/A'} for j in jugadores]
     return jsonify(resultados)
 
@@ -235,7 +246,7 @@ def api_rivales_similares(id):
         Jugador.temporada == temp, 
         Valoracion.rol_principal == rol,
         Jugador.id != id
-    ).order_by(Valoracion.rtg_principal.desc()).limit(10).all()
+    ).order_by(Valoracion.rtg_principal.desc()).all() # <-- Eliminado el límite
     
     return jsonify([{
         'id': r.id,
@@ -251,80 +262,81 @@ def api_radar_contexto(id):
     rol = jugador.valoracion.rol_principal if jugador.valoracion else 'MC'
     plantilla_solicitada = request.args.get('plantilla', 'completo')
     
-    # 1. Comparación Global (Todas las ligas)
     rivales = Jugador.query.join(Valoracion).filter(Jugador.temporada == temp, Valoracion.rol_principal == rol).all()
     
-    # 2. El Mejor Jugador del Rol por RTG (Para ser el Gold Standard en TODO)
-    if rivales:
-        mejor_jugador = max(rivales, key=lambda j: j.valoracion.rtg_principal if j.valoracion else 0)
-        stats_mejor = mejor_jugador.estadisticas.datos_crudos if mejor_jugador.estadisticas else {}
-        nombre_mejor = mejor_jugador.nombre
-    else:
-        mejor_jugador, stats_mejor, nombre_mejor = None, {}, "N/A"
+    mejor_jugador = max(rivales, key=lambda j: j.valoracion.rtg_principal if j.valoracion else 0) if rivales else None
+    stats_mejor = mejor_jugador.estadisticas.datos_crudos if mejor_jugador and mejor_jugador.estadisticas else {}
+    nombre_mejor = mejor_jugador.nombre if mejor_jugador else "N/A"
 
     jugador_st = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}
     prefijo = rol.split('_')[0] if '_' in rol else rol
 
-    # 3. Datos para el Radar (Plantillas Tácticas Corregidas)
-    if prefijo == 'FW':
-        plantillas = {
+    # ESTRUCTURA MAESTRA: Definimos todas las configuraciones aquí. 
+    # Si el prefijo no existe, usamos 'MC' como estándar seguro.
+    ALL_PLANTILLAS = {
+        'FW': {
             'completo': {'keys': ['Gls', 'npxG', 'Ast', 'xA', 'SoT', 'KP'], 'labels': ['Goles', 'npxG', 'Asistencias', 'xA', 'Tiros Puerta', 'Pases Clave']},
             'opcion1': {'keys': ['Gls', 'npxG', 'SoT', 'SoT%', 'G/Sh'], 'labels': ['Goles', 'npxG', 'Tiros Puerta', '% Tiros Puerta', 'Goles/Tiro']},
             'opcion2': {'keys': ['Ast', 'xA', 'KP', 'Prog', 'SCA'], 'labels': ['Asistencias', 'xA', 'Pases Clave', 'Pases Prog', 'Creación (SCA)']}
-        }
-    elif prefijo in ['MC', 'AM']:
-        plantillas = {
+        },
+        'MC': {
             'completo': {'keys': ['Prog', 'SCA', 'KP', 'TklW', 'Int', 'Cmp%Total'], 'labels': ['Pases Prog', 'SCA', 'Pases Clave', 'Tackles', 'Intercepciones', '% Pase']},
             'opcion1': {'keys': ['SCA', 'xA', 'KP', 'PPA', 'Ast'], 'labels': ['Creación (SCA)', 'xA', 'Pases Clave', 'Pases Área', 'Asistencias']},
             'opcion2': {'keys': ['TklW', 'Int', 'Recov', 'BallRec', 'Clr'], 'labels': ['Tackles', 'Intercepciones', 'Recuperaciones', 'Balones Rec.', 'Despejes']}
-        }
-    else:
-        plantillas = {
+        },
+        'AM': {
+            'completo': {'keys': ['Prog', 'SCA', 'KP', 'TklW', 'Int', 'Cmp%Total'], 'labels': ['Pases Prog', 'SCA', 'Pases Clave', 'Tackles', 'Intercepciones', '% Pase']},
+            'opcion1': {'keys': ['SCA', 'xA', 'KP', 'PPA', 'Ast'], 'labels': ['Creación (SCA)', 'xA', 'Pases Clave', 'Pases Área', 'Asistencias']},
+            'opcion2': {'keys': ['TklW', 'Int', 'Recov', 'BallRec', 'Clr'], 'labels': ['Tackles', 'Intercepciones', 'Recuperaciones', 'Balones Rec.', 'Despejes']}
+        },
+        'DF': {
             'completo': {'keys': ['TklW', 'Int', 'Clr', 'AerialWon%', 'Prog', 'Recov'], 'labels': ['Tackles', 'Intercepciones', 'Despejes', 'Aéreo %', 'Pases Prog', 'Recuperaciones']},
             'opcion1': {'keys': ['Prog', 'PrgDist', 'Cmp%Total', 'KP', 'IntoLast3rd'], 'labels': ['Pases Prog', 'Dist. Prog', '% Pase', 'Pases Clave', 'Pases Últ. 3º']},
             'opcion2': {'keys': ['TklW', 'Int', 'Clr', 'AerialWon%', 'BallRec'], 'labels': ['Tackles', 'Intercepciones', 'Despejes', 'Aéreo %', 'Balones Rec.']}
         }
+    }
 
-    if plantilla_solicitada not in plantillas: plantilla_solicitada = 'completo'
+    # Lógica de respaldo infalible
+    config_rol = ALL_PLANTILLAS.get(prefijo, ALL_PLANTILLAS['MC'])
+    template = config_rol.get(plantilla_solicitada, config_rol['completo'])
     
-    radar_keys = plantillas[plantilla_solicitada]['keys']
-    radar_labels = plantillas[plantilla_solicitada]['labels']
+    keys = template['keys']
+    labels = template['labels']
 
     def calc_stats_block(keys_list, labels_list):
         bloque = []
         for k, label in zip(keys_list, labels_list):
             val_jugador = safe_float(jugador_st.get(k, 0))
             val_mejor = safe_float(stats_mejor.get(k, 0))
-            
-            lista_rivales = [safe_float((r.estadisticas.datos_crudos if r.estadisticas else {}).get(k, 0)) for r in rivales]
+            lista_rivales = [safe_float((r.estadisticas.datos_crudos.get(k, 0) if r.estadisticas else 0)) for r in rivales]
                 
-            if len(lista_rivales) > 0:
-                perc_jugador = sum(i <= val_jugador for i in lista_rivales) / len(lista_rivales) * 100
-                val_promedio = np.mean(lista_rivales)
-            else:
-                perc_jugador, val_promedio = 0, 0
+            perc = (sum(i < val_jugador for i in lista_rivales) / len(lista_rivales) * 100) if lista_rivales else 0
+            perc_mejor = (sum(i < val_mejor for i in lista_rivales) / len(lista_rivales) * 100) if lista_rivales else 0
+            val_promedio = np.mean(lista_rivales) if lista_rivales else 0
                 
+            # ... dentro del bucle de calc_stats_block ...
             bloque.append({
-                'key': k, 'label': label, 'raw_jugador': val_jugador, 'perc_jugador': round(perc_jugador, 1),
-                'raw_promedio': round(val_promedio, 2), 'raw_mejor': round(val_mejor, 2), 'nombre_mejor': nombre_mejor
+                'key': k, # ESTO ES LO QUE NECESITA EL JS PARA BUSCAR
+                'label': label, 
+                'raw_jugador': val_jugador, 'perc_jugador': round(perc, 1),
+                'raw_promedio': round(val_promedio, 2), 
+                'raw_mejor': round(val_mejor, 2), 'perc_mejor': round(perc_mejor, 1),
+                'nombre_mejor': nombre_mejor
             })
         return bloque
 
-    radar_stats = calc_stats_block(radar_keys, radar_labels)
-
-    # 4. Datos para la Tabla Vertical (Basado en PESOS_JSON)
+    radar_stats = calc_stats_block(keys, labels)
+    
     role_dict = PESOS_JSON.get(rol, PESOS_JSON.get('MC_ORG')) 
     role_keys = []
     for cat, stats in role_dict['estadisticas'].items():
         role_keys.extend(stats.keys())
-    
     role_labels = [NOMBRES_STATS.get(k, k) for k in role_keys]
     tabla_roles_stats = calc_stats_block(role_keys, role_labels)
 
     return jsonify({
-        'nombre': jugador.nombre, 'rol': rol, 'prefijo_rol': prefijo, 'poblacion': len(rivales),
-        'stats': radar_stats,
-        'role_stats': tabla_roles_stats
+        'nombre': jugador.nombre, 'club': jugador.club, 'rol': rol, 'prefijo_rol': prefijo, 
+        'poblacion': len(rivales), 'stats': radar_stats, 'role_stats': tabla_roles_stats
     })
 
 if __name__ == '__main__':

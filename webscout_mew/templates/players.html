@@ -27,7 +27,10 @@
         <!-- Filtro de Temporada -->
         <div class="glass-panel px-4 py-2 !rounded-full text-xs font-medium flex items-center gap-2 hover:bg-white/10 transition-colors text-white/80 relative">
             <select id="filterTemporada" class="bg-transparent appearance-none outline-none cursor-pointer pr-4 z-10">
-                <option value="ALL" class="text-black">Temporada: Todas</option>
+                <option value="ALL">Temporada: Todas</option>
+            {% for temp in temporadas %}
+                <option value="{{ temp }}">{{ temp }}</option>
+            {% endfor %}
             </select>
             <i class="ph-bold ph-caret-down text-xs opacity-50 absolute right-4 pointer-events-none"></i>
         </div>

@@ -63,6 +63,24 @@
         "documentation": {}
     },
     {
+        "label": "matplotlib.pyplot",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "matplotlib.pyplot",
+        "description": "matplotlib.pyplot",
+        "detail": "matplotlib.pyplot",
+        "documentation": {}
+    },
+    {
+        "label": "seaborn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "seaborn",
+        "description": "seaborn",
+        "detail": "seaborn",
+        "documentation": {}
+    },
+    {
         "label": "sys",
         "kind": 6,
         "isExtraImport": true,
@@ -726,6 +744,15 @@
         "documentation": {}
     },
     {
+        "label": "generar_scatter_tesis",
+        "kind": 2,
+        "importPath": "calcular_mape",
+        "description": "calcular_mape",
+        "peekOfCode": "def generar_scatter_tesis(archivo_csv):\n    print(\"Cargando datos y procesando...\")\n    # 1. Cargar el dataset\n    try:\n        df = pd.read_csv(\"Scouting_Database_con_TM.csv\")\n    except FileNotFoundError:\n        print(\"Error: No se encontró el archivo CSV.\")\n        return\n    # Limpieza básica\n    df['Valor_Deportivo'] = pd.to_numeric(df['Valor_Deportivo'], errors='coerce')",
+        "detail": "calcular_mape",
+        "documentation": {}
+    },
+    {
         "label": "calibrar_roles_fw_v2",
         "kind": 2,
         "importPath": "calibrador_roles",
@@ -937,7 +964,7 @@
         "kind": 5,
         "importPath": "prueba_def",
         "description": "prueba_def",
-        "peekOfCode": "PESOS_JSON = {\n    \"DC\": {\n        \"categoria_pesos\": {\n            \"Defensa\": 0.40,\n            \"Aerial\": 0.20,\n            \"Passing\": 0.30,\n            \"Possession\": 0.10\n        },\n        \"estadisticas\": {\n            \"Defensa\": {",
+        "peekOfCode": "PESOS_JSON = {\n    \"DC\": {\n        \"categoria_pesos\": {\n            \"Defensa\": 0.40,\"Aerial\": 0.20,\"Passing\": 0.30,\"Possession\": 0.10\n        },\n        \"estadisticas\": {\n            \"Defensa\": {\n                \"Int\": 0.20,        \n                \"Clr\": 0.20,        \n                \"Recov\": 0.20,     ",
         "detail": "prueba_def",
         "documentation": {}
     },
