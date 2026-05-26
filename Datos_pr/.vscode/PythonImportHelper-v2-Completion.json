@@ -72,6 +72,15 @@
         "documentation": {}
     },
     {
+        "label": "matplotlib.ticker",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "matplotlib.ticker",
+        "description": "matplotlib.ticker",
+        "detail": "matplotlib.ticker",
+        "documentation": {}
+    },
+    {
         "label": "seaborn",
         "kind": 6,
         "isExtraImport": true,
@@ -744,11 +753,11 @@
         "documentation": {}
     },
     {
-        "label": "generar_scatter_tesis",
+        "label": "generar_grafico_dual",
         "kind": 2,
         "importPath": "calcular_mape",
         "description": "calcular_mape",
-        "peekOfCode": "def generar_scatter_tesis(archivo_csv):\n    print(\"Cargando datos y procesando...\")\n    # 1. Cargar el dataset\n    try:\n        df = pd.read_csv(\"Scouting_Database_con_TM.csv\")\n    except FileNotFoundError:\n        print(\"Error: No se encontró el archivo CSV.\")\n        return\n    # Limpieza básica\n    df['Valor_Deportivo'] = pd.to_numeric(df['Valor_Deportivo'], errors='coerce')",
+        "peekOfCode": "def generar_grafico_dual():\n    print(\"🎨 Generando Radiografía de Ineficiencia del Mercado (Escala Ajustada)...\")\n    # 1. Cargar los archivos CSV que generaste en los pasos anteriores\n    csv_elite = 'Auditoria_Traspasos_Elite.csv'\n    csv_caros = 'Auditoria_Fichajes_Caros.csv'\n    if not os.path.exists(csv_elite) or not os.path.exists(csv_caros):\n        print(f\"❌ Error: Faltan los archivos CSV. Asegúrate de tener {csv_elite} y {csv_caros} en esta carpeta.\")\n        return\n    df_elite = pd.read_csv(csv_elite)\n    df_caros = pd.read_csv(csv_caros)",
         "detail": "calcular_mape",
         "documentation": {}
     },
@@ -759,6 +768,24 @@
         "description": "calibrador_roles",
         "peekOfCode": "def calibrar_roles_fw_v2():\n    # 1. Cargar Datos\n    carpeta = os.path.dirname(os.path.abspath(__file__))\n    archivo = [f for f in os.listdir(carpeta) if 'Premier20-21' in f][0]\n    if archivo.endswith('.xlsx'): df = pd.read_excel(os.path.join(carpeta, archivo), engine='openpyxl')\n    else: df = pd.read_csv(os.path.join(carpeta, archivo))\n    # 2. Filtrar solo Delanteros con minutos decentes\n    col_min = 'Min' if 'Min' in df.columns else 'Minutos'\n    df = df[(df['PosAdj'] == 'FW') & (df[col_min] >= 900)].copy() # Subí a 900 min para mayor fiabilidad\n    # 3. Métrica de \"Volumen Creativo\" (CORREGIDA)",
         "detail": "calibrador_roles",
+        "documentation": {}
+    },
+    {
+        "label": "clasificar_fichaje",
+        "kind": 2,
+        "importPath": "caros_tm",
+        "description": "caros_tm",
+        "peekOfCode": "def clasificar_fichaje(svd, costo_real):\n    \"\"\"\n    Clasifica la transferencia según la varianza entre el Algoritmo (SVD) y la Realidad.\n    \"\"\"\n    desviacion = ((svd - costo_real) / costo_real) * 100\n    if -15 <= desviacion <= 15:\n        return \"🟢 Categoría A: Tasación de Precisión\", desviacion\n    elif desviacion > 30:\n        return \"💎 Categoría B: Ineficiencia Explotada (Gema)\", desviacion\n    elif desviacion < -40:",
+        "detail": "caros_tm",
+        "documentation": {}
+    },
+    {
+        "label": "analizar_fichajes_mas_caros",
+        "kind": 2,
+        "importPath": "caros_tm",
+        "description": "caros_tm",
+        "peekOfCode": "def analizar_fichajes_mas_caros():\n    print(\"🔍 Iniciando Auditoría de Mercado (Cohorte: 68 Fichajes Más Caros por Temporada)...\")\n    db_path = 'scoutmew.db'\n    if not os.path.exists(db_path):\n        db_path = '../scoutmew.db' \n        if not os.path.exists(db_path):\n            print(\"❌ Error: No se encontró scoutmew.db\")\n            return\n    # 1. Extraer a los jugadores traspasados\n    conn = sqlite3.connect(db_path)",
+        "detail": "caros_tm",
         "documentation": {}
     },
     {
@@ -1191,6 +1218,24 @@
         "description": "trans_tm",
         "peekOfCode": "primer_jugador_procesado = False\n# --- FUNCIÓN DE FILTRADO (El Colador) ---\ndef es_transferencia_real(fee_str):\n    if not fee_str: \n        return False\n    fee_lower = str(fee_str).lower()\n    # 1. Descartar si contiene palabras relacionadas a préstamos o fichajes libres\n    palabras_basura = ['free', 'libre', 'cesión', 'cesion', 'loan', 'coste', 'cost', '-', '?']\n    for palabra in palabras_basura:\n        if palabra in fee_lower:",
         "detail": "trans_tm",
+        "documentation": {}
+    },
+    {
+        "label": "clasificar_fichaje",
+        "kind": 2,
+        "importPath": "validar_traspaso",
+        "description": "validar_traspaso",
+        "peekOfCode": "def clasificar_fichaje(svd, costo_real):\n    \"\"\"\n    Clasifica la transferencia según la varianza entre el Algoritmo (SVD) y la Realidad.\n    \"\"\"\n    desviacion = ((svd - costo_real) / costo_real) * 100\n    if -15 <= desviacion <= 15:\n        return \"🟢 Categoría A: Tasación de Precisión\", desviacion\n    elif desviacion > 30:\n        return \"💎 Categoría B: Ineficiencia Explotada (Gema)\", desviacion\n    elif desviacion < -40:",
+        "detail": "validar_traspaso",
+        "documentation": {}
+    },
+    {
+        "label": "analizar_cohorte_traspasos",
+        "kind": 2,
+        "importPath": "validar_traspaso",
+        "description": "validar_traspaso",
+        "peekOfCode": "def analizar_cohorte_traspasos():\n    print(\"🔍 Iniciando Auditoría de Traspasos (Cohorte de Validación)...\")\n    db_path = 'scoutmew.db'\n    if not os.path.exists(db_path):\n        db_path = '../scoutmew.db' \n        if not os.path.exists(db_path):\n            print(\"❌ Error: No se encontró scoutmew.db\")\n            return\n    # 1. Extraer SOLO a los jugadores que SÍ fueron traspasados (coste_num > 0)\n    conn = sqlite3.connect(db_path)",
+        "detail": "validar_traspaso",
         "documentation": {}
     },
     {

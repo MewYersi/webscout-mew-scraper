@@ -1,102 +1,123 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import seaborn as sns
+import os
 
-def generar_scatter_tesis(archivo_csv):
-    print("Cargando datos y procesando...")
+def generar_grafico_dual():
+    print("🎨 Generando Radiografía de Ineficiencia del Mercado (Escala Ajustada)...")
     
-    # 1. Cargar el dataset
-    try:
-        df = pd.read_csv("Scouting_Database_con_TM.csv")
-    except FileNotFoundError:
-        print("Error: No se encontró el archivo CSV.")
+    # 1. Cargar los archivos CSV que generaste en los pasos anteriores
+    csv_elite = 'Auditoria_Traspasos_Elite.csv'
+    csv_caros = 'Auditoria_Fichajes_Caros.csv'
+    
+    if not os.path.exists(csv_elite) or not os.path.exists(csv_caros):
+        print(f"❌ Error: Faltan los archivos CSV. Asegúrate de tener {csv_elite} y {csv_caros} en esta carpeta.")
         return
 
-    # Limpieza básica
-    df['Valor_Deportivo'] = pd.to_numeric(df['Valor_Deportivo'], errors='coerce')
-    df['TM_Value'] = pd.to_numeric(df['TM_Value'], errors='coerce')
+    df_elite = pd.read_csv(csv_elite)
+    df_caros = pd.read_csv(csv_caros)
 
-    # 2. Recopilar la élite (Top 68 por temporada)
-    temporadas = sorted(df['Szn'].unique())
-    lista_top = []
-
-    for temp in temporadas:
-        df_temp = df[df['Szn'] == temp].copy()
-        top_68 = df_temp.nlargest(68, 'RTG_Principal')
-        
-        # Filtramos los que tienen valor 0 en Transfermarkt
-        top_68 = top_68[top_68['TM_Value'] > 0]
-        lista_top.append(top_68)
-
-    # Unir todos los datos en un solo DataFrame (~340 jugadores)
-    df_final = pd.concat(lista_top)
-    
-    # 3. Estandarizar a Millones de Euros
-    df_final['TM_Millones'] = df_final['TM_Value'] / 1_000_000
-    df_final['VD_Millones'] = df_final['Valor_Deportivo'] / 1_000_000
-
-    print(f"Total de jugadores graficados: {len(df_final)}")
-
-    # ==========================================
-    # 4. CONFIGURACIÓN ESTÉTICA DEL GRÁFICO (Tesis)
-    # ==========================================
-    # Estilo limpio y profesional
+    # 2. Configuración estética profesional (Nivel Tesis)
     sns.set_theme(style="whitegrid")
-    plt.figure(figsize=(10, 8))
+    fig, axes = plt.subplots(1, 2, figsize=(16, 7), sharex=False, sharey=False)
+    
+    max_elite = max(df_elite['Costo Real (€M)'].max(), df_elite['SVD (€M)'].max())
+    max_caros = max(df_caros['Costo Real (€M)'].max(), df_caros['SVD (€M)'].max())
+    max_global = max(max_elite, max_caros) + 10
 
-    # Crear el gráfico de dispersión
-    # Usamos el color (hue) para diferenciar las temporadas ligeramente
-    scatter = sns.scatterplot(
-        data=df_final, 
-        x='TM_Millones', 
-        y='VD_Millones', 
-        hue='Szn', 
-        palette='viridis', 
+    # ==========================================
+    # FUNCIÓN AUXILIAR: ESCALA PERSONALIZADA
+    # ==========================================
+    def aplicar_escala_log(ax):
+        # 0 a 50 lineal en X, 0 a 40 lineal en Y. El resto se comprime.
+        ax.set_xscale('symlog', linthresh=55)
+        ax.set_yscale('symlog', linthresh=45)
+        
+        # Evitamos la notación científica
+        formatter = ticker.ScalarFormatter()
+        formatter.set_scientific(False)
+        ax.xaxis.set_major_formatter(formatter)
+        ax.yaxis.set_major_formatter(formatter)
+        
+        # Forzamos las marcas visuales exactamente donde las pediste
+        ax.set_xticks([0, 25, 50, 100, 150, 200])
+        ax.set_yticks([0, 20, 40, 80, 120, 160])
+
+    # ==========================================
+    # GRÁFICO IZQUIERDO: Enfoque "Moneyball" (Élite Táctica)
+    # ==========================================
+    sns.scatterplot(
+        data=df_elite, 
+        x='Costo Real (€M)', 
+        y='SVD (€M)', 
+        ax=axes[0],
+        color='#2ecc71', # Verde Gema
         alpha=0.7, 
-        s=60, # Tamaño de los puntos
+        s=60, 
         edgecolor='black'
     )
+    
+    # Línea de Precio Justo
+    axes[0].plot([0, max_global], [0, max_global], color='gray', linestyle='--', linewidth=1.5, label='Valor Justo (y=x)')
+    
+    # Aplicar escala personalizada
+    aplicar_escala_log(axes[0])
+    
+    axes[0].set_title('A. Enfoque Rendimiento (Top 68 RTG)', fontsize=14, fontweight='bold', pad=15)
+    axes[0].set_xlabel('Costo Real Pagado (Millones €)', fontsize=12)
+    axes[0].set_ylabel('Valor Deportivo - SVD (Millones €)', fontsize=12)
+    axes[0].set_xlim(-2, max_elite + 10)
+    axes[0].set_ylim(-2, df_elite['SVD (€M)'].max() + 10)
+    axes[0].legend(loc='lower right')
+    
+    # Añadir texto explicativo usando coordenadas relativas (transAxes)
+    axes[0].text(0.05, 0.90, 'ZONA DE GEMAS\n(SVD > Costo)', transform=axes[0].transAxes, color='green', fontsize=12, fontweight='bold', alpha=0.5)
 
-    # 5. LÍNEAS DE REFERENCIA
-    # Obtener los límites del gráfico para dibujar las líneas
-    max_val = max(df_final['TM_Millones'].max(), df_final['VD_Millones'].max()) + 20
-
-    # Línea 1: La diagonal perfecta (y = x). 
-    # Si un punto cae aquí, tu modelo y el mercado dicen exactamente el mismo precio.
-    plt.plot([0, max_val], [0, max_val], color='red', linestyle='--', linewidth=1.5, label='Igualdad Perfecta (y=x)')
-
-    # Línea 2: Línea de Regresión de tu modelo (Tendencia real)
-    # Esto demuestra la correlación a pesar de la diferencia de escala
-    sns.regplot(
-        data=df_final, 
-        x='TM_Millones', 
-        y='VD_Millones', 
-        scatter=False, 
-        color='blue', 
-        line_kws={'linewidth': 2, 'label': 'Tendencia de Valoración (Modelo)'}
+    # ==========================================
+    # GRÁFICO DERECHO: Enfoque "Galáctico" (Los más caros)
+    # ==========================================
+    sns.scatterplot(
+        data=df_caros, 
+        x='Costo Real (€M)', 
+        y='SVD (€M)', 
+        ax=axes[1],
+        color='#e74c3c', # Rojo Peligro
+        alpha=0.7, 
+        s=60, 
+        edgecolor='black'
     )
-
-    # 6. ETIQUETAS Y TÍTULOS
-    plt.title('Comparativa de Valoración: Modelo de Rendimiento vs Transfermarkt\nÉlite Continental (Top 68 por Temporada)', fontsize=14, fontweight='bold', pad=15)
-    plt.xlabel('Valor de Mercado Real - Transfermarkt (Millones €)', fontsize=12)
-    plt.ylabel('Valor Deportivo Calculado - Algoritmo (Millones €)', fontsize=12)
     
-    # Ajustar ejes para que empiecen en 0
-    plt.xlim(0, df_final['TM_Millones'].max() + 20)
-    plt.ylim(0, df_final['VD_Millones'].max() + 20)
+    # Línea de Precio Justo
+    axes[1].plot([0, max_global], [0, max_global], color='gray', linestyle='--', linewidth=1.5, label='Valor Justo (y=x)')
+    
+    # Aplicar escala personalizada
+    aplicar_escala_log(axes[1])
+    
+    axes[1].set_title('B. Enfoque Especulativo (Top 68 Más Caros)', fontsize=14, fontweight='bold', pad=15)
+    axes[1].set_xlabel('Costo Real Pagado (Millones €)', fontsize=12)
+    axes[1].set_ylabel('Valor Deportivo - SVD (Millones €)', fontsize=12)
+    axes[1].set_xlim(-2, max_caros + 10)
+    axes[1].set_ylim(-2, df_caros['SVD (€M)'].max() + 10)
+    axes[1].legend(loc='lower right')
 
-    # Leyenda
-    plt.legend(title='Leyenda', bbox_to_anchor=(1.05, 1), loc='upper left')
+    # Añadir texto explicativo usando coordenadas relativas (transAxes)
+    axes[1].text(0.65, 0.10, 'ZONA DE BURBUJAS\n(Costo > SVD)', transform=axes[1].transAxes, color='red', fontsize=12, fontweight='bold', alpha=0.5)
 
-    # Guardar en alta resolución (300 dpi es el estándar para imprimir tesis)
-    nombre_archivo = 'scatter_valoracion_tesis.png'
+    # ==========================================
+    # TÍTULO PRINCIPAL Y EXPORTACIÓN
+    # ==========================================
+    fig.suptitle('Radiografía de la Ineficiencia Transaccional en el Mercado de Élite Europeo', fontsize=18, fontweight='bold', y=1.05)
+    
     plt.tight_layout()
-    plt.savefig(nombre_archivo, dpi=300)
-    print(f"\n¡Éxito! Gráfico guardado en alta resolución como: {nombre_archivo}")
     
-    # Mostrar la ventana interactiva
+    # Guardar en alta resolución
+    nombre_archivo = 'Radiografia_Mercado_Tesis.png'
+    plt.savefig(nombre_archivo, dpi=300, bbox_inches='tight')
+    
+    print(f"✅ ¡Gráfico guardado exitosamente como: {nombre_archivo}!")
+    
     plt.show()
 
-# Ejecutar
-generar_scatter_tesis('Scouting_Database_con_TM.csv')
+if __name__ == '__main__':
+    generar_grafico_dual()

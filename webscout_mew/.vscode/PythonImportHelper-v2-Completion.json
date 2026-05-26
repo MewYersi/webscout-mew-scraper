@@ -166,7 +166,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    año_corto = str(jugador.temporada)[-2:] \n    patron_temporada = f\"{año_corto}/%\"\n    fichaje = Transferencia.query.filter(\n        Transferencia.jugador_nombre == jugador.nombre,\n        Transferencia.temporada.like(patron_temporada)\n    ).first()\n    return render_template('profile.html', jugador=jugador, stats=stats, traspaso=fichaje)",
+        "peekOfCode": "def player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    # ¡Cambiado! Ahora buscamos la coincidencia exacta porque la BD ya tiene el año restado\n    fichaje = Transferencia.query.filter(\n        Transferencia.jugador_nombre == jugador.nombre,\n        Transferencia.temporada == str(jugador.temporada) \n    ).first()\n    return render_template('profile.html', jugador=jugador, stats=stats, traspaso=fichaje)\n# ==========================================",
         "detail": "app",
         "documentation": {}
     },

@@ -199,6 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
         tempSet.add(row.getAttribute('data-temporada'));
     });
 
+   // ... código anterior ...
     // Llenar Clubes
     Array.from(clubesSet).sort().forEach(club => {
         const option = document.createElement('option');
@@ -208,9 +209,11 @@ document.addEventListener('DOMContentLoaded', function() {
         filterClub.appendChild(option);
     });
 
-    // Llenar Temporadas
-    const temporadas = Array.from(tempSet).sort().reverse(); // Las más recientes arriba
-    temporadas.forEach(temp => {
+    // --- CÓDIGO CORREGIDO PARA TEMPORADAS ---
+    // Ya no usamos tempSet (leyendo el HTML), sino que usamos la variable Jinja pura
+    const temporadasLimpias = {{ temporadas | tojson | safe }}; 
+    
+    temporadasLimpias.forEach(temp => {
         const option = document.createElement('option');
         option.value = temp;
         option.text = temp;
@@ -218,15 +221,14 @@ document.addEventListener('DOMContentLoaded', function() {
         filterTemporada.appendChild(option);
     });
 
-    // Establecer la "21-22" por defecto si existe (O "2021-2022" dependiendo de cómo esté en tu base de datos)
-    if (temporadas.includes('21-22')) {
-        filterTemporada.value = '21-22';
-    } else if (temporadas.includes('2021-2022')) {
-        filterTemporada.value = '2021-2022';
-    } else if (temporadas.length > 0) {
-        // Si no existe, al menos agarra la más reciente
-        filterTemporada.value = temporadas[0]; 
+    // Fijamos la temporada seleccionada actualmente (viene de Flask)
+    const tempActualSeleccionada = "{{ temporada_actual }}";
+    if (temporadasLimpias.includes(tempActualSeleccionada)) {
+        filterTemporada.value = tempActualSeleccionada;
+    } else if (temporadasLimpias.length > 0) {
+        filterTemporada.value = temporadasLimpias[0];
     }
+    // ... código posterior ...
 
     // 2. FUNCIÓN DE FILTRADO
     function ejecutarFiltros() {

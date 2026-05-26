@@ -146,17 +146,51 @@ def migrar_datos():
             print(f"\n💸 [2/2] Cargando Historial Financiero ({csv_fichajes})...")
             df_fichajes = pd.read_csv(csv_fichajes)
             
-            # Limpiamos los NaN que puedan corromper la DB
-            df_fichajes = df_fichajes.fillna({'Fee_Num': 0, 'Fee': 'N/A'})
+            # Limpiamos los NaN
+            df_fichajes = df_fichajes.fillna({'Fee_Num': 0, 'Fee': 'N/A', 'Date': ''})
             
-            print(f"🚀 Migrando {len(df_fichajes)} transacciones monetarias...")
+            # NUEVA FUNCIÓN INTELIGENTE: Clasificador Verano/Invierno
+            def calcular_temporada_rendimiento(temp_fichaje, fecha_fichaje):
+                try:
+                    # 1. Extraemos el mes del fichaje (formato DD/MM/YYYY)
+                    mes = 0
+                    if fecha_fichaje:
+                        partes = str(fecha_fichaje).split('/')
+                        if len(partes) >= 2:
+                            mes = int(partes[1])
+                    
+                    # 2. Obtenemos el año base de la temporada (Ej: "21/22" -> 2021)
+                    año_base = 0
+                    if '/' in str(temp_fichaje):
+                        año_inicio = int(str(temp_fichaje).split('/')[0])
+                        año_base = 2000 + año_inicio
+                    elif len(str(temp_fichaje)) == 4:
+                        año_base = int(temp_fichaje)
+                    else:
+                        return str(temp_fichaje)
+
+                    # 3. Lógica de Mercado de Pases:
+                    # Si es Enero, Febrero o Marzo (Invierno), el fichaje corresponde a la temporada actual.
+                    if 1 <= mes <= 3:
+                        return str(año_base) 
+                    # Si es Verano (Julio, Agosto, etc.), el fichaje corresponde a la temporada PASADA.
+                    else:
+                        return str(año_base - 1)
+                except Exception as e:
+                    print(f"Error al calcular temporada para {temp_fichaje}: {e}")
+                    return str(temp_fichaje)
+
+            print(f"🚀 Migrando {len(df_fichajes)} transacciones monetarias con análisis de ventanas...")
             
             for index, row in df_fichajes.iterrows():
-                # Verificamos que realmente haya habido dinero de por medio (Fee_Num > 0)
                 if int(row['Fee_Num']) > 0:
+                    
+                    # APLICAMOS EL CÁLCULO CON LA FECHA INCLUIDA
+                    temp_rendimiento = calcular_temporada_rendimiento(row['Season'], row['Date'])
+
                     nueva_transferencia = Transferencia(
                         jugador_nombre=row['Player'],
-                        temporada=str(row['Season']),
+                        temporada=temp_rendimiento, # Guarda 2020 (Verano) o 2021 (Invierno)
                         fecha=str(row['Date']),
                         club_origen=str(row['Left_Club']),
                         club_destino=str(row['Joined_Club']),
@@ -166,10 +200,10 @@ def migrar_datos():
                     db.session.add(nueva_transferencia)
             
             db.session.commit()
-            print("✨ ¡Tabla de Transferencias Completada!")
+            print("✨ ¡Tabla de Transferencias Completada y Alineada al Rendimiento!")
         else:
-            print(f"\n⚠️ Aviso: No se encontró el archivo {csv_fichajes}. Se omitió la tabla de transferencias.")
-
+            print(f"\n⚠️ Aviso: No se encontró el archivo {csv_fichajes}.")
+            
         print("\n🏆 ¡MIGRACIÓN TOTAL COMPLETADA CON ÉXITO! 🏆")
         print("La base de datos scoutmew.db ha sido reconstruida con la nueva arquitectura financiera.")
 

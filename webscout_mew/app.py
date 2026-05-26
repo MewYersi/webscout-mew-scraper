@@ -116,12 +116,10 @@ def player_profile(id):
     jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)
     stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}
     
-    año_corto = str(jugador.temporada)[-2:] 
-    patron_temporada = f"{año_corto}/%"
-    
+    # ¡Cambiado! Ahora buscamos la coincidencia exacta porque la BD ya tiene el año restado
     fichaje = Transferencia.query.filter(
         Transferencia.jugador_nombre == jugador.nombre,
-        Transferencia.temporada.like(patron_temporada)
+        Transferencia.temporada == str(jugador.temporada) 
     ).first()
 
     return render_template('profile.html', jugador=jugador, stats=stats, traspaso=fichaje)
