@@ -852,6 +852,60 @@
         "documentation": {}
     },
     {
+        "label": "exportar_tabla_imagen",
+        "kind": 2,
+        "importPath": "hipo_p1",
+        "description": "hipo_p1",
+        "peekOfCode": "def exportar_tabla_imagen(df, titulo, pie_pagina, nombre_archivo):\n    # Ajustar tamaño de la imagen\n    fig, ax = plt.subplots(figsize=(10, len(df) * 0.5 + 1.5))\n    ax.axis('off') \n    # Agregar Título (Clásico, negro)\n    plt.figtext(0.5, 0.85, titulo, ha='center', fontsize=12, weight='bold', color='black')\n    # Crear la tabla\n    tabla = ax.table(cellText=df.values, \n                     colLabels=df.columns, \n                     cellLoc='center', ",
+        "detail": "hipo_p1",
+        "documentation": {}
+    },
+    {
+        "label": "df_tabla6",
+        "kind": 5,
+        "importPath": "hipo_p1",
+        "description": "hipo_p1",
+        "peekOfCode": "df_tabla6 = pd.DataFrame({\n    \"Variable Independiente\": [\"Sistema de Valoración (SVD)\"],\n    \"Variable Dependiente\": [\"Costo Real Transaccional\"],\n    \"Rho de Spearman\": [\"0.369**\"],\n    \"Sig. (p-valor)\": [\"0.000\"],\n    \"N (Muestra)\": [\"340\"]\n})\nexportar_tabla_imagen(df_tabla6, \n                      \"Tabla 6: Correlación entre el SVD y las transacciones de mercado\",\n                      \"* La correlación es significativa en el nivel 0.05 (bilateral).\\nFuente: Elaboración propia a partir del procesamiento estadístico computacional.\",",
+        "detail": "hipo_p1",
+        "documentation": {}
+    },
+    {
+        "label": "df_tabla7",
+        "kind": 5,
+        "importPath": "hipo_p1",
+        "description": "hipo_p1",
+        "peekOfCode": "df_tabla7 = pd.DataFrame({\n    \"Módulo de Procesamiento\": [\"Aduanas Tácticas\", \"Desacoplamiento JSON\", \"Normalización (P85/P95)\"],\n    \"Casos de Prueba\": [\"3085\", \"3085\", \"3085\"],\n    \"Éxito de Procesamiento\": [\"100%\", \"100%\", \"100%\"],\n    \"Filtrado de Sesgos\": [\"Sí\", \"Sí\", \"N/A\"],\n    \"Eficacia Funcional\": [\"1.000\", \"1.000\", \"1.000\"]\n})\nexportar_tabla_imagen(df_tabla7, \n                      \"Tabla 7: Nivel de eficacia del procesamiento algorítmico del SVD (Caja Blanca)\",\n                      \"Fuente: Elaboración propia a partir de las trazas de ejecución del algoritmo.\",",
+        "detail": "hipo_p1",
+        "documentation": {}
+    },
+    {
+        "label": "df_tabla8",
+        "kind": 5,
+        "importPath": "hipo_p1",
+        "description": "hipo_p1",
+        "peekOfCode": "df_tabla8 = pd.DataFrame({\n    \"Variable Independiente\": [\"Integración Contextual (Valor SVD)\"],\n    \"Variable Dependiente\": [\"Precio Real Pagado (Mercado)\"],\n    \"Rho de Spearman\": [\"0.369**\"],\n    \"Sig. (p-valor)\": [\"0.000\"],\n    \"N (Muestra)\": [\"340\"]\n})\nexportar_tabla_imagen(df_tabla8, \n                      \"Tabla 8: Correlación entre variables contextuales y el precio de mercado\",\n                      \"* La correlación es significativa en el nivel 0.05 (bilateral).\\nFuente: Elaboración propia a partir del procesamiento estadístico computacional.\",",
+        "detail": "hipo_p1",
+        "documentation": {}
+    },
+    {
+        "label": "df_tabla9",
+        "kind": 5,
+        "importPath": "hipo_p1",
+        "description": "hipo_p1",
+        "peekOfCode": "df_tabla9 = pd.DataFrame({\n    \"Componente UI/UX\": [\"Panel Maestro\", \"Perfil Dinámico\", \"Matriz Scatter\"],\n    \"Requerimiento Funcional\": [\"Filtros y búsqueda general\", \"Carga de radares tácticos\", \"Graficado de ineficiencias\"],\n    \"Estado de Prueba\": [\"Aprobado\", \"Aprobado\", \"Aprobado\"],\n    \"Nivel Cumplimiento\": [\"100%\", \"100%\", \"100%\"]\n})\nexportar_tabla_imagen(df_tabla9, \n                      \"Tabla 9: Matriz de cumplimiento funcional de la interfaz ScoutMew Vision\",\n                      \"Fuente: Elaboración propia a partir de las pruebas de usuario (Frontend).\",\n                      \"Tabla_9_Cumplimiento_UI.png\")",
+        "detail": "hipo_p1",
+        "documentation": {}
+    },
+    {
+        "label": "df_tabla10",
+        "kind": 5,
+        "importPath": "hipo_p1",
+        "description": "hipo_p1",
+        "peekOfCode": "df_tabla10 = pd.DataFrame({\n    \"Variable Independiente\": [\"Tasación Algorítmica (SVD)\"],\n    \"Variable Dependiente\": [\"Costo Real de Fichaje\"],\n    \"Rho de Spearman\": [\"0.369**\"],\n    \"Sig. (p-valor)\": [\"0.000\"],\n    \"N (Muestra)\": [\"340\"]\n})\nexportar_tabla_imagen(df_tabla10, \n                      \"Tabla 10: Correlación entre la valoración SVD y el costo real de fichaje\",\n                      \"* La correlación es significativa en el nivel 0.05 (bilateral).\\nFuente: Elaboración propia a partir del procesamiento estadístico computacional.\",",
+        "detail": "hipo_p1",
+        "documentation": {}
+    },
+    {
         "label": "limpiar_dinero",
         "kind": 2,
         "importPath": "limpiador_datos",
@@ -982,7 +1036,7 @@
         "kind": 2,
         "importPath": "prueba_def",
         "description": "prueba_def",
-        "peekOfCode": "def calcular_valor_deportivo(row, col_rtg, nombre_rol):\n    rtg = row[col_rtg]\n    edad = row['Age']\n    minutos = row['Min']\n    liga = row['League']\n    # Curva Exponencial Base (Se mantiene: premia la élite)\n    precio_base = ((rtg / 10) ** 6) * 200  \n    # 1. EDAD: Aplanada. Ya no premiamos el potencial de venta. \n    # Solo aplicamos un micro-ajuste de fiabilidad física extrema.\n    factor_edad = 1.0",
+        "peekOfCode": "def calcular_valor_deportivo(row, col_rtg, nombre_rol):\n    rtg = row[col_rtg]\n    edad = row['Age']\n    minutos = row['Min']\n    liga = row['League']\n    # Curva Exponencial Base\n    precio_base = ((rtg / 10) ** 6) * 200  \n    # 1. EDAD: Aplanada.\n    factor_edad = 1.0\n    if edad >= 34: ",
         "detail": "prueba_def",
         "documentation": {}
     },
@@ -991,7 +1045,7 @@
         "kind": 5,
         "importPath": "prueba_def",
         "description": "prueba_def",
-        "peekOfCode": "PESOS_JSON = {\n    \"DC\": {\n        \"categoria_pesos\": {\n            \"Defensa\": 0.40,\"Aerial\": 0.20,\"Passing\": 0.30,\"Possession\": 0.10\n        },\n        \"estadisticas\": {\n            \"Defensa\": {\n                \"Int\": 0.20,        \n                \"Clr\": 0.20,        \n                \"Recov\": 0.20,     ",
+        "peekOfCode": "PESOS_JSON = {\n    \"DC\": {\n        \"categoria_pesos\": {\n            \"Defensa\": 0.40,\n            \"Aerial\": 0.20,\n            \"Passing\": 0.30,\n            \"Possession\": 0.10\n        },\n        \"estadisticas\": {\n            \"Defensa\": {",
         "detail": "prueba_def",
         "documentation": {}
     },
@@ -1000,7 +1054,7 @@
         "kind": 5,
         "importPath": "prueba_def",
         "description": "prueba_def",
-        "peekOfCode": "archivo = 'DataFramev1.xlsx'\nUMBRAL_MINUTOS = 800\n# --- NUEVOS UMBRALES DE ADUANA TÁCTICA ---\nUMBRAL_CENTROS = 15.0 # Si tira más de 15 centros al año, sospechamos que es lateral\nUMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\nif os.path.exists(archivo):\n    print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    all_assessments = []",
+        "peekOfCode": "archivo = 'DataFramev1.xlsx'\nUMBRAL_MINUTOS = 800\n# --- NUEVOS UMBRALES DE ADUANA TÁCTICA ---\nUMBRAL_CENTROS = 15.0 # Si tira más de 15 centros al año, sospechamos que es lateral\nUMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\n    if os.path.exists(archivo):\n        print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n        xls = pd.ExcelFile(archivo, engine='openpyxl')\n        all_assessments = []",
         "detail": "prueba_def",
         "documentation": {}
     },
@@ -1009,7 +1063,7 @@
         "kind": 5,
         "importPath": "prueba_def",
         "description": "prueba_def",
-        "peekOfCode": "UMBRAL_MINUTOS = 800\n# --- NUEVOS UMBRALES DE ADUANA TÁCTICA ---\nUMBRAL_CENTROS = 15.0 # Si tira más de 15 centros al año, sospechamos que es lateral\nUMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\nif os.path.exists(archivo):\n    print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    all_assessments = []\n    stats_inversas = ['Dispossesed', 'AerialLost']",
+        "peekOfCode": "UMBRAL_MINUTOS = 800\n# --- NUEVOS UMBRALES DE ADUANA TÁCTICA ---\nUMBRAL_CENTROS = 15.0 # Si tira más de 15 centros al año, sospechamos que es lateral\nUMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\n    if os.path.exists(archivo):\n        print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n        xls = pd.ExcelFile(archivo, engine='openpyxl')\n        all_assessments = []\n        stats_inversas = ['Dispossesed', 'AerialLost']",
         "detail": "prueba_def",
         "documentation": {}
     },
@@ -1018,7 +1072,7 @@
         "kind": 5,
         "importPath": "prueba_def",
         "description": "prueba_def",
-        "peekOfCode": "UMBRAL_CENTROS = 15.0 # Si tira más de 15 centros al año, sospechamos que es lateral\nUMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\nif os.path.exists(archivo):\n    print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    all_assessments = []\n    stats_inversas = ['Dispossesed', 'AerialLost']\n    for sheet_name in xls.sheet_names:\n        print(f\"\\n📅 Procesando Temporada Global: {sheet_name}\")",
+        "peekOfCode": "UMBRAL_CENTROS = 15.0 # Si tira más de 15 centros al año, sospechamos que es lateral\nUMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\n    if os.path.exists(archivo):\n        print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n        xls = pd.ExcelFile(archivo, engine='openpyxl')\n        all_assessments = []\n        stats_inversas = ['Dispossesed', 'AerialLost']\n        for sheet_name in xls.sheet_names:\n            print(f\"\\n📅 Procesando Temporada Global: {sheet_name}\")",
         "detail": "prueba_def",
         "documentation": {}
     },
@@ -1027,7 +1081,7 @@
         "kind": 5,
         "importPath": "prueba_def",
         "description": "prueba_def",
-        "peekOfCode": "UMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\nif os.path.exists(archivo):\n    print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    all_assessments = []\n    stats_inversas = ['Dispossesed', 'AerialLost']\n    for sheet_name in xls.sheet_names:\n        print(f\"\\n📅 Procesando Temporada Global: {sheet_name}\")\n        df_season = pd.read_excel(xls, sheet_name=sheet_name)",
+        "peekOfCode": "UMBRAL_TOQUES_ATT = 12.0 # Si promedia/acumula más de 12 toques en el tercio rival, es lateral\nmetricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\n    if os.path.exists(archivo):\n        print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n        xls = pd.ExcelFile(archivo, engine='openpyxl')\n        all_assessments = []\n        stats_inversas = ['Dispossesed', 'AerialLost']\n        for sheet_name in xls.sheet_names:\n            print(f\"\\n📅 Procesando Temporada Global: {sheet_name}\")\n            df_season = pd.read_excel(xls, sheet_name=sheet_name)",
         "detail": "prueba_def",
         "documentation": {}
     },
@@ -1036,8 +1090,170 @@
         "kind": 5,
         "importPath": "prueba_def",
         "description": "prueba_def",
-        "peekOfCode": "metricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\nif os.path.exists(archivo):\n    print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n    xls = pd.ExcelFile(archivo, engine='openpyxl')\n    all_assessments = []\n    stats_inversas = ['Dispossesed', 'AerialLost']\n    for sheet_name in xls.sheet_names:\n        print(f\"\\n📅 Procesando Temporada Global: {sheet_name}\")\n        df_season = pd.read_excel(xls, sheet_name=sheet_name)\n        df_clean = df_season[df_season['Min'] >= UMBRAL_MINUTOS].copy()",
+        "peekOfCode": "metricas_defensivas = ['TklW', 'Int', 'Recov', 'Clr', 'Tkl', 'TklDef3rd', 'TklMid3rd', 'TklAtt3rd', 'BallRec', 'BallRecProg']\n    if os.path.exists(archivo):\n        print(\"🚀 Iniciando Motor V15 (Modo Escala Europea + Cura de Sesgo)...\")\n        xls = pd.ExcelFile(archivo, engine='openpyxl')\n        all_assessments = []\n        stats_inversas = ['Dispossesed', 'AerialLost']\n        for sheet_name in xls.sheet_names:\n            print(f\"\\n📅 Procesando Temporada Global: {sheet_name}\")\n            df_season = pd.read_excel(xls, sheet_name=sheet_name)\n            df_clean = df_season[df_season['Min'] >= UMBRAL_MINUTOS].copy()",
         "detail": "prueba_def",
+        "documentation": {}
+    },
+    {
+        "label": "nombre_archivo",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "nombre_archivo = 'Scouting_Database_con_TM.csv'\ntry:\n    df = pd.read_csv(nombre_archivo)\nexcept FileNotFoundError:\n    print(f\"Error: No se encontró el archivo '{nombre_archivo}'. Asegúrate de estar en la carpeta correcta.\")\n    exit()\n# 2. Filtrar a Trent Alexander-Arnold (2018)\ntrent = df[(df['Player'] == 'Trent Alexander-Arnold') & (df['Szn'] == 2018)]\nif trent.empty:\n    print(\"Error: No se encontró el registro de Trent (2018) en el CSV.\")",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "trent",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "trent = df[(df['Player'] == 'Trent Alexander-Arnold') & (df['Szn'] == 2018)]\nif trent.empty:\n    print(\"Error: No se encontró el registro de Trent (2018) en el CSV.\")\n    exit()\n# Extraer la fila como Serie\ntrent_data = trent.iloc[0]\n# 3. Extraer valores exactos que ya están calculados en el CSV\nrtg_csv = trent_data['RTG_Principal']\nvalor_csv = trent_data['Valor_Deportivo']\nedad = trent_data['Age']",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "trent_data",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "trent_data = trent.iloc[0]\n# 3. Extraer valores exactos que ya están calculados en el CSV\nrtg_csv = trent_data['RTG_Principal']\nvalor_csv = trent_data['Valor_Deportivo']\nedad = trent_data['Age']\nminutos = trent_data['Min']\nliga = trent_data['League']\nrol = trent_data['Rol_Principal']\n# 4. Reconstruir la lógica económica para la Tabla 4\n# Precio Base (Curva Exponencial)",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "rtg_csv",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "rtg_csv = trent_data['RTG_Principal']\nvalor_csv = trent_data['Valor_Deportivo']\nedad = trent_data['Age']\nminutos = trent_data['Min']\nliga = trent_data['League']\nrol = trent_data['Rol_Principal']\n# 4. Reconstruir la lógica económica para la Tabla 4\n# Precio Base (Curva Exponencial)\nprecio_base = ((rtg_csv / 10) ** 6) * 200\n# Moduladores Contextuales",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "valor_csv",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "valor_csv = trent_data['Valor_Deportivo']\nedad = trent_data['Age']\nminutos = trent_data['Min']\nliga = trent_data['League']\nrol = trent_data['Rol_Principal']\n# 4. Reconstruir la lógica económica para la Tabla 4\n# Precio Base (Curva Exponencial)\nprecio_base = ((rtg_csv / 10) ** 6) * 200\n# Moduladores Contextuales\nfactor_edad = 1.0 if edad < 34 else 0.90",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "edad",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "edad = trent_data['Age']\nminutos = trent_data['Min']\nliga = trent_data['League']\nrol = trent_data['Rol_Principal']\n# 4. Reconstruir la lógica económica para la Tabla 4\n# Precio Base (Curva Exponencial)\nprecio_base = ((rtg_csv / 10) ** 6) * 200\n# Moduladores Contextuales\nfactor_edad = 1.0 if edad < 34 else 0.90\nfactor_minutos = 0.6 + ((minutos / 3420) * 0.4) if minutos >= 1000 else 0.5",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "minutos",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "minutos = trent_data['Min']\nliga = trent_data['League']\nrol = trent_data['Rol_Principal']\n# 4. Reconstruir la lógica económica para la Tabla 4\n# Precio Base (Curva Exponencial)\nprecio_base = ((rtg_csv / 10) ** 6) * 200\n# Moduladores Contextuales\nfactor_edad = 1.0 if edad < 34 else 0.90\nfactor_minutos = 0.6 + ((minutos / 3420) * 0.4) if minutos >= 1000 else 0.5\nfactor_liga = 1.15 if liga == 'Premier League' else (1.0 if liga in ['La Liga', 'Bundesliga', 'Serie A'] else 0.85)",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "liga",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "liga = trent_data['League']\nrol = trent_data['Rol_Principal']\n# 4. Reconstruir la lógica económica para la Tabla 4\n# Precio Base (Curva Exponencial)\nprecio_base = ((rtg_csv / 10) ** 6) * 200\n# Moduladores Contextuales\nfactor_edad = 1.0 if edad < 34 else 0.90\nfactor_minutos = 0.6 + ((minutos / 3420) * 0.4) if minutos >= 1000 else 0.5\nfactor_liga = 1.15 if liga == 'Premier League' else (1.0 if liga in ['La Liga', 'Bundesliga', 'Serie A'] else 0.85)\nfactor_pos = 0.98  # Correspondiente a defensores (LB_OFF)",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "rol",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "rol = trent_data['Rol_Principal']\n# 4. Reconstruir la lógica económica para la Tabla 4\n# Precio Base (Curva Exponencial)\nprecio_base = ((rtg_csv / 10) ** 6) * 200\n# Moduladores Contextuales\nfactor_edad = 1.0 if edad < 34 else 0.90\nfactor_minutos = 0.6 + ((minutos / 3420) * 0.4) if minutos >= 1000 else 0.5\nfactor_liga = 1.15 if liga == 'Premier League' else (1.0 if liga in ['La Liga', 'Bundesliga', 'Serie A'] else 0.85)\nfactor_pos = 0.98  # Correspondiente a defensores (LB_OFF)\nmultiplicador_total = factor_edad * factor_minutos * factor_liga * factor_pos",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "precio_base",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "precio_base = ((rtg_csv / 10) ** 6) * 200\n# Moduladores Contextuales\nfactor_edad = 1.0 if edad < 34 else 0.90\nfactor_minutos = 0.6 + ((minutos / 3420) * 0.4) if minutos >= 1000 else 0.5\nfactor_liga = 1.15 if liga == 'Premier League' else (1.0 if liga in ['La Liga', 'Bundesliga', 'Serie A'] else 0.85)\nfactor_pos = 0.98  # Correspondiente a defensores (LB_OFF)\nmultiplicador_total = factor_edad * factor_minutos * factor_liga * factor_pos\nvalor_calculado = precio_base * multiplicador_total\nvalor_redondeado = round(valor_calculado, -4)\n# ==========================================",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "factor_edad",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "factor_edad = 1.0 if edad < 34 else 0.90\nfactor_minutos = 0.6 + ((minutos / 3420) * 0.4) if minutos >= 1000 else 0.5\nfactor_liga = 1.15 if liga == 'Premier League' else (1.0 if liga in ['La Liga', 'Bundesliga', 'Serie A'] else 0.85)\nfactor_pos = 0.98  # Correspondiente a defensores (LB_OFF)\nmultiplicador_total = factor_edad * factor_minutos * factor_liga * factor_pos\nvalor_calculado = precio_base * multiplicador_total\nvalor_redondeado = round(valor_calculado, -4)\n# ==========================================\n# 5. IMPRESIÓN DEL REPORTE DE AUDITORÍA\n# ==========================================",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "factor_minutos",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "factor_minutos = 0.6 + ((minutos / 3420) * 0.4) if minutos >= 1000 else 0.5\nfactor_liga = 1.15 if liga == 'Premier League' else (1.0 if liga in ['La Liga', 'Bundesliga', 'Serie A'] else 0.85)\nfactor_pos = 0.98  # Correspondiente a defensores (LB_OFF)\nmultiplicador_total = factor_edad * factor_minutos * factor_liga * factor_pos\nvalor_calculado = precio_base * multiplicador_total\nvalor_redondeado = round(valor_calculado, -4)\n# ==========================================\n# 5. IMPRESIÓN DEL REPORTE DE AUDITORÍA\n# ==========================================\nprint(\"=\"*65)",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "factor_liga",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "factor_liga = 1.15 if liga == 'Premier League' else (1.0 if liga in ['La Liga', 'Bundesliga', 'Serie A'] else 0.85)\nfactor_pos = 0.98  # Correspondiente a defensores (LB_OFF)\nmultiplicador_total = factor_edad * factor_minutos * factor_liga * factor_pos\nvalor_calculado = precio_base * multiplicador_total\nvalor_redondeado = round(valor_calculado, -4)\n# ==========================================\n# 5. IMPRESIÓN DEL REPORTE DE AUDITORÍA\n# ==========================================\nprint(\"=\"*65)\nprint(\" AUDITORÍA SVD - LECTURA DIRECTA DEL CSV\")",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "factor_pos",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "factor_pos = 0.98  # Correspondiente a defensores (LB_OFF)\nmultiplicador_total = factor_edad * factor_minutos * factor_liga * factor_pos\nvalor_calculado = precio_base * multiplicador_total\nvalor_redondeado = round(valor_calculado, -4)\n# ==========================================\n# 5. IMPRESIÓN DEL REPORTE DE AUDITORÍA\n# ==========================================\nprint(\"=\"*65)\nprint(\" AUDITORÍA SVD - LECTURA DIRECTA DEL CSV\")\nprint(\"=\"*65)",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "multiplicador_total",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "multiplicador_total = factor_edad * factor_minutos * factor_liga * factor_pos\nvalor_calculado = precio_base * multiplicador_total\nvalor_redondeado = round(valor_calculado, -4)\n# ==========================================\n# 5. IMPRESIÓN DEL REPORTE DE AUDITORÍA\n# ==========================================\nprint(\"=\"*65)\nprint(\" AUDITORÍA SVD - LECTURA DIRECTA DEL CSV\")\nprint(\"=\"*65)\nprint(f\"Jugador: {trent_data['Player']} | Temporada: {trent_data['Szn']} | Rol: {rol}\")",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "valor_calculado",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "valor_calculado = precio_base * multiplicador_total\nvalor_redondeado = round(valor_calculado, -4)\n# ==========================================\n# 5. IMPRESIÓN DEL REPORTE DE AUDITORÍA\n# ==========================================\nprint(\"=\"*65)\nprint(\" AUDITORÍA SVD - LECTURA DIRECTA DEL CSV\")\nprint(\"=\"*65)\nprint(f\"Jugador: {trent_data['Player']} | Temporada: {trent_data['Szn']} | Rol: {rol}\")\nprint(f\"RTG Principal (Dato CSV): {rtg_csv}\")",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "valor_redondeado",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "valor_redondeado = round(valor_calculado, -4)\n# ==========================================\n# 5. IMPRESIÓN DEL REPORTE DE AUDITORÍA\n# ==========================================\nprint(\"=\"*65)\nprint(\" AUDITORÍA SVD - LECTURA DIRECTA DEL CSV\")\nprint(\"=\"*65)\nprint(f\"Jugador: {trent_data['Player']} | Temporada: {trent_data['Szn']} | Rol: {rol}\")\nprint(f\"RTG Principal (Dato CSV): {rtg_csv}\")\nprint(f\"Valor Deportivo (Dato CSV): € {valor_csv:,.2f}\")",
+        "detail": "tbl3",
+        "documentation": {}
+    },
+    {
+        "label": "metricas_lb_off",
+        "kind": 5,
+        "importPath": "tbl3",
+        "description": "tbl3",
+        "peekOfCode": "metricas_lb_off = ['xA', 'CrsPA', 'KP', 'Prog', 'IntoLast3rd', \n                   'TouchesAtt3rd', 'PrgDist', 'DribSucc', 'Dispossesed', \n                   'SCA', 'SCAPassLive', \n                   'Recov', 'TklW', 'Int', 'BallRec']\nfor m in metricas_lb_off:\n    if m in trent_data:\n        print(f\" - {m}: {trent_data[m]}\")\n    else:\n        print(f\" - {m}: [No encontrada en CSV]\")\nprint(\"\\n--- CONSTRUCCIÓN DE LA TABLA 4 (Simulador Financiero) ---\")",
+        "detail": "tbl3",
         "documentation": {}
     },
     {
