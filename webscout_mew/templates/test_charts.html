@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0"></script>
+
+<main class="flex-1 h-full flex flex-col relative overflow-y-auto p-10 bg-slate-50">
+    
+    <div class="mb-8">
+        <h1 class="text-3xl font-black text-indigo-900">Laboratorio de Gráficos (Aislado)</h1>
+        <p class="text-slate-600">Jugador Prueba: <strong>{{ jugador.nombre }}</strong> | Rol: <strong id="lblRol">{{ jugador.valoracion.rol_principal }}</strong> | Temporada: <strong>{{ jugador.temporada }}</strong></p>
+    </div>
+
+    <!-- PANEL DINÁMICO DE REPORTES -->
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-slate-200">
+        
+        <div id="analiticasGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
+            <!-- JS inyecta Scatters y Radares aquí -->
+        </div>
+
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("🟢 1. Iniciando Laboratorio de Gráficos...");
+
+        const ctxColor = 'rgba(15, 23, 42, 0.5)';
+        Chart.defaults.color = ctxColor;
+        Chart.defaults.font.family = "'Outfit', sans-serif";
+        
+        const playerStats = {{ stats | tojson | safe }};
+        const playerName = "{{ jugador.nombre }}";
+        const playerRole = "{{ jugador.valoracion.rol_principal }}";
+        const playerSeason = "{{ jugador.temporada }}";
+        const playerId = {{ jugador.id }};
+
+        console.log("🟢 2. Datos del jugador cargados:", { playerName, playerRole, playerSeason, playerId });
+        if (Object.keys(playerStats).length === 0) console.warn("⚠️ ALERTA: playerStats está vacío.");
+
+        const statMax = {
+            'Gls': 0.8, 'npxG': 0.8, 'np:G-xG': 0.3, 'npxG/Sh': 0.2, 'SoT%': 100, 
+            'xA': 0.4, 'xAG': 0.4, 'KP': 3.5, 'PPA': 3.0, 'Prog': 9.0, 'IntoLast3rd': 8.0, 'CrsPA': 2.0, 'Ast': 0.4, 
+            'Cmp%Total': 100, 'PrgDist': 300, 'LongCmp': 10,
+            'SCA': 6.0, 'GCA': 1.0, 
+            'DribSucc': 3.5, 'TouchesAttPen': 8.0, 'TouchesAtt3rd': 40, 'TouchesMid3rd': 60, 'TouchesDef3rd': 35.0, 'TouchesLive': 60, 'dispossesed': 3.0,
+            'TklW': 3.0, 'Int': 2.5, 'Recov': 12.0, 'Clr': 6.0, 'BallRec': 10.0,
+            'AerialWon%': 100, 'AerialWon': 4.0
+        };
+
+        const configAnaliticas = {
+            'FW_WG': [ 
+                { tipo: 'scatter', titulo: 'Desborde y Centro (FW_WG)', x: 'DribSucc', y: 'CrsPA', labelX: 'Regates Exitosos / 90', labelY: 'Centros al Área / 90', textos: { TR: ['Extremo Clásico', 'Regatea y Centra'], TL: ['Centrador', 'Lanza sin regatear'], BR: ['Encarador', 'Regatea hacia adentro'], BL: ['Poco desborde', 'Juego interior'] } },
+                { tipo: 'scatter', titulo: 'Producción Ofensiva (FW_WG)', x: 'xAG', y: 'SCA', labelX: 'Peligro Creado (xAG)', labelY: 'Creación (SCA) / 90', textos: { TR: ['Extremo Élite', 'Volumen y Calidad'], TL: ['Volumen', 'Mucha acción, poco peligro'], BR: ['Calidad', 'Pocas acciones pero letales'], BL: ['Bajo Impacto', ''] } },
+                { tipo: 'radar', titulo: 'Desequilibrio (FW_WG)', labels: ['Regates', 'Dist. Prog.', 'Centros (CrsPA)', 'Creación'], keys: ['DribSucc', 'PrgDist', 'CrsPA', 'SCA'], color: '#360568' },
+                { tipo: 'radar', titulo: 'Perfil Goleador (FW_WG)', labels: ['Goles', 'Olfato (npxG)', 'Toques Ataque', 'Visión (xA)'], keys: ['Gls', 'npxG', 'TouchesAtt3rd', 'xA'], color: '#FFC482' }
+            ],
+            // Agrego un fallback genérico para probar cualquier posición
+            'DEFAULT': [
+                { tipo: 'scatter', titulo: 'Letalidad Absoluta (GENÉRICO)', x: 'npxG', y: 'Gls', labelX: 'Goles Esperados (npxG)', labelY: 'Goles Reales / 90', textos: { TR: ['Killer', ''], TL: ['Letal', ''], BR: ['Falla', ''], BL: ['Baja Amenaza', ''] } },
+                { tipo: 'scatter', titulo: 'Amenaza Mixta (GENÉRICO)', x: 'TouchesAttPen', y: 'xAG', labelX: 'Toques en Área Rival', labelY: 'Peligro Creado (xAG)', textos: { TR: ['Atacante Total', ''], TL: ['Asistidor', ''], BR: ['Llegador', ''], BL: ['Poca amenaza', ''] } },
+                { tipo: 'radar', titulo: 'Producción (GENÉRICO)', labels: ['Goles', 'Olfato (npxG)', 'Creación (SCA)', 'Peligro (xAG)'], keys: ['Gls', 'npxG', 'SCA', 'xAG'], color: '#FFC482' },
+                { tipo: 'radar', titulo: 'Magia (GENÉRICO)', labels: ['Regates', 'Pases Área', 'Creación', 'Amenaza (xAG)'], keys: ['DribSucc', 'PPA', 'SCA', 'xAG'], color: '#360568' }
+            ]
+        };
+
+        const grid = document.getElementById('analiticasGrid');
+        let vistas = configAnaliticas[playerRole];
+        
+        if (!vistas) {
+            console.warn(`⚠️ Rol "${playerRole}" no mapeado. Usando DEFAULT.`);
+            vistas = configAnaliticas['DEFAULT'];
+            document.getElementById('lblRol').innerText += " (Usando Fallback DEFAULT)";
+        }
+
+        console.log(`🟢 3. Inyectando ${vistas.length} contenedores HTML...`);
+
+        // 1. INYECTAR CONTENEDORES
+        vistas.forEach((vista, index) => {
+            const chartId = `testChart_${index}`;
+            grid.innerHTML += `
+                <div class="relative w-full h-[350px] bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col">
+                    <h4 class="text-xs font-black text-slate-700 uppercase text-center mb-2">${vista.titulo}</h4>
+                    <div id="loader_${chartId}" class="absolute inset-0 flex items-center justify-center bg-white/80 z-20 rounded-xl">
+                        <span class="text-sm font-bold text-slate-500 animate-pulse">Generando gráfico...</span>
+                    </div>
+                    <div id="error_${chartId}" class="absolute inset-0 flex items-center justify-center bg-red-50 z-30 rounded-xl hidden flex-col">
+                        <i class="ph-bold ph-warning text-3xl text-red-500 mb-2"></i>
+                        <span class="text-xs font-bold text-red-700 text-center px-4 error-text">Error</span>
+                    </div>
+                    <div class="relative flex-1 w-full min-h-[250px]">
+                        <canvas id="${chartId}"></canvas>
+                    </div>
+                </div>
+            `;
+        });
+
+        // 2. CONSTRUIR GRÁFICOS
+        setTimeout(() => {
+            console.log("🟢 4. Iniciando renderizado de gráficos...");
+            vistas.forEach((vista, index) => {
+                const chartId = `testChart_${index}`;
+                if (vista.tipo === 'scatter') construirScatterTest(vista, chartId);
+                else if (vista.tipo === 'radar') construirRadarTest(vista, chartId);
+            });
+        }, 300);
+
+        function mostrarError(canvasId, mensaje) {
+            console.error(`❌ Error en ${canvasId}:`, mensaje);
+            document.getElementById(`loader_${canvasId}`).classList.add('hidden');
+            const errDiv = document.getElementById(`error_${canvasId}`);
+            errDiv.classList.remove('hidden');
+            errDiv.querySelector('.error-text').innerText = mensaje;
+        }
+
+        function construirScatterTest(vista, canvasId) {
+            console.log(`📡 Solicitando datos para Scatter [${canvasId}] -> X: ${vista.x}, Y: ${vista.y}`);
+            
+            fetch(`/api/scatter_data?x=${vista.x}&y=${vista.y}&temporada=${playerSeason}`)
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    return res.json();
+                })
+                .then(data => {
+                    document.getElementById(`loader_${canvasId}`).classList.add('hidden');
+                    console.log(`✅ Datos recibidos para ${canvasId}: ${data.length} jugadores.`);
+                    
+                    if(data.length === 0) {
+                        return mostrarError(canvasId, "La API devolvió 0 jugadores para esta temporada/filtros.");
+                    }
+
+                    const sumX = data.reduce((acc, curr) => acc + curr.x, 0);
+                    const sumY = data.reduce((acc, curr) => acc + curr.y, 0);
+                    const mediaX = sumX / data.length;
+                    const mediaY = sumY / data.length;
+
+                    const maxX = Math.max(...data.map(d => d.x));
+                    const maxY = Math.max(...data.map(d => d.y));
+                    const minX = Math.min(...data.map(d => d.x));
+                    const minY = Math.min(...data.map(d => d.y));
+
+                    const chartData = data.map(d => {
+                        const esJugadorBase = (d.id == playerId); 
+                        return {
+                            x: d.x, y: d.y, jugador: d.nombre, club: d.club, isTarget: esJugadorBase,
+                            backgroundColor: esJugadorBase ? '#360568' : 'rgba(102, 153, 155, 0.4)', 
+                            borderColor: esJugadorBase ? '#FFC482' : 'transparent', borderWidth: esJugadorBase ? 2 : 0, r: esJugadorBase ? 8 : 4 
+                        };
+                    });
+
+                    chartData.sort((a, b) => (a.isTarget === b.isTarget) ? 0 : a.isTarget ? 1 : -1);
+
+                    const ctx = document.getElementById(canvasId).getContext('2d');
+                    try {
+                        new Chart(ctx, {
+                            type: 'bubble', 
+                            data: { datasets: [{ data: chartData }] },
+                            options: {
+                                responsive: true, maintainAspectRatio: false, layout: { padding: 25 }, 
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: { callbacks: { label: (c) => `${c.raw.jugador} (${c.raw.club}): [${c.raw.x.toFixed(2)}, ${c.raw.y.toFixed(2)}]` } },
+                                    annotation: {
+                                        annotations: {
+                                            lineX: { type: 'line', scaleID: 'x', value: mediaX, borderColor: 'rgba(0,0,0,0.2)', borderWidth: 1, borderDash: [4, 4] },
+                                            lineY: { type: 'line', scaleID: 'y', value: mediaY, borderColor: 'rgba(0,0,0,0.2)', borderWidth: 1, borderDash: [4, 4] },
+                                            labelTR: { type: 'label', xValue: maxX, yValue: maxY, content: vista.textos.TR, color: '#66999B', font: { size: 9 }, position: {x: 'start', y: 'start'} },
+                                            labelTL: { type: 'label', xValue: minX, yValue: maxY, content: vista.textos.TL, color: '#B3AF8F', font: { size: 9 }, position: {x: 'end', y: 'start'} },
+                                            labelBR: { type: 'label', xValue: maxX, yValue: minY, content: vista.textos.BR, color: '#FFC482', font: { size: 9 }, position: {x: 'start', y: 'end'} },
+                                            labelBL: { type: 'label', xValue: minX, yValue: minY, content: vista.textos.BL, color: 'rgba(0,0,0,0.4)', font: { size: 9 }, position: {x: 'end', y: 'end'} }
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    x: { title: { display: true, text: vista.labelX }, grid: { display: false } },
+                                    y: { title: { display: true, text: vista.labelY }, grid: { display: false } }
+                                }
+                            }
+                        });
+                        console.log(`🎨 Scatter ${canvasId} dibujado con éxito.`);
+                    } catch (e) {
+                        mostrarError(canvasId, "Fallo al inicializar Chart.js (Scatter): " + e.message);
+                    }
+                })
+                .catch(err => mostrarError(canvasId, "Error Fetch API: " + err.message));
+        }
+
+        function construirRadarTest(vista, canvasId) {
+            console.log(`📡 Construyendo Mini-Radar [${canvasId}]...`);
+            document.getElementById(`loader_${canvasId}`).classList.add('hidden'); 
+
+            const dataPuntos = vista.keys.map(key => {
+                let valor = playerStats[key] || 0;
+                let max = statMax[key] || Math.max(valor, 1);
+                return Math.min(Math.abs(valor) / max * 100, 100);
+            });
+            const dataMedia = vista.keys.map(() => 50);
+
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            try {
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: vista.labels,
+                        datasets: [
+                            { label: playerName, data: dataPuntos, backgroundColor: vista.color + '40', borderColor: vista.color, borderWidth: 2, pointRadius: 2, fill: true, order: 2 },
+                            { label: 'Media División', data: dataMedia, backgroundColor: 'transparent', borderColor: 'rgba(0,0,0,0.3)', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, fill: false, order: 3 }
+                        ]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: { color: 'rgba(0,0,0,0.1)' }, grid: { color: 'rgba(0,0,0,0.1)', circular: false }, 
+                                pointLabels: { font: { size: 9 }, color: '#496A81' }, ticks: { display: false, min: 0, max: 100 }
+                            }
+                        },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+                console.log(`🎨 Radar ${canvasId} dibujado con éxito.`);
+            } catch (e) {
+                mostrarError(canvasId, "Fallo al inicializar Chart.js (Radar): " + e.message);
+            }
+        }
+    }); 
+</script>
+{% endblock %}

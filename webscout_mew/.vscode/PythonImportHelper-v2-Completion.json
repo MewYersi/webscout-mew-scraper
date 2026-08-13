@@ -139,7 +139,16 @@
         "kind": 6,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "class EstadisticasFBref(db.Model):\n    __tablename__ = 'estadisticas_fbref'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    datos_crudos = db.Column(db.JSON)\n# ==========================================\n# 2. RUTAS BÁSICAS\n# ==========================================\n@app.route('/')\ndef dashboard():",
+        "peekOfCode": "class EstadisticasFBref(db.Model):\n    __tablename__ = 'estadisticas_fbref'\n    id = db.Column(db.Integer, primary_key=True)\n    jugador_id = db.Column(db.Integer, db.ForeignKey('jugadores.id'))\n    datos_crudos = db.Column(db.JSON)\n# ==========================================\n# 2. VARIABLES GLOBALES Y DICCIONARIOS\n# ==========================================\ndef safe_float(val):\n    try: return float(val)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "safe_float",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def safe_float(val):\n    try: return float(val)\n    except (ValueError, TypeError): return 0.0\nPESOS_JSON = {\n   \"DC\": { \"estadisticas\": { \"Defensa\": {\"Int\": 0.20, \"Clr\": 0.20, \"Recov\": 0.20, \"TklW\": 0.15, \"BallRec\": 0.15, \"TklDef3rd\": 0.10}, \"Aerial\": {\"AerialWon%\": 0.60, \"AerialWon\": 0.40}, \"Passing\": {\"Cmp%Total\": 0.25, \"PrgDist\": 0.20, \"Prog\": 0.20, \"LongCmp\": 0.20, \"Cmp%Long\": 0.15}, \"Possession\": {\"TouchesDef3rd\": 0.45, \"TouchesMid3rd\": 0.25, \"dispossesed\": 0.30} } },\n   \"LB_DEF\": { \"estadisticas\": { \"Defensa\": {\"TklW\": 0.25, \"Int\": 0.25, \"Recov\": 0.20, \"Clr\": 0.15, \"TklDef3rd\": 0.15}, \"Passing\": {\"Cmp%Total\": 0.35, \"PrgDist\": 0.25, \"Prog\": 0.25, \"IntoLast3rd\": 0.15}, \"Possession\": {\"TouchesDef3rd\": 0.40, \"TouchesMid3rd\": 0.30, \"dispossesed\": 0.30}, \"Aerial\": {\"AerialWon%\": 0.70, \"AerialWon\": 0.30} } },\n   \"LB_OFF\": { \"estadisticas\": { \"Passing\": {\"xA\": 0.30, \"CrsPA\": 0.25, \"KP\": 0.20, \"Prog\": 0.15, \"IntoLast3rd\": 0.10}, \"Possession\": {\"TouchesAtt3rd\": 0.40, \"PrgDist\": 0.30, \"DribSucc\": 0.20, \"dispossesed\": 0.10}, \"GAS\": {\"SCA\": 0.60, \"SCAPassLive\": 0.40}, \"Defensa\": {\"Recov\": 0.30, \"TklW\": 0.30, \"Int\": 0.25, \"BallRec\": 0.15} } },\n   \"MC_DEF\": { \"estadisticas\": { \"Defensa\": {\"Int\": 0.25, \"Recov\": 0.25, \"TklW\": 0.15, \"BallRec\": 0.10, \"BallRecProg\": 0.10, \"TklMid3rd\": 0.10, \"Tkl\": 0.05}, \"Passing\": {\"Cmp%Total\": 0.35, \"ShortCmp\": 0.15, \"Cmp%Short\": 0.15, \"MediumCmp\": 0.10, \"Prog\": 0.10, \"PrgDist\": 0.10, \"LongCmp\": 0.05}, \"Possession\": {\"dispossesed\": 0.40, \"TouchesMid3rd\": 0.30, \"TouchesDef3rd\": 0.20, \"BallRec\": 0.10}, \"Aerial\": {\"AerialWon%\": 1.00}, \"GAS\": {\"SCA\": 0.50, \"SCAPassLive\": 0.50}, \"Shooting\": {\"Gls\": 1.0} } },\n   \"MC_ORG\": { \"estadisticas\": { \"Passing\": {\"Prog\": 0.20, \"PrgDist\": 0.20, \"IntoLast3rd\": 0.15, \"Cmp%Total\": 0.15, \"KP\": 0.10, \"LongCmp\": 0.10, \"xA\": 0.05, \"xAG\": 0.05}, \"Possession\": {\"PrgDist\": 0.30, \"TouchesMid3rd\": 0.20, \"TouchesLive\": 0.15, \"dispossesed\": 0.12, \"DribSucc\": 0.13, \"TouchesDef3rd\": 0.10}, \"Defensa\": {\"Recov\": 0.35, \"Int\": 0.30, \"BallRec\": 0.20, \"TklMid3rd\": 0.15}, \"GAS\": {\"SCA\": 0.60, \"SCAPassLive\": 0.40}, \"Aerial\": {\"AerialWon%\": 1.0}, \"Shooting\": {\"Gls\": 0.50, \"npxG/Sh\": 0.50} } },\n   \"MC_EST\": { \"estadisticas\": { \"Passing\": {\"Prog\": 0.15, \"IntoLast3rd\": 0.15, \"PrgDist\": 0.15, \"xA\": 0.15, \"Cmp%Total\": 0.10, \"KP\": 0.10, \"PPA\": 0.10, \"Ast\": 0.10}, \"Defensa\": {\"Recov\": 0.25, \"TklMid3rd\": 0.20, \"TklW\": 0.20, \"Int\": 0.15, \"BallRec\": 0.10, \"BallRecProg\": 0.10}, \"Possession\": {\"TouchesMid3rd\": 0.20, \"TouchesAtt3rd\": 0.15, \"TouchesDef3rd\": 0.15, \"PrgDist\": 0.15, \"TouchesAttPen\": 0.10, \"DribSucc\": 0.10, \"dispossesed\": 0.10, \"BallRecProg\": 0.05}, \"GAS\": {\"SCA\": 0.35, \"SCAPassLive\": 0.30, \"GCA\": 0.20, \"SCADef\": 0.10, \"SCADrib\": 0.05}, \"Aerial\": {\"AerialWon%\": 0.60, \"AerialWon\": 0.40}, \"Shooting\": {\"Gls\": 0.30, \"npxG\": 0.25, \"G-xG\": 0.20, \"xG\": 0.15, \"SoT%\": 0.10} } },",
         "detail": "app",
         "documentation": {}
     },
@@ -157,7 +166,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def players():\n    # Obtener temporadas únicas de la base de datos\n    temporadas_disponibles = db.session.query(Jugador.temporada).distinct().order_by(Jugador.temporada.desc()).all()\n    temporadas_disponibles = [t[0] for t in temporadas_disponibles if t[0]]\n    # Traer todos los jugadores\n    todos_los_jugadores = Jugador.query.join(Valoracion)\\\n        .options(joinedload(Jugador.valoracion))\\\n        .order_by(Valoracion.rtg_principal.desc()).all()\n    return render_template('players.html', jugadores=todos_los_jugadores, temporadas=temporadas_disponibles)\n@app.route('/jugador/<int:id>')",
+        "peekOfCode": "def players():\n    temporadas_disponibles = db.session.query(Jugador.temporada).distinct().order_by(Jugador.temporada.desc()).all()\n    temporadas_disponibles = [t[0] for t in temporadas_disponibles if t[0]]\n    todos_los_jugadores = Jugador.query.join(Valoracion)\\\n        .options(joinedload(Jugador.valoracion))\\\n        .order_by(Valoracion.rtg_principal.desc()).all()\n    return render_template('players.html', jugadores=todos_los_jugadores, temporadas=temporadas_disponibles)\n@app.route('/jugador/<int:id>')\ndef player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)",
         "detail": "app",
         "documentation": {}
     },
@@ -166,16 +175,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    # ¡Cambiado! Ahora buscamos la coincidencia exacta porque la BD ya tiene el año restado\n    fichaje = Transferencia.query.filter(\n        Transferencia.jugador_nombre == jugador.nombre,\n        Transferencia.temporada == str(jugador.temporada) \n    ).first()\n    return render_template('profile.html', jugador=jugador, stats=stats, traspaso=fichaje)\n# ==========================================",
-        "detail": "app",
-        "documentation": {}
-    },
-    {
-        "label": "safe_float",
-        "kind": 2,
-        "importPath": "app",
-        "description": "app",
-        "peekOfCode": "def safe_float(val):\n    try: return float(val)\n    except (ValueError, TypeError): return 0.0\nPESOS_JSON = {\n   \"DC\": { \"estadisticas\": { \"Defensa\": {\"Int\": 0.20, \"Clr\": 0.20, \"Recov\": 0.20, \"TklW\": 0.15, \"BallRec\": 0.15, \"TklDef3rd\": 0.10}, \"Aerial\": {\"AerialWon%\": 0.60, \"AerialWon\": 0.40}, \"Passing\": {\"Cmp%Total\": 0.25, \"PrgDist\": 0.20, \"Prog\": 0.20, \"LongCmp\": 0.20, \"Cmp%Long\": 0.15}, \"Possession\": {\"TouchesDef3rd\": 0.45, \"TouchesMid3rd\": 0.25, \"dispossesed\": 0.30} } },\n   \"LB_DEF\": { \"estadisticas\": { \"Defensa\": {\"TklW\": 0.25, \"Int\": 0.25, \"Recov\": 0.20, \"Clr\": 0.15, \"TklDef3rd\": 0.15}, \"Passing\": {\"Cmp%Total\": 0.35, \"PrgDist\": 0.25, \"Prog\": 0.25, \"IntoLast3rd\": 0.15}, \"Possession\": {\"TouchesDef3rd\": 0.40, \"TouchesMid3rd\": 0.30, \"dispossesed\": 0.30}, \"Aerial\": {\"AerialWon%\": 0.70, \"AerialWon\": 0.30} } },\n   \"LB_OFF\": { \"estadisticas\": { \"Passing\": {\"xA\": 0.30, \"CrsPA\": 0.25, \"KP\": 0.20, \"Prog\": 0.15, \"IntoLast3rd\": 0.10}, \"Possession\": {\"TouchesAtt3rd\": 0.40, \"PrgDist\": 0.30, \"DribSucc\": 0.20, \"dispossesed\": 0.10}, \"GAS\": {\"SCA\": 0.60, \"SCAPassLive\": 0.40}, \"Defensa\": {\"Recov\": 0.30, \"TklW\": 0.30, \"Int\": 0.25, \"BallRec\": 0.15} } },\n   \"MC_DEF\": { \"estadisticas\": { \"Defensa\": {\"Int\": 0.25, \"Recov\": 0.25, \"TklW\": 0.15, \"BallRec\": 0.10, \"BallRecProg\": 0.10, \"TklMid3rd\": 0.10, \"Tkl\": 0.05}, \"Passing\": {\"Cmp%Total\": 0.35, \"ShortCmp\": 0.15, \"Cmp%Short\": 0.15, \"MediumCmp\": 0.10, \"Prog\": 0.10, \"PrgDist\": 0.10, \"LongCmp\": 0.05}, \"Possession\": {\"dispossesed\": 0.40, \"TouchesMid3rd\": 0.30, \"TouchesDef3rd\": 0.20, \"BallRec\": 0.10}, \"Aerial\": {\"AerialWon%\": 1.00}, \"GAS\": {\"SCA\": 0.50, \"SCAPassLive\": 0.50}, \"Shooting\": {\"Gls\": 1.0} } },\n   \"MC_ORG\": { \"estadisticas\": { \"Passing\": {\"Prog\": 0.20, \"PrgDist\": 0.20, \"IntoLast3rd\": 0.15, \"Cmp%Total\": 0.15, \"KP\": 0.10, \"LongCmp\": 0.10, \"xA\": 0.05, \"xAG\": 0.05}, \"Possession\": {\"PrgDist\": 0.30, \"TouchesMid3rd\": 0.20, \"TouchesLive\": 0.15, \"dispossesed\": 0.12, \"DribSucc\": 0.13, \"TouchesDef3rd\": 0.10}, \"Defensa\": {\"Recov\": 0.35, \"Int\": 0.30, \"BallRec\": 0.20, \"TklMid3rd\": 0.15}, \"GAS\": {\"SCA\": 0.60, \"SCAPassLive\": 0.40}, \"Aerial\": {\"AerialWon%\": 1.0}, \"Shooting\": {\"Gls\": 0.50, \"npxG/Sh\": 0.50} } },\n   \"MC_EST\": { \"estadisticas\": { \"Passing\": {\"Prog\": 0.15, \"IntoLast3rd\": 0.15, \"PrgDist\": 0.15, \"xA\": 0.15, \"Cmp%Total\": 0.10, \"KP\": 0.10, \"PPA\": 0.10, \"Ast\": 0.10}, \"Defensa\": {\"Recov\": 0.25, \"TklMid3rd\": 0.20, \"TklW\": 0.20, \"Int\": 0.15, \"BallRec\": 0.10, \"BallRecProg\": 0.10}, \"Possession\": {\"TouchesMid3rd\": 0.20, \"TouchesAtt3rd\": 0.15, \"TouchesDef3rd\": 0.15, \"PrgDist\": 0.15, \"TouchesAttPen\": 0.10, \"DribSucc\": 0.10, \"dispossesed\": 0.10, \"BallRecProg\": 0.05}, \"GAS\": {\"SCA\": 0.35, \"SCAPassLive\": 0.30, \"GCA\": 0.20, \"SCADef\": 0.10, \"SCADrib\": 0.05}, \"Aerial\": {\"AerialWon%\": 0.60, \"AerialWon\": 0.40}, \"Shooting\": {\"Gls\": 0.30, \"npxG\": 0.25, \"G-xG\": 0.20, \"xG\": 0.15, \"SoT%\": 0.10} } },",
+        "peekOfCode": "def player_profile(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    fichaje = Transferencia.query.filter(\n        Transferencia.jugador_nombre == jugador.nombre,\n        Transferencia.temporada == str(jugador.temporada) \n    ).first()\n    historial = Jugador.query.join(Valoracion).filter(\n        Jugador.nombre == jugador.nombre\n    ).order_by(Jugador.temporada.asc()).all()",
         "detail": "app",
         "documentation": {}
     },
@@ -202,7 +202,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def api_buscar_jugador():\n    query = request.args.get('q', '').lower()\n    temporada = request.args.get('temporada', '')\n    rol_exacto = request.args.get('rol_exacto', '') # Captura la restricción de rol\n    if len(query) < 2: return jsonify([])\n    q_filter = Jugador.query.join(Valoracion).filter(\n        func.lower(Jugador.nombre).contains(query), \n        Jugador.temporada == temporada\n    )\n    # Si ya hay un jugador seleccionado, filtramos el buscador",
+        "peekOfCode": "def api_buscar_jugador():\n    query = request.args.get('q', '').lower()\n    temporada = request.args.get('temporada', '')\n    rol_exacto = request.args.get('rol_exacto', '') \n    if len(query) < 2: return jsonify([])\n    q_filter = Jugador.query.join(Valoracion).filter(\n        func.lower(Jugador.nombre).contains(query), \n        Jugador.temporada == temporada\n    )\n    if rol_exacto:",
         "detail": "app",
         "documentation": {}
     },
@@ -211,7 +211,7 @@
         "kind": 2,
         "importPath": "app",
         "description": "app",
-        "peekOfCode": "def api_rivales_similares(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion)).get_or_404(id)\n    temp = jugador.temporada\n    rol = jugador.valoracion.rol_principal if jugador.valoracion else 'MC'\n    rivales = Jugador.query.join(Valoracion).filter(\n        Jugador.temporada == temp, \n        Valoracion.rol_principal == rol,\n        Jugador.id != id\n    ).order_by(Valoracion.rtg_principal.desc()).all() # <-- Eliminado el límite\n    return jsonify([{",
+        "peekOfCode": "def api_rivales_similares(id):\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion)).get_or_404(id)\n    temp = jugador.temporada\n    rol = jugador.valoracion.rol_principal if jugador.valoracion else 'MC'\n    rivales = Jugador.query.join(Valoracion).filter(+\n        Jugador.temporada == temp, \n        Valoracion.rol_principal == rol,\n        Jugador.id != id\n    ).order_by(Valoracion.rtg_principal.desc()).all() \n    return jsonify([{",
         "detail": "app",
         "documentation": {}
     },
@@ -221,6 +221,33 @@
         "importPath": "app",
         "description": "app",
         "peekOfCode": "def api_radar_contexto(id):\n    jugador = Jugador.query.options(joinedload(Jugador.estadisticas), joinedload(Jugador.valoracion)).get_or_404(id)\n    temp = jugador.temporada\n    rol = jugador.valoracion.rol_principal if jugador.valoracion else 'MC'\n    plantilla_solicitada = request.args.get('plantilla', 'completo')\n    rivales = Jugador.query.join(Valoracion).filter(Jugador.temporada == temp, Valoracion.rol_principal == rol).all()\n    mejor_jugador = max(rivales, key=lambda j: j.valoracion.rtg_principal if j.valoracion else 0) if rivales else None\n    stats_mejor = mejor_jugador.estadisticas.datos_crudos if mejor_jugador and mejor_jugador.estadisticas else {}\n    nombre_mejor = mejor_jugador.nombre if mejor_jugador else \"N/A\"\n    jugador_st = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "test_charts",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def test_charts():\n    # Buscamos a Vinicius Junior (2021)\n    jugador = Jugador.query.filter(\n        Jugador.nombre.contains('Vinicius'), \n        Jugador.temporada == '2021'\n    ).options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).first()\n    # Si por algún motivo no existe en tu BD, cogemos al primer atacante que encontremos\n    if not jugador:\n        jugador = Jugador.query.join(Valoracion).filter(\n            Valoracion.rol_principal == 'FW_WG'",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "api_jugador_stats",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def api_jugador_stats(id):\n    jugador = Jugador.query.options(joinedload(Jugador.estadisticas)).get_or_404(id)\n    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}\n    return jsonify(stats)\n@app.route('/api/cazar_clones/<int:id>')\ndef api_cazar_clones(id):\n    sim_min = float(request.args.get('similitud', 85))\n    edad_max = int(request.args.get('edad', 23))\n    precio_max = float(request.args.get('precio', 15)) * 1000000 # Convertimos Millones a valor real\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "api_cazar_clones",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def api_cazar_clones(id):\n    sim_min = float(request.args.get('similitud', 85))\n    edad_max = int(request.args.get('edad', 23))\n    precio_max = float(request.args.get('precio', 15)) * 1000000 # Convertimos Millones a valor real\n    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)\n    rol = jugador.valoracion.rol_principal\n    role_dict = PESOS_JSON.get(rol, PESOS_JSON.get('MC_ORG'))\n    role_keys = []\n    for cat, stats_dict in role_dict.get('estadisticas', {}).items():\n        role_keys.extend(stats_dict.keys())",
         "detail": "app",
         "documentation": {}
     },

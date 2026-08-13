@@ -7,41 +7,43 @@
     
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
 </head>
-<body class="relative"> 
+
+<body class="relative h-screen w-full flex overflow-hidden text-[#2B3A67] selection:bg-[#496A81] selection:text-white mesh-background font-sans">
 
     <aside class="w-24 h-full py-6 pl-6 flex flex-col hidden lg:flex z-20">
-        <!-- ¡AQUÍ ESTABA EL ERROR! Le quitamos el bg-white/70 y lo dejamos solo como glass-panel -->
         <div class="glass-panel w-full h-full flex flex-col items-center py-10 justify-between">
             
-            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.3)] cursor-pointer transition-transform hover:scale-110">
+            <!-- Logo SVD -->
+            <div class="w-12 h-12 bg-gradient-to-br from-[#2B3A67] to-[#496A81] rounded-full flex items-center justify-center shadow-[0_4px_15px_rgba(43,58,103,0.3)] cursor-pointer transition-transform hover:scale-110">
                 <i class="ph-fill ph-soccer-ball text-2xl text-white"></i>
             </div>
 
             <nav class="flex flex-col gap-6">
                 <a href="{{ url_for('dashboard') }}" class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all 
-                    {% if request.endpoint == 'dashboard' %}nav-active{% else %}text-slate-500 hover:text-blue-600 hover:bg-white/30{% endif %}">
+                    {% if request.endpoint == 'dashboard' %}nav-active{% else %}text-slate-400 hover:text-[#496A81] hover:bg-white/40{% endif %}">
                     <i class="ph-bold ph-house text-xl"></i>
                 </a>
 
                 <a href="{{ url_for('players') }}" class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all 
-                    {% if request.endpoint == 'players' or request.endpoint == 'player_profile' %}nav-active{% else %}text-slate-500 hover:text-blue-600 hover:bg-white/30{% endif %}">
+                    {% if request.endpoint == 'players' or request.endpoint == 'player_profile' %}nav-active{% else %}text-slate-400 hover:text-[#496A81] hover:bg-white/40{% endif %}">
                     <i class="ph-bold ph-users text-xl"></i>
                 </a>
 
-                <a href="#" class="w-12 h-12 rounded-2xl flex items-center justify-center text-slate-500 hover:text-blue-600 hover:bg-white/30 transition-all">
+                <a href="#" class="w-12 h-12 rounded-2xl flex items-center justify-center text-slate-400 hover:text-[#496A81] hover:bg-white/40 transition-all">
                     <i class="ph-bold ph-flask text-xl"></i>
                 </a>
 
                 <a href="{{ url_for('compare') }}" class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all 
-                    {% if request.endpoint == 'compare' %}nav-active{% else %}text-slate-500 hover:text-blue-600 hover:bg-white/30{% endif %}"> 
+                    {% if request.endpoint == 'compare' %}nav-active{% else %}text-slate-400 hover:text-[#496A81] hover:bg-white/40{% endif %}"> 
                     <i class="ph-bold ph-chart-polar text-xl"></i> 
                 </a>
             </nav>
 
-            <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white/50 cursor-pointer hover:border-blue-500 transition-colors opacity-80 hover:opacity-100">
-                <img src="https://ui-avatars.com/api/?name=Mew+User&background=eff6ff&color=2563eb" alt="User" class="w-full h-full object-cover">
+            <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white/60 cursor-pointer hover:border-[#496A81] transition-colors opacity-80 hover:opacity-100 shadow-sm">
+                <img src="https://ui-avatars.com/api/?name=Mew+User&background=F4F1EA&color=2B3A67" alt="User" class="w-full h-full object-cover">
             </div>
 
         </div>

@@ -2,224 +2,377 @@
 
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- PLUGIN PARA LOS CUADRANTES FM -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0"></script>
 
 <style>
     /* Estilos específicos de la cancha (Modo Claro) */
-    .pitch-container {
-        position: relative; width: 100%; max-width: 180px; min-width: 160px;
-        aspect-ratio: 2/3; border: 2px solid rgba(15, 23, 42, 0.1);
-        border-radius: 8px; background: rgba(255, 255, 255, 0.4);
-        margin: 0; flex-shrink: 0;
-    }
-    .pitch-line-center {
-        position: absolute; top: 50%; left: 0; width: 100%; height: 2px;
-        background: rgba(15, 23, 42, 0.1); transform: translateY(-50%);
-    }
-    .pitch-circle {
-        position: absolute; top: 50%; left: 50%; width: 50px; height: 50px;
-        border: 2px solid rgba(15, 23, 42, 0.1); border-radius: 50%;
-        transform: translate(-50%, -50%);
-    }
-    .pitch-box-top {
-        position: absolute; top: 0; left: 50%; width: 50%; height: 15%;
-        border: 2px solid rgba(15, 23, 42, 0.1); border-top: none;
-        transform: translateX(-50%);
-    }
-    .pitch-box-bottom {
-        position: absolute; bottom: 0; left: 50%; width: 50%; height: 15%;
-        border: 2px solid rgba(15, 23, 42, 0.1); border-bottom: none;
-        transform: translateX(-50%);
-    }
-    .role-dot {
-        position: absolute; width: 24px; height: 24px; border-radius: 50%;
-        transform: translate(-50%, -50%); display: flex; align-items: center;
-        justify-content: center; font-size: 10px; font-weight: bold;
-        color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
+    .pitch-container { position: relative; width: 100%; max-width: 180px; min-width: 160px; aspect-ratio: 2/3; border: 2px solid rgba(15, 23, 42, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.4); margin: 0; flex-shrink: 0; }
+    .pitch-line-center { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(15, 23, 42, 0.1); transform: translateY(-50%); }
+    .pitch-circle { position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; border: 2px solid rgba(15, 23, 42, 0.1); border-radius: 50%; transform: translate(-50%, -50%); }
+    .pitch-box-top { position: absolute; top: 0; left: 50%; width: 50%; height: 15%; border: 2px solid rgba(15, 23, 42, 0.1); border-top: none; transform: translateX(-50%); }
+    .pitch-box-bottom { position: absolute; bottom: 0; left: 50%; width: 50%; height: 15%; border: 2px solid rgba(15, 23, 42, 0.1); border-bottom: none; transform: translateX(-50%); }
+    .role-dot { position: absolute; width: 24px; height: 24px; border-radius: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
 </style>
 
+<!-- DICCIONARIO ESPACIAL PARA EL MAPA POSICIONAL -->
+{% set map_pos = {
+    'FW_ST': 'top: 15%; left: 50%;', 'FW_SS': 'top: 25%; left: 50%;', 'FW_WG': 'top: 20%; left: 20%;', 
+    'AM': 'top: 35%; left: 50%;', 'MC_ORG': 'top: 55%; left: 50%;', 'MC_EST': 'top: 55%; left: 50%;', 'MC_DEF': 'top: 70%; left: 50%;',
+    'DF': 'top: 85%; left: 50%;', 'DC': 'top: 85%; left: 50%;', 'DFC': 'top: 85%; left: 50%;',
+    'LB_DEF': 'top: 75%; left: 15%;', 'LB_OFF': 'top: 65%; left: 15%;', 'RB_DEF': 'top: 75%; left: 85%;', 'RB_OFF': 'top: 65%; left: 85%;',
+    'LAT_DEF': 'top: 75%; left: 15%;', 'LAT_OFF': 'top: 65%; left: 15%;'
+} %}
+
+{% set pos_primaria = map_pos.get(jugador.valoracion.rol_principal, 'top: 50%; left: 50%;') %}
+{% set pos_secundaria = map_pos.get(jugador.valoracion.rol_2, 'top: 50%; left: 50%;') %}
+
 <main class="flex-1 h-full flex flex-col relative overflow-hidden">
-   
-    <div class="flex-1 overflow-y-auto no-scrollbar p-6 flex flex-col gap-6 z-10">
+    <div class="flex-1 overflow-y-auto no-scrollbar p-6 flex flex-col gap-6 z-10 pb-10">
         
+        <!-- HEADER -->
         <div class="shrink-0 mb-2">
             <header class="flex flex-col md:flex-row justify-between items-center gap-4 z-10 shrink-0 mb-6">
                 <div>
-                    <div class="flex items-center gap-2 text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">
-                        <a href="{{ url_for('players') }}" class="hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1">
+                    <div class="flex items-center gap-2 text-[#496A81] text-xs font-black uppercase tracking-wider mb-2">
+                        <a href="{{ url_for('players') }}" class="hover:text-[#2B3A67] transition-colors cursor-pointer flex items-center gap-1">
                             <i class="ph-bold ph-house"></i> Tabla Maestra
                         </a>
                         <i class="ph-bold ph-caret-right text-[10px]"></i>
-                        <span class="text-slate-800">{{ jugador.nombre }}</span>
+                        <span class="text-[#2B3A67]">{{ jugador.nombre }}</span>
                     </div>
-                    
-                    <h1 class="text-3xl font-bold tracking-tight text-slate-800">Análisis de Perfil</h1>
+                    <h1 class="text-3xl font-black tracking-tight text-[#2B3A67]">Análisis de Perfil</h1>
                 </div>
                 
-                <div class="bg-white/60 backdrop-blur-md border border-slate-200 shadow-sm h-12 w-full md:w-[400px] !rounded-full flex items-center px-5 gap-3 transition-all focus-within:bg-white focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100 group">
-                    <i class="ph-bold ph-magnifying-glass text-lg text-slate-400 group-focus-within:text-blue-600 transition-colors"></i>
-                    <input type="text" placeholder="Buscar otro jugador..." class="bg-transparent border-none outline-none text-slate-700 placeholder-slate-400 w-full h-full text-sm">
+                <div class="glass-panel h-12 w-full md:w-[400px] !rounded-full flex items-center px-5 gap-3 transition-all focus-within:bg-white/80 group">
+                    <i class="ph-bold ph-magnifying-glass text-lg text-slate-400 group-focus-within:text-[#496A81] transition-colors"></i>
+                    <input type="text" placeholder="Buscar otro jugador..." class="bg-transparent border-none outline-none text-[#2B3A67] placeholder-slate-400 w-full h-full text-sm font-medium">
                 </div>
             </header>
         </div>
 
-        <div class="glass-panel rounded-[2rem] p-8 flex flex-col md:flex-row justify-between items-center gap-8 shrink-0 bg-white/70">
+        <!-- INFO PRINCIPAL -->
+        <div class="glass-panel rounded-[2rem] p-8 flex flex-col md:flex-row justify-between items-center gap-8 shrink-0">
             <div class="flex items-center gap-6">
                 <div class="relative">
-                    <img src="https://ui-avatars.com/api/?name={{ jugador.nombre }}&background=eff6ff&color=2563eb&bold=true&size=128" class="w-24 h-24 rounded-full border-4 border-white shadow-md">
-                    <span class="absolute bottom-0 right-0 bg-slate-100 text-slate-700 px-2 py-0.5 text-[10px] rounded border border-slate-300 font-bold uppercase">{{ jugador.nacion }}</span>
+                    <img src="https://ui-avatars.com/api/?name={{ jugador.nombre }}&background=F4F1EA&color=2B3A67&bold=true&size=128" class="w-24 h-24 rounded-full border-4 border-white shadow-md">
+                    <span class="absolute bottom-0 right-0 bg-white text-[#2B3A67] px-2 py-0.5 text-[10px] rounded border border-slate-200 font-bold uppercase shadow-sm">{{ jugador.nacion }}</span>
                 </div>
                 <div>
-                    <h2 class="text-4xl font-bold tracking-tight mb-1 text-slate-800">{{ jugador.nombre }}</h2>
-                    <div class="flex items-center gap-4 text-slate-500 text-sm font-medium mb-3">
+                    <h2 class="text-4xl font-black tracking-tight mb-1 text-[#2B3A67]">{{ jugador.nombre }}</h2>
+                    <div class="flex items-center gap-4 text-[#496A81] text-sm font-bold mb-3">
                         <span class="flex items-center gap-1"><i class="ph-fill ph-shield-chevron"></i> {{ jugador.club }}</span>
-                        <span>•</span> Edad: {{ jugador.edad }} <span>•</span> {{ stats.get('Min', jugador.minutos) }} Minutos
+                        <span class="text-slate-300">•</span> Edad: {{ jugador.edad }} <span class="text-slate-300">•</span> {{ stats.get('Min', jugador.minutos) }} Minutos
                     </div>
-
                     <div class="flex gap-2">
-                        <span class="bg-blue-50 text-blue-600 border border-blue-200 px-3 py-1 rounded-full text-xs font-bold">{{ jugador.valoracion.rol_principal }}</span>
+                        <span class="bg-[#2B3A67]/10 text-[#2B3A67] border border-[#2B3A67]/20 px-3 py-1 rounded-full text-xs font-black">{{ jugador.valoracion.rol_principal }}</span>
                         {% if jugador.valoracion.rol_2 and jugador.valoracion.rol_2 != '0' and jugador.valoracion.rol_2 != 'nan' %}
-                            <span class="bg-indigo-50 text-indigo-600 border border-indigo-200 px-3 py-1 rounded-full text-xs font-bold">{{ jugador.valoracion.rol_2 }}</span>
+                            <span class="bg-white/60 text-[#496A81] border border-white px-3 py-1 rounded-full text-xs font-bold shadow-sm">{{ jugador.valoracion.rol_2 }}</span>
                         {% endif %}
                     </div>
                 </div>
             </div>
 
             {% if traspaso %}
-                <div class="mt-5 bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center gap-4 backdrop-blur-md animate-fade-in shadow-sm">
-                    <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 shrink-0 border border-amber-200">
+                <div class="mt-5 bg-[#E5A97A]/10 border border-[#E5A97A]/30 rounded-2xl p-4 flex items-center gap-4 backdrop-blur-md animate-fade-in shadow-sm">
+                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#E5A97A] shrink-0 border border-[#E5A97A]/20 shadow-sm">
                         <i class="ph-bold ph-arrows-left-right text-lg"></i>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-[10px] text-amber-700/80 uppercase font-bold tracking-wider mb-0.5">Traspaso de Temporada ({{ traspaso.temporada }})</p>
-                        <p class="text-sm font-medium text-slate-700 truncate">
-                            De <span class="font-bold text-slate-900">{{ traspaso.club_origen }}</span> a <span class="font-bold text-slate-900">{{ traspaso.club_destino }}</span>
-                        </p>
+                        <p class="text-[10px] text-[#E5A97A] uppercase font-black tracking-wider mb-0.5">Traspaso ({{ traspaso.temporada }})</p>
+                        <p class="text-sm font-medium text-[#2B3A67] truncate">De <span class="font-bold">{{ traspaso.club_origen }}</span> a <span class="font-bold">{{ traspaso.club_destino }}</span></p>
                     </div>
-                    <div class="text-right border-l border-amber-200 pl-4">
-                        <p class="text-[10px] text-amber-700/80 uppercase font-bold">Costo Real</p>
-                        <p class="text-lg font-bold text-amber-600">
-                            € {{ "{:,.1f}".format(traspaso.coste_num / 1000000) }}M
-                        </p>
+                    <div class="text-right border-l border-[#E5A97A]/30 pl-4">
+                        <p class="text-[10px] text-[#E5A97A] uppercase font-black">Costo Real</p>
+                        <p class="text-lg font-black text-[#E5A97A]">€ {{ "{:,.1f}".format(traspaso.coste_num / 1000000) }}M</p>
                     </div>
                 </div>
             {% endif %}
 
             <div class="text-right flex flex-col items-end">
-                <p class="text-xs text-slate-500 uppercase tracking-wider font-bold mb-1">Valor Deportivo Calculado</p>
-                <h3 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500 drop-shadow-sm mb-2">€ {{ "{:,.1f}".format(jugador.valoracion.valor_deportivo / 1000000) }} M</h3>
-                <div class="bg-white/60 border border-slate-200 px-4 py-2 rounded-xl flex items-center gap-3 backdrop-blur-sm shadow-sm">
-                    <div class="text-center border-r border-slate-200 pr-3">
-                        <p class="text-[10px] text-slate-500 uppercase">Global RTG</p>
-                        <p class="font-bold text-lg text-slate-800">{{ "{:.1f}".format(jugador.valoracion.rtg_principal) }}</p>
+                <p class="text-xs text-[#496A81] uppercase tracking-widest font-black mb-1">Valor Deportivo</p>
+                <h3 class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2B3A67] to-[#496A81] drop-shadow-sm mb-2">€ {{ "{:,.1f}".format(jugador.valoracion.valor_deportivo / 1000000) }} M</h3>
+                <div class="bg-white/70 border border-white px-4 py-2 rounded-xl flex items-center gap-3 backdrop-blur-sm shadow-sm">
+                    <div class="text-center border-r border-slate-200/60 pr-3">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Global RTG</p>
+                        <div class="flex items-center gap-1">
+                            <p class="font-black text-lg text-[#2B3A67]">{{ "{:.1f}".format(jugador.valoracion.rtg_principal) }}</p>
+                            <i class="ph-bold ph-trend-up text-[#8B9A7B] text-xs"></i>
+                        </div>
                     </div>
                     <div class="text-center pl-1">
-                        <p class="text-[10px] text-slate-500 uppercase">Mercado</p>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Mercado</p>
                         {% if jugador.valoracion.precio_mercado and jugador.valoracion.precio_mercado > 0 %}
-                            <p class="font-bold text-sm text-emerald-600">
-                                € {{ "{:,.1f}".format(jugador.valoracion.precio_mercado / 1000000) }} M
-                            </p>
+                            <p class="font-black text-sm text-[#8B9A7B]">€ {{ "{:,.1f}".format(jugador.valoracion.precio_mercado / 1000000) }} M</p>
                         {% else %}
-                            <p class="font-bold text-sm text-slate-300">-</p>
+                            <p class="font-black text-sm text-slate-400">-</p>
                         {% endif %}
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0">
-            
-            <div class="lg:col-span-4 flex flex-col gap-6">
-                <div class="glass-panel rounded-[2rem] p-6 flex flex-col h-auto bg-white/70">
-                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <i class="ph-bold ph-radar text-blue-600"></i> Perfil Táctico Dinámico
+        <!-- RADAR Y BARRAS POR 90 MIN -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 shrink-0">
+            <!-- Columna Izquierda (Radar y Cancha) -->
+            <div class="lg:col-span-3 flex flex-col gap-6">
+                <div class="glass-panel rounded-[2rem] p-5 flex flex-col h-auto shadow-sm">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2 border-b border-white/50 pb-2">
+                        <i class="ph-bold ph-radar text-blue-500"></i> Perfil Táctico
                     </h3>
-                    <div class="relative w-full aspect-square max-h-[300px] mx-auto">
+                    <div class="relative w-full aspect-square max-h-[220px] mx-auto">
                         <canvas id="playerRadar"></canvas>
                     </div>
                 </div>
 
-                <div class="glass-panel rounded-[2rem] p-6 flex flex-col flex-1 min-h-[350px] bg-white/70">
-                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <i class="ph-bold ph-map-pin text-sky-500"></i> Mapa de Roles
+                <div class="glass-panel rounded-[2rem] p-5 flex flex-col flex-1 min-h-[300px] shadow-sm">
+                    <h3 class="text-xs font-black text-[#496A81] uppercase tracking-widest mb-4 flex items-center gap-2 border-b border-white/50 pb-2">
+                        <i class="ph-bold ph-map-pin text-[#66999B]"></i> Mapa de Roles
                     </h3>
-                    <div class="flex flex-row items-center justify-center gap-6 h-full w-full">
-                        <div class="pitch-container">
+                    <div class="flex flex-col items-center justify-center gap-4 h-full w-full">
+                        <div class="pitch-container !max-w-[140px]">
                             <div class="pitch-box-top"></div>
                             <div class="pitch-line-center"></div>
                             <div class="pitch-circle"></div>
                             <div class="pitch-box-bottom"></div>
-                            <div class="role-dot bg-blue-600 text-white opacity-100 z-10" style="top: 30%; left: 50%;">1</div>
-                            <div class="role-dot bg-indigo-400 text-white opacity-90 z-10" style="top: 50%; left: 50%;">2</div>
-                        </div>
-                        <div class="flex flex-col gap-4 shrink-0">
-                            <div class="flex items-center gap-3">
-                                <div class="w-6 h-6 rounded-full bg-blue-600 shadow-sm flex items-center justify-center text-[10px] font-bold shrink-0 text-white">1</div>
-                                <div><p class="font-bold text-sm leading-tight text-slate-800">{{ jugador.valoracion.rol_principal }}</p></div>
-                            </div>
+                            <div class="role-dot bg-[#360568] text-white opacity-100 z-10 shadow-md" style="{{ pos_primaria }}">1</div>
                             {% if jugador.valoracion.rol_2 and jugador.valoracion.rol_2 != '0' and jugador.valoracion.rol_2 != 'nan' %}
-                            <div class="flex items-center gap-3">
-                                <div class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 border border-indigo-300 flex items-center justify-center text-[10px] font-bold shrink-0">2</div>
-                                <div><p class="font-bold text-sm leading-tight text-slate-600">{{ jugador.valoracion.rol_2 }}</p></div>
-                            </div>
+                                <div class="role-dot bg-[#66999B] text-white opacity-90 z-10 shadow-md" style="{{ pos_secundaria }}">2</div>
                             {% endif %}
+                        </div>
+                        <div class="flex flex-col gap-2 shrink-0 w-full mt-2">
+                            <div class="flex items-center gap-2 bg-white/60 p-2 rounded-xl border border-white shadow-sm">
+                                <div class="w-5 h-5 rounded-full bg-[#360568] flex items-center justify-center text-[9px] font-black shrink-0 text-white shadow-sm">1</div>
+                                <div><p class="font-black text-xs leading-tight text-[#360568]">{{ jugador.valoracion.rol_principal }}</p></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-8 glass-panel rounded-[2rem] p-6 flex flex-col h-[700px] bg-white/70">
-                <div class="flex justify-between items-center mb-6 shrink-0">
+            <!-- Columna Derecha (Barras) -->
+            <div class="lg:col-span-9 glass-panel rounded-[2rem] p-8 flex flex-col h-full min-h-[550px] shadow-sm">
+                <div class="flex justify-between items-center mb-6 shrink-0 border-b border-slate-200 pb-4">
                     <div class="flex items-center gap-4">
-                        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                            <i class="ph-fill ph-chart-polar text-sky-500"></i> Métricas por 90 min
+                        <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="ph-fill ph-chart-polar text-sky-500"></i> Análisis por 90 min
                         </h3>
-                        
-                        <div class="flex bg-slate-100 rounded-full p-1 border border-slate-200">
-                            <button onclick="cambiarRolVista('{{ jugador.valoracion.rol_principal }}', this)" class="role-btn active px-4 py-1 rounded-full text-xs font-bold transition-all bg-blue-600 text-white shadow-sm">
-                                {{ jugador.valoracion.rol_principal }} (1º)
+                        <div class="flex bg-slate-100 rounded-full p-1 border border-slate-200 shadow-inner">
+                            <button onclick="cambiarRolVista('{{ jugador.valoracion.rol_principal }}', this)" class="role-btn active px-4 py-1 rounded-full text-xs font-bold transition-all bg-[#360568] text-white shadow-md">
+                                {{ jugador.valoracion.rol_principal }}
                             </button>
-                            
                             {% if jugador.valoracion.rol_2 and jugador.valoracion.rol_2 != '0' and jugador.valoracion.rol_2 != 'nan' %}
                             <button onclick="cambiarRolVista('{{ jugador.valoracion.rol_2 }}', this)" class="role-btn px-4 py-1 rounded-full text-xs font-bold text-slate-500 hover:text-blue-600 transition-all">
-                                {{ jugador.valoracion.rol_2 }} (2º)
+                                {{ jugador.valoracion.rol_2 }}
                             </button>
                             {% endif %}
                         </div>
                     </div>
-                    
-                    <div class="bg-slate-100 border border-slate-200 px-3 py-1 rounded-full text-xs text-slate-500">Topes de Élite</div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Topes de Élite</span>
+                        <select onchange="window.location.href='/jugador/' + this.value" class="bg-white border border-slate-200 rounded-full px-4 py-1.5 text-xs font-bold text-slate-700 outline-none cursor-pointer shadow-sm focus:border-blue-500 hover:bg-slate-50 transition-colors">
+                            {% for temp, id in temporadas_jugador %}
+                                <option value="{{ id }}" {% if temp == jugador.temporada %}selected{% endif %}>{{ temp }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
+                <div id="stats-container" class="flex-1 overflow-y-auto pr-4 space-y-6 flex flex-col no-scrollbar pb-6">
+                    <!-- JS inyecta las barras aquí -->
+                </div>
+            </div>
+        </div>
 
-                <div id="stats-container" class="flex-1 overflow-y-auto no-scrollbar pr-2 space-y-8">
+        <!-- HISTORIAL Y SIMILARES -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 shrink-0 mt-2">
+            <div class="lg:col-span-8 glass-panel rounded-[2rem] p-6 flex flex-col min-h-[520px] shadow-sm">
+                <div class="flex justify-between items-center mb-6 shrink-0 border-b border-slate-200 pb-4">
+                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                        <i class="ph-bold ph-trend-up text-emerald-500"></i> Evolución y Trayectoria
+                    </h3>
+                    <div class="flex gap-3 text-[10px] font-bold uppercase text-slate-500 tracking-wider">
+                        <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-emerald-500"></div> SVD</span>
+                        <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-indigo-500"></div> Mercado</span>
+                        <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-amber-500"></div> RTG</span>
+                    </div>
+                </div>
+                <div class="relative flex-1 w-full h-full">
+                    <canvas id="historyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4 glass-panel rounded-[2rem] p-6 flex flex-col h-[520px] relative overflow-hidden shadow-sm">
+                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-white/50 pb-4 shrink-0">
+                    <i class="ph-bold ph-users-three text-indigo-500 text-lg"></i> Perfiles Similares
+                </h3>
+                <div class="flex-1 flex flex-col gap-3 overflow-y-auto no-scrollbar pb-16" id="similar-players-container">
+                    {% for sim in similares %}
+                    <div onclick="cerrarModalClones(); abrirComparacionCaraACara({{ sim.id }}, '{{ sim.nombre | replace("'", "\\'") }}', {{ sim.match }});" 
+                         class="relative overflow-hidden bg-white/40 backdrop-blur-sm border border-white/60 p-4 rounded-2xl flex flex-col gap-3 transition-all hover:bg-white/80 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer group">
+                        <div class="flex justify-between items-center z-10">
+                            <div class="flex gap-4 items-center min-w-0">
+                                <img src="https://ui-avatars.com/api/?name={{ sim.nombre }}&background=eff6ff&color=2563eb&bold=true" class="w-12 h-12 rounded-full border-2 border-white shadow-sm shrink-0">
+                                <div class="min-w-0 flex flex-col justify-center">
+                                    <h4 class="text-[13px] font-black text-slate-800 group-hover:text-blue-600 transition-colors truncate leading-tight">{{ sim.nombre }}</h4>
+                                    <span class="text-[11px] text-slate-500 font-medium truncate block mt-0.5">{{ sim.club }}</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end shrink-0 pl-2">
+                                <span class="text-xs font-black text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-lg border border-emerald-200 shadow-sm">{{ sim.match }}%</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 w-full mt-1 z-10">
+                            <div class="flex-1 bg-white/80 rounded-lg p-2 flex justify-between items-center border border-white shadow-sm">
+                                <span class="text-[10px] font-bold text-slate-500 truncate" title="{{ sim.div_pos.stat }}"><i class="ph-bold ph-trend-up text-emerald-500 mr-1"></i>{{ sim.div_pos.stat[:12] }}</span>
+                                <span class="text-[11px] font-black text-emerald-600 ml-1">{{ sim.div_pos.val }}</span>
+                            </div>
+                            <div class="flex-1 bg-white/80 rounded-lg p-2 flex justify-between items-center border border-white shadow-sm">
+                                <span class="text-[10px] font-bold text-slate-500 truncate" title="{{ sim.div_neg.stat }}"><i class="ph-bold ph-trend-down text-red-500 mr-1"></i>{{ sim.div_neg.stat[:12] }}</span>
+                                <span class="text-[11px] font-black text-red-500 ml-1">{{ sim.div_neg.val }}</span>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-0 left-0 h-1.5 bg-gradient-to-r from-emerald-400 to-teal-400 transition-all duration-500" style="width: {{ sim.match }}%;"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="absolute bottom-0 left-0 w-full p-4 pt-10 bg-gradient-to-t from-[#f0f4f8] via-[#f0f4f8]/90 to-transparent">
+                    <button onclick="abrirModalClones()" class="w-full bg-gradient-to-r from-[#360568] to-[#496A81] hover:from-[#496A81] hover:to-[#360568] text-white font-bold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 text-sm">
+                        <i class="ph-bold ph-crosshair text-lg"></i> Cazar en el Mercado
+                    </button>
+                </div>
+            </div>
+        </div>
+
+       
+
+    <!-- MODAL CAZA DE CLONES -->
+    <div id="clonesModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex-col items-center justify-center p-4 transition-opacity opacity-0 duration-300">
+        <div class="glass-panel w-full max-w-3xl rounded-[2rem] overflow-hidden flex flex-col shadow-2xl border border-white/60 relative">
+            <button onclick="cerrarModalClones()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white/50 hover:bg-red-100 hover:text-red-500 rounded-full transition-colors text-slate-500 z-10">
+                <i class="ph-bold ph-x text-lg"></i>
+            </button>
+            <div class="p-6 border-b border-white/40 bg-white/30">
+                <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <i class="ph-fill ph-crosshair text-indigo-500"></i> Radar de Ineficiencias: <span class="text-indigo-600">{{ jugador.nombre }}</span>
+                </h2>
+                <p class="text-sm text-slate-600 mt-1">Busca jugadores con alta similitud estadística (Coseno) pero bajo valor de mercado.</p>
+            </div>
+            <div class="p-6 bg-white/20 flex flex-col md:flex-row gap-6 h-[400px]">
+                <div class="w-full md:w-1/3 flex flex-col gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase flex justify-between">
+                            <span>Similitud Mínima</span><span id="similitudValor" class="text-indigo-600">85%</span>
+                        </label>
+                        <input type="range" id="inputSim" min="70" max="98" value="85" class="w-full accent-indigo-500 mt-2" oninput="document.getElementById('similitudValor').innerText = this.value + '%'">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase">Edad Máxima</label>
+                        <input type="number" id="inputEdad" value="23" class="w-full bg-white/60 border border-white rounded-xl px-3 py-2 text-sm font-bold text-slate-700 outline-none focus:border-indigo-400 mt-1 shadow-sm">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-500 uppercase">Precio Máximo (M€)</label>
+                        <input type="number" id="inputPrecio" value="15" class="w-full bg-white/60 border border-white rounded-xl px-3 py-2 text-sm font-bold text-slate-700 outline-none focus:border-indigo-400 mt-1 shadow-sm">
+                    </div>
+                    <button onclick="ejecutarFiltroClones({{ jugador.id }})" class="w-full bg-slate-800 text-white font-bold py-2.5 rounded-xl hover:bg-slate-700 transition-colors mt-auto shadow-md flex justify-center items-center gap-2">
+                        <i class="ph-bold ph-funnel"></i> Ejecutar Filtro
+                    </button>
+                </div>
+                <div id="panelResultadosClones" class="w-full md:w-2/3 bg-white/40 rounded-[1.5rem] p-4 border border-white/60 flex flex-col items-center justify-center min-h-[250px] text-center shadow-inner overflow-hidden">
+                    <i class="ph-duotone ph-radar text-6xl text-indigo-300 mb-3 animate-pulse"></i>
+                    <h4 class="text-slate-700 font-bold mb-1">Motor de Búsqueda Listo</h4>
+                    <p class="text-xs text-slate-500 max-w-[250px]">Ajusta los parámetros financieros para encontrar clones infravalorados en la base de datos.</p>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- MODAL COMPARACIÓN CARA A CARA -->
+    <div id="compareModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex-col items-center justify-center p-4 transition-opacity opacity-0 duration-300">
+        <div class="w-full max-w-5xl rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl border border-white/80 bg-white/10 backdrop-blur-xl relative max-h-[90vh]">
+            <button onclick="cerrarComparacion()" class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center bg-white shadow-sm hover:bg-red-50 hover:text-red-500 rounded-full transition-colors text-slate-700 z-10 border border-slate-100">
+                <i class="ph-bold ph-x text-xl"></i>
+            </button>
+            <div class="p-6 md:p-8 border-b border-white/60 bg-white/60 shrink-0">
+                <div class="flex items-center justify-between pr-14">
+                    <h2 class="text-3xl font-black text-slate-800 flex items-center gap-3">
+                        <span class="text-[#360568] drop-shadow-sm">{{ jugador.nombre }}</span> 
+                        <span class="text-slate-400 text-xl font-normal mx-2">vs</span> 
+                        <span id="compareRivalName" class="text-[#ffac4e] drop-shadow-sm" style="-webkit-text-stroke: 1px rgba(0,0,0,0.1);">Rival</span>
+                    </h2>
+                    <div class="px-4 py-1.5 bg-[#66999B]/10 text-[#66999B] font-black rounded-xl border border-[#66999B]/30 shadow-sm text-sm flex items-center gap-2">
+                        <i class="ph-bold ph-check-circle"></i> <span id="compareMatchPct">0</span>% Match
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row flex-1 overflow-hidden bg-white/40">
+                <div class="w-full lg:w-2/5 p-8 border-b lg:border-b-0 lg:border-r border-slate-200/60 flex flex-col items-center justify-center bg-white/60">
+                    <h4 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-6">Superposición Táctica</h4>
+                    <div class="relative w-full aspect-square max-h-[350px]">
+                        <canvas id="compareRadarChart"></canvas>
+                    </div>
+                </div>
+                <div class="w-full lg:w-3/5 p-8 flex flex-col h-full overflow-y-auto no-scrollbar bg-slate-50/50">
+                    <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6 shrink-0 flex justify-between px-2">
+                        <span class="text-[#360568]">Ventaja {{ jugador.nombre }}</span>
+                        <span class="text-[#ffac4e]" style="-webkit-text-stroke: 0.5px rgba(0,0,0,0.1);">Ventaja Rival</span>
+                    </h4>
+                    <div id="compareBarsContainer" class="flex flex-col gap-5">
+                    </div>
+                </div>
+            </div>
+            <div class="p-5 bg-white/70 border-t border-slate-200/60 shrink-0 text-center">
+                <button id="btnVerPerfilRival" class="bg-[#360568] hover:bg-[#360568]/90 text-white font-bold py-3 px-8 rounded-2xl transition-colors shadow-lg text-sm flex items-center justify-center gap-2 mx-auto">
+                    Ir al Perfil Completo <i class="ph-bold ph-arrow-right text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+<!-- PANEL DINÁMICO DE REPORTES FM STYLE (VISTA DE 4 GRÁFICOS) -->
+<div class="glass-panel rounded-[2rem] p-6 flex flex-col shadow-sm mb-6 relative overflow-hidden mt-6 shrink-0">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 shrink-0 border-b border-white/40 pb-4 z-10">
+                <div>
+                    <h3 class="text-sm font-black text-[#360568] uppercase tracking-wider flex items-center gap-2">
+                        <i class="ph-bold ph-crosshair text-[#66999B]"></i> Analíticas de Producción
+                    </h3>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">Reporte detallado según rol: <span class="text-[#360568]">{{ jugador.valoracion.rol_principal }}</span></p>
+                </div>
+            </div>
+
+            <!-- Contenedor Grid Dinámico de 4 tarjetas -->
+            <div id="analiticasGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full z-10">
+                <!-- JS inyecta Scatters y Radares aquí -->
+            </div>
+            
+            <div class="absolute -top-20 -right-20 w-64 h-64 bg-[#7FB0DE]/10 rounded-full blur-3xl pointer-events-none"></div>
+        </div>
+
 </main>
 
 <script>
+   
     document.addEventListener('DOMContentLoaded', function() {
+        console.log("🟢 [INIT] Script Perfil Final...");
+
+        // ==========================================
+        // CONFIGURACIONES GLOBALES DE CHART.JS
+        // ==========================================
         const ctx = document.getElementById('playerRadar').getContext('2d');
         Chart.defaults.color = 'rgba(15, 23, 42, 0.5)';
         Chart.defaults.font.family = "'Outfit', sans-serif";
         
         let radarChart = null;
-
         const playerStats = {{ stats | tojson | safe }};
         const playerName = "{{ jugador.nombre }}";
 
-        // ==========================================
-        // 1. DICCIONARIO DE TOPES DE ÉLITE
-        // ==========================================
         const statMax = {
-            'Gls': 0.8, 'npxG': 0.8, 'np:G-xG': 0.3, 'npxG/Sh': 0.2, 'SoT%': 100, 'xG': 0.8,
+            'Gls': 0.8, 'npxG': 0.8, 'np:G-xG': 0.3, 'npxG/Sh': 0.2, 'SoT%': 100, 
             'xA': 0.4, 'xAG': 0.4, 'KP': 3.5, 'PPA': 3.0, 'Prog': 9.0, 'IntoLast3rd': 8.0, 'CrsPA': 2.0, 'Ast': 0.4, 
             'Cmp%Total': 100, 'PrgDist': 300, 'LongCmp': 10,
-            'SCA': 6.0, 'GCA': 1.0, 'SCAPassLive': 4.0, 'SCADrib': 1.0,
-            'DribSucc': 3.5, 'TouchesAttPen': 8.0, 'TouchesAtt3rd': 40, 'TouchesMid3rd': 60, 'dispossesed': 3.0,
+            'SCA': 6.0, 'GCA': 1.0, 
+            'DribSucc': 3.5, 'TouchesAttPen': 8.0, 'TouchesAtt3rd': 40, 'TouchesMid3rd': 60, 'TouchesDef3rd': 35.0, 'TouchesLive': 60, 'dispossesed': 3.0,
             'TklW': 3.0, 'Int': 2.5, 'Recov': 12.0, 'Clr': 6.0, 'BallRec': 10.0,
-            'AerialWon%': 100, 'AerialWon': 4.0, 'TouchesDef3rd': 35.0
+            'AerialWon%': 100, 'AerialWon': 4.0
         };
 
         const statNames = {
@@ -231,225 +384,427 @@
             'AerialWon%': 'Duelos Aéreos (%)', 'AerialWon': 'Duelos Aéreos Ganados'
         };
 
-        // ==========================================
-        // 2. CONFIGURACIÓN DE VISTAS ESPECÍFICAS POR ROL (Colores adaptados a Modo Claro)
-        // ==========================================
         const roleLayouts = {
-            'FW_ST': {
-                radar: { labels: ['Goles', 'Letalidad', 'Aéreo', 'Toques Área', 'Creación', 'Inteligencia Tiro'], keys: ['Gls', 'np:G-xG', 'AerialWon', 'TouchesAttPen', 'SCA', 'npxG/Sh'], color: '#0ea5e9', bgColor: 'rgba(14, 165, 233, 0.2)' },
-                groups: [
-                    { title: 'Tiro y Finalización', color: 'cyan-500', keys: ['Gls', 'npxG', 'np:G-xG', 'npxG/Sh'] },
-                    { title: 'Presencia en Área', color: 'emerald-500', keys: ['TouchesAttPen', 'AerialWon', 'AerialWon%'] },
-                    { title: 'Generación', color: 'blue-600', keys: ['SCA', 'GCA', 'xA'] }
-                ]
-            },
-            'FW_WG': {
-                radar: { labels: ['Regates', 'SCA Regate', 'Centros Área', 'Goles', 'Toques Últ. Tercio', 'Peligro (xAG)'], keys: ['DribSucc', 'SCADrib', 'CrsPA', 'Gls', 'TouchesAtt3rd', 'xAG'], color: '#0ea5e9', bgColor: 'rgba(14, 165, 233, 0.2)' },
-                groups: [
-                    { title: 'Desborde y Regate', color: 'emerald-500', keys: ['DribSucc', 'SCADrib', 'TouchesAtt3rd'] },
-                    { title: 'Generación y Centros', color: 'blue-600', keys: ['xAG', 'CrsPA', 'SCA', 'IntoLast3rd'] },
-                    { title: 'Finalización', color: 'cyan-500', keys: ['Gls', 'npxG'] }
-                ]
-            },
-            'FW_SS': {
-                radar: { labels: ['Goles', 'Peligro', 'Creación', 'Pases Área', 'Toques Área', 'Regates'], keys: ['Gls', 'xAG', 'SCA', 'PPA', 'TouchesAttPen', 'DribSucc'], color: '#0ea5e9', bgColor: 'rgba(14, 165, 233, 0.2)' },
-                groups: [
-                    { title: 'Tiro y Finalización', color: 'cyan-500', keys: ['Gls', 'npxG', 'np:G-xG'] },
-                    { title: 'Generación de Peligro', color: 'blue-600', keys: ['SCA', 'GCA', 'xA', 'xAG', 'PPA'] },
-                    { title: 'Presencia y Regate', color: 'emerald-500', keys: ['TouchesAttPen', 'DribSucc'] }
-                ]
-            },
-            'AM': {
-                radar: { labels: ['Peligro (xAG)', 'Visión (xA)', 'Creación (SCA)', 'Goles', 'Pases Área', 'Regates'], keys: ['xAG', 'xA', 'SCA', 'Gls', 'PPA', 'DribSucc'], color: '#2563eb', bgColor: 'rgba(37, 99, 235, 0.2)' },
-                groups: [
-                    { title: 'Visión de juego', color: 'blue-600', keys: ['xA', 'xAG', 'KP', 'PPA'] },
-                    { title: 'Generación Global', color: 'blue-600', keys: ['SCA', 'GCA', 'SCAPassLive'] },
-                    { title: 'Llegada al Área', color: 'cyan-500', keys: ['Gls', 'npxG/Sh', 'TouchesAttPen'] },
-                    { title: 'Traslado', color: 'emerald-500', keys: ['DribSucc', 'PrgDist', 'IntoLast3rd'] }
-                ]
-            },
-            'MC_DEF': {
-                radar: { labels: ['Tackles (TklW)', 'Recuperaciones', 'Intercepciones', 'Precisión %', 'Toques Def', 'Balones Recup'], keys: ['TklW', 'Recov', 'Int', 'Cmp%Total', 'TouchesDef3rd', 'BallRec'], color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.2)' },
-                groups: [
-                    { title: 'Defensa', color: 'amber-500', keys: ['TklW', 'Int', 'Recov', 'BallRec', 'Clr'] },
-                    { title: 'Seguridad en Pase', color: 'indigo-500', keys: ['Cmp%Total', 'Prog', 'PrgDist'] },
-                    { title: 'Presencia Física', color: 'emerald-500', keys: ['dispossesed', 'AerialWon%'] }
-                ]
-            },
-            'MC_ORG': {
-                radar: { labels: ['Pases Prog', 'Distancia Prog', 'Pases Último 3º', 'Creación (SCA)', 'Visión (xA)', 'Toques Medio'], keys: ['Prog', 'PrgDist', 'IntoLast3rd', 'SCA', 'xA', 'TouchesMid3rd'], color: '#6366f1', bgColor: 'rgba(99, 102, 241, 0.2)' },
-                groups: [
-                    { title: 'Distribución y Progresión', color: 'indigo-500', keys: ['Prog', 'PrgDist', 'IntoLast3rd', 'Cmp%Total', 'LongCmp'] },
-                    { title: 'Aporte Ofensivo', color: 'blue-600', keys: ['SCA', 'xA', 'xAG', 'KP'] },
-                    { title: 'Seguridad en el Medio Campo', color: 'emerald-500', keys: ['TouchesMid3rd', 'dispossesed'] }
-                ]
-            },
-            'MC_EST': {
-                radar: { labels: ['Llegada (Gls)', 'Creación (SCA)', 'Pases Prog', 'Regates', 'Recuperaciones', 'Toques Área'], keys: ['Gls', 'SCA', 'Prog', 'DribSucc', 'Recov', 'TouchesAttPen'], color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.2)' },
-                groups: [
-                    { title: 'Traslado y Progresión', color: 'indigo-500', keys: ['Prog', 'PrgDist', 'IntoLast3rd', 'DribSucc'] },
-                    { title: 'Llegada', color: 'blue-600', keys: ['SCA', 'Gls', 'TouchesAttPen', 'xA'] },
-                    { title: 'Recuperación', color: 'amber-500', keys: ['Recov', 'Int', 'TklW'] }
-                ]
-            },
             'DF': {
-                radar: { labels: ['Tackles', 'Intercepciones', 'Despejes', 'Duelos Aéreos %', 'Recuperaciones', 'Pases Prog'], keys: ['TklW', 'Int', 'Clr', 'AerialWon%', 'Recov', 'Prog'], color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.2)' },
-                groups: [
-                    { title: 'Defensa', color: 'amber-500', keys: ['TklW', 'Int', 'Recov', 'Clr'] },
-                    { title: 'Juego Aéreo', color: 'amber-500', keys: ['AerialWon%', 'AerialWon'] },
-                    { title: 'Salida de Balón', color: 'indigo-500', keys: ['Prog', 'PrgDist', 'Cmp%Total'] }
-                ]
+                radar: { labels: ['Duelos Aéreos %', 'Anticipación', 'Despejes', '1vs1 (Tackles)', 'Seguridad', 'Salida (Pase %)', 'Progresión', 'Presencia Def.'], keys: ['AerialWon%', 'Int', 'Clr', 'TklW', 'Recov', 'Cmp%Total', 'Prog', 'TouchesDef3rd'], color: '#B3AF8F', bgColor: 'rgba(179, 175, 143, 0.4)' },
+                groups: [{ title: 'Defensa Pura', color: 'amber-500', keys: ['TklW', 'Int', 'Recov', 'Clr'] }, { title: 'Físico y Aéreo', color: 'amber-500', keys: ['AerialWon%', 'AerialWon'] }, { title: 'Salida de Balón', color: 'indigo-500', keys: ['Prog', 'PrgDist', 'Cmp%Total'] }]
             },
-            'FW': {
-                radar: { labels: ['Goles', 'Letalidad', 'Peligro', 'Creación', 'Toques Área', 'Regates'], keys: ['Gls', 'np:G-xG', 'xAG', 'SCA', 'TouchesAttPen', 'DribSucc'], color: '#0ea5e9', bgColor: 'rgba(14, 165, 233, 0.2)' },
-                groups: [
-                    { title: 'Tiro y Finalización', color: 'cyan-500', keys: ['Gls', 'npxG', 'np:G-xG', 'npxG/Sh'] },
-                    { title: 'Generación de Peligro', color: 'blue-600', keys: ['SCA', 'GCA', 'xA', 'xAG'] },
-                    { title: 'Presencia y Regate', color: 'emerald-500', keys: ['TouchesAttPen', 'DribSucc', 'AerialWon'] }
-                ]
+            'MC': { 
+                radar: { labels: ['Distribución %', 'Pases Prog.', 'Conducción', 'Visión (xA)', 'Recuperaciones', 'Destrucción', 'Retención', 'Volumen de Juego'], keys: ['Cmp%Total', 'Prog', 'PrgDist', 'xA', 'Recov', 'TklW', 'dispossesed', 'TouchesMid3rd'], color: '#66999B', bgColor: 'rgba(102, 153, 155, 0.4)' },
+                groups: [{ title: 'Distribución y Progresión', color: 'indigo-500', keys: ['Cmp%Total', 'Prog', 'PrgDist', 'TouchesMid3rd'] }, { title: 'Aporte Ofensivo', color: 'blue-600', keys: ['SCA', 'xA', 'xAG', 'TouchesAtt3rd'] }, { title: 'Defensa y Recuperación', color: 'emerald-500', keys: ['TklW', 'Int', 'Recov', 'dispossesed'] }]
+            },
+            'AM': { 
+                radar: { labels: ['Regate', 'Profundidad', 'Veneno (Pases Área)', 'Creación (SCA)', 'Peligro (xAG)', 'Llegada', 'Amenaza (npxG)', 'Asistencias'], keys: ['DribSucc', 'TouchesAtt3rd', 'PPA', 'SCA', 'xAG', 'TouchesAttPen', 'npxG', 'xA'], color: '#360568', bgColor: 'rgba(54, 5, 104, 0.4)' },
+                groups: [{ title: 'Generación', color: 'blue-600', keys: ['SCA', 'xAG', 'xA', 'PPA'] }, { title: 'Desborde y Llegada', color: 'emerald-500', keys: ['DribSucc', 'TouchesAtt3rd', 'TouchesAttPen'] }, { title: 'Amenaza', color: 'cyan-500', keys: ['npxG', 'Gls'] }]
+            },
+            'FW': { 
+                radar: { labels: ['Goles', 'Olfato (npxG)', 'Letalidad', 'Calidad Tiro', 'Presencia en Área', 'Creación Propia', 'Juego Aéreo', 'Participación'], keys: ['Gls', 'npxG', 'np:G-xG', 'npxG/Sh', 'TouchesAttPen', 'SCA', 'AerialWon', 'TouchesLive'], color: '#FFC482', bgColor: 'rgba(255, 196, 130, 0.4)' },
+                groups: [{ title: 'Tiro y Finalización', color: 'cyan-500', keys: ['Gls', 'npxG', 'np:G-xG', 'npxG/Sh'] }, { title: 'Generación', color: 'blue-600', keys: ['SCA', 'xA'] }, { title: 'Presencia Física', color: 'emerald-500', keys: ['TouchesAttPen', 'TouchesLive', 'AerialWon'] }]
             }
         };
 
-        roleLayouts['LB_DEF'] = roleLayouts['DF'];
-        roleLayouts['LB_OFF'] = roleLayouts['DF'];
-        roleLayouts['DC'] = roleLayouts['DF'];
+        roleLayouts['LB_DEF'] = roleLayouts['DF']; roleLayouts['LB_OFF'] = roleLayouts['DF'];
+        roleLayouts['DC'] = roleLayouts['DF']; roleLayouts['DFC'] = roleLayouts['DF'];
+        roleLayouts['MC_DEF'] = roleLayouts['MC']; roleLayouts['MC_ORG'] = roleLayouts['MC']; roleLayouts['MC_EST'] = roleLayouts['MC'];
+        roleLayouts['FW_WG'] = roleLayouts['AM'];
+        roleLayouts['FW_ST'] = roleLayouts['FW']; roleLayouts['FW_SS'] = roleLayouts['FW'];
 
-        // ==========================================
-        // 3. MOTOR DE RENDERIZADO
-        // ==========================================
+        
         window.cambiarRolVista = function(rolSeleccionado, btnElement) {
-            document.querySelectorAll('.role-btn').forEach(b => {
-                b.classList.remove('bg-blue-600', 'shadow-sm', 'text-white');
-                b.classList.add('text-slate-500');
+            if(!btnElement) return;
+
+            // 1. Estilos visuales de los botones
+            document.querySelectorAll('.role-btn').forEach(b => { 
+                b.classList.remove('bg-[#360568]', 'shadow-md', 'text-white'); 
+                b.classList.add('text-slate-500'); 
             });
-            btnElement.classList.add('bg-blue-600', 'shadow-sm', 'text-white');
+            btnElement.classList.add('bg-[#360568]', 'shadow-md', 'text-white');
             btnElement.classList.remove('text-slate-500');
 
+            // 2. Obtener el layout exacto según el rol
             const prefijo = rolSeleccionado.split('_')[0];
-            const layout = roleLayouts[rolSeleccionado] || roleLayouts[prefijo] || roleLayouts['MC_ORG'];
+            const layout = roleLayouts[rolSeleccionado] || roleLayouts[prefijo] || roleLayouts['MC'];
 
-            actualizarRadar(layout.radar);
-            renderizarBarras(layout.groups);
+            if (layout) {
+                if (layout.radar) actualizarRadar(layout.radar);
+                if (layout.groups) renderizarBarras(layout.groups);
+            }
+
+            // 3. Actualizar dinámicamente las Analíticas de Producción (Scatters y Mini Radares)
+            cargarScatters(rolSeleccionado);
         };
 
-        function actualizarRadar(radarConfig) {
+        let radarBaseConfig = null;
+        function safeFloat(val) { let v = parseFloat(val); return isNaN(v) ? 0 : v; }
+
+        function actualizarRadar(radarConfig, datasetClon = null) {
+            radarBaseConfig = radarConfig;
             const dataPuntos = radarConfig.keys.map(key => {
+                let valor = playerStats[key] || 0; let max = statMax[key] || Math.max(valor, 1);
+                return Math.min(Math.abs(valor) / max * 100, 100);
+            });
+            const dataMediaDivision = radarConfig.keys.map(() => 50); 
+            let datasets = [
+                { label: playerName, data: dataPuntos, backgroundColor: radarConfig.bgColor, borderColor: radarConfig.color, borderWidth: 2, pointBackgroundColor: radarConfig.color, pointBorderColor: '#fff', pointHoverRadius: 6, pointRadius: 3, order: 2, fill: true },
+                { label: 'Media de la División', data: dataMediaDivision, backgroundColor: 'transparent', borderColor: 'rgba(255, 255, 255, 0.8)', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, order: 3, fill: false }
+            ];
+            if (datasetClon) { datasets.push({ label: datasetClon.nombre, data: datasetClon.data, backgroundColor: 'transparent', borderColor: '#FFC482', borderWidth: 2.5, pointBackgroundColor: '#FFC482', pointRadius: 4, order: 1 }); }
+            if (radarChart) radarChart.destroy();
+            radarChart = new Chart(ctx, { type: 'radar', data: { labels: radarConfig.labels, datasets: datasets }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { angleLines: { color: 'rgba(255, 255, 255, 0.2)' }, grid: { color: 'rgba(255, 255, 255, 0.15)', circular: false }, pointLabels: { font: { size: 9, weight: 'bold', family: "'Outfit', sans-serif" }, color: '#496A81' }, ticks: { display: false, min: 0, max: 100, stepSize: 25 } } }, plugins: { legend: { display: false }, tooltip: { backgroundColor: 'rgba(54, 5, 104, 0.9)', titleColor: '#F4F1EA', bodyColor: '#F4F1EA', borderColor: 'rgba(255,255,255,0.2)', borderWidth: 1 } } } });
+        }
+
+        window.superponerRadar = function(clonId, clonNombre) { fetch('/api/jugador_stats/' + clonId).then(r => r.json()).then(statsClon => { if(!radarBaseConfig) return; const dataClon = radarBaseConfig.keys.map(key => { let valor = safeFloat(statsClon[key] || 0); let max = statMax[key] || Math.max(valor, 1); return Math.min(Math.abs(valor) / max * 100, 100); }); actualizarRadar(radarBaseConfig, { nombre: clonNombre, data: dataClon }); }); };
+        window.quitarSuperposicion = function() { if(radarBaseConfig) actualizarRadar(radarBaseConfig); };
+        window.abrirModalClones = function() { const modal = document.getElementById('clonesModal'); modal.classList.remove('hidden'); modal.classList.add('flex'); setTimeout(() => modal.classList.remove('opacity-0'), 10); };
+        window.cerrarModalClones = function() { const modal = document.getElementById('clonesModal'); modal.classList.add('opacity-0'); setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300); };
+
+        function getEscalaTermica(p) {
+            if (p >= 95) return 'bg-emerald-100 text-emerald-700 border-emerald-300 shadow-sm'; if (p >= 80) return 'bg-green-100 text-green-700 border-green-300'; if (p >= 65) return 'bg-lime-100 text-lime-700 border-lime-300'; if (p >= 50) return 'bg-yellow-100 text-yellow-700 border-yellow-300'; if (p >= 35) return 'bg-amber-100 text-amber-700 border-amber-300'; if (p >= 20) return 'bg-orange-100 text-orange-700 border-orange-300'; return 'bg-red-100 text-red-700 border-red-300';
+        }
+
+        function renderizarBarras(groups) {
+            const container = document.getElementById('stats-container'); container.innerHTML = ''; 
+            const twColors = { 'cyan-500': { bg: 'bg-[#66999B]', text: 'text-[#66999B]', grad: 'from-[#66999B] to-[#496A81]' }, 'blue-600': { bg: 'bg-[#360568]', text: 'text-[#360568]', grad: 'from-[#360568] to-[#496A81]' }, 'emerald-500': { bg: 'bg-[#B3AF8F]', text: 'text-[#B3AF8F]', grad: 'from-[#B3AF8F] to-[#66999B]' }, 'indigo-500': { bg: 'bg-[#360568]', text: 'text-[#360568]' }, 'amber-500': { bg: 'bg-[#FFC482]', text: 'text-[#FFC482]', grad: 'from-[#FFC482] to-[#B3AF8F]' } };
+            groups.forEach(grupo => {
+                const colorMap = twColors[grupo.color] || { bg: 'bg-slate-400', text: 'text-slate-700', grad: 'from-slate-400 to-slate-500' };
+                let groupHTML = `<div class="bg-white/25 p-5 rounded-[1.5rem] border border-white/60 shadow-sm"><h4 class="text-[11px] font-black ${colorMap.text} uppercase tracking-widest mb-4 flex items-center gap-2"><div class="w-2 h-2 rounded-full ${colorMap.bg}"></div> ${grupo.title}</h4><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">`;
+                grupo.keys.forEach(key => {
+                    let valorCrudo = playerStats[key] || 0; let maxTeorico = statMax[key] || Math.max(Math.abs(valorCrudo), 1); let porcentaje = Math.min((Math.abs(valorCrudo) / maxTeorico) * 100, 100); let displayName = statNames[key] || key; let percentilVisual = Math.round(porcentaje); let badgeStyle = getEscalaTermica(percentilVisual);
+                    groupHTML += `<div class="flex items-center gap-3 bg-white/50 p-3 rounded-2xl border border-white shadow-sm hover:bg-white hover:shadow-md transition-all group"><div class="w-11 h-11 rounded-xl flex items-center justify-center border shadow-inner shrink-0 transition-transform group-hover:scale-105 ${badgeStyle}"><span class="text-sm font-black font-mono tracking-tighter">${percentilVisual}</span></div><div class="flex-1 flex flex-col justify-center min-w-0"><div class="flex justify-between items-end mb-1.5"><span class="text-[9px] font-bold text-slate-500 uppercase tracking-wider truncate pr-2" title="${displayName}">${displayName}</span><span class="text-[10px] font-mono font-bold text-slate-700 leading-none">${Number(valorCrudo).toFixed(2).replace(/\.00$/, '')}${key.includes('%') ? '%' : ''}</span></div><div class="w-full h-1.5 bg-slate-200/50 rounded-full overflow-hidden border border-slate-300/30"><div class="h-full bg-gradient-to-r ${colorMap.grad}" style="width: ${porcentaje}%;"></div></div></div></div>`;
+                });
+                groupHTML += `</div></div>`; container.innerHTML += groupHTML;
+            });
+        }
+
+        window.ejecutarFiltroClones = function(jugadorId) {
+            const sim = document.getElementById('inputSim').value; const edad = document.getElementById('inputEdad').value; const precio = document.getElementById('inputPrecio').value; const panel = document.getElementById('panelResultadosClones');
+            panel.innerHTML = '<i class="ph-bold ph-spinner animate-spin text-4xl text-indigo-500"></i><p class="text-xs text-slate-500 mt-2 font-bold uppercase tracking-widest">Analizando base de datos...</p>';
+            fetch(`/api/cazar_clones/${jugadorId}?similitud=${sim}&edad=${edad}&precio=${precio}`).then(res => res.json()).then(data => {
+                if(data.length === 0) { panel.innerHTML = `<i class="ph-duotone ph-warning-circle text-5xl text-slate-400 mb-3"></i><h4 class="text-slate-700 font-bold mb-1">Sin coincidencias</h4><p class="text-xs text-slate-500 max-w-[250px]">Ningún jugador cumple los filtros.</p>`; return; }
+                panel.innerHTML = '<div id="listaClones" class="w-full h-full flex flex-col gap-3 overflow-y-auto pr-2 no-scrollbar"></div>'; const lista = document.getElementById('listaClones');
+                data.forEach(clon => {
+                    lista.innerHTML += `<div onclick="cerrarModalClones(); abrirComparacionCaraACara(${clon.id}, '${clon.nombre.replace(/'/g, "\\'")}', ${clon.match});" class="bg-white/60 hover:bg-white border border-white/80 p-3 rounded-xl flex items-center justify-between cursor-pointer transition-all shadow-sm group"><div class="flex items-center gap-3"><img src="https://ui-avatars.com/api/?name=${clon.nombre}&background=eff6ff&color=2563eb&bold=true" class="w-10 h-10 rounded-full border border-white shadow-sm"><div class="flex flex-col items-start text-left"><span class="text-sm font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">${clon.nombre}</span><span class="text-[10px] text-slate-500 font-medium">${clon.club} • <span class="font-bold text-slate-600">${clon.edad} años</span></span></div></div><div class="flex flex-col items-end gap-1.5 shrink-0 pl-2"><span class="text-[10px] font-black text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded border border-emerald-200">Match: ${clon.match}%</span><span class="text-[10px] font-bold text-slate-700 bg-white px-2 py-0.5 rounded border border-slate-200 shadow-sm">€ ${clon.precio_m}M</span></div></div>`;
+                });
+            }).catch(err => { panel.innerHTML = '<p class="text-sm text-red-500 font-bold">Error de conexión.</p>'; });
+        }
+
+        let compareChartInstance = null;
+        window.abrirComparacionCaraACara = function(rivalId, rivalNombre, matchPct) {
+            const modal = document.getElementById('compareModal'); document.getElementById('compareRivalName').innerText = rivalNombre; document.getElementById('compareMatchPct').innerText = matchPct; document.getElementById('btnVerPerfilRival').onclick = () => window.location.href = '/jugador/' + rivalId;
+            modal.classList.remove('hidden'); modal.classList.add('flex'); setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            fetch('/api/jugador_stats/' + rivalId).then(r => r.json()).then(statsRival => {
+                if(!radarBaseConfig) return;
+                const dataBase = radarBaseConfig.keys.map(key => { let val = safeFloat(playerStats[key] || 0); let max = statMax[key] || Math.max(val, 1); return Math.min(Math.abs(val) / max * 100, 100); });
+                const dataRival = radarBaseConfig.keys.map(key => { let val = safeFloat(statsRival[key] || 0); let max = statMax[key] || Math.max(val, 1); return Math.min(Math.abs(val) / max * 100, 100); });
+                const ctxCompare = document.getElementById('compareRadarChart').getContext('2d'); if(compareChartInstance) compareChartInstance.destroy();
+                compareChartInstance = new Chart(ctxCompare, { type: 'radar', data: { labels: radarBaseConfig.labels, datasets: [ { label: playerName, data: dataBase, backgroundColor: 'rgba(54, 5, 104, 0.2)', borderColor: '#360568', borderWidth: 2.5, pointRadius: 0 }, { label: rivalNombre, data: dataRival, backgroundColor: 'rgba(255, 196, 130, 0.2)', borderColor: '#FFC482', borderWidth: 2.5, pointRadius: 0 } ] }, options: { responsive: true, maintainAspectRatio: false, scales: { r: { ticks: { display: false, max: 100, min: 0 } } }, plugins: { legend: { display: false } } } });
+                const container = document.getElementById('compareBarsContainer'); container.innerHTML = '';
+                radarBaseConfig.keys.forEach((key, index) => {
+                    let percBase = Math.round(dataBase[index]); let percRival = Math.round(dataRival[index]); let nombreStat = radarBaseConfig.labels[index];
+                    let colorBase = percBase > percRival ? 'bg-[#360568]' : 'bg-slate-300'; let colorRival = percRival > percBase ? 'bg-[#FFC482]' : 'bg-slate-300'; let textBase = percBase > percRival ? 'text-[#360568] font-black' : 'text-slate-500 font-bold'; let textRival = percRival > percBase ? 'text-[#FFC482] font-black' : 'text-slate-500 font-bold';
+                    container.innerHTML += `<div class="flex flex-col gap-1.5"><div class="text-center text-[10px] font-black text-[#496A81] uppercase tracking-widest">${nombreStat}</div><div class="flex items-center gap-4"><span class="${textBase} w-8 text-right text-sm">${percBase}</span><div class="flex-1 flex bg-[#496A81]/20 rounded-full h-4 overflow-hidden shadow-inner relative border border-[#496A81]/20"><div class="w-1/2 flex justify-end"><div class="h-full ${colorBase} rounded-l-full transition-all duration-700" style="width: ${percBase}%"></div></div><div class="w-0.5 h-full bg-white absolute left-1/2 top-0 z-10"></div><div class="w-1/2 flex justify-start"><div class="h-full ${colorRival} rounded-r-full transition-all duration-700" style="width: ${percRival}%"></div></div></div><span class="${textRival} w-8 text-left text-sm">${percRival}</span></div></div>`;
+                });
+            });
+        };
+        window.cerrarComparacion = function() { const modal = document.getElementById('compareModal'); modal.classList.add('opacity-0'); setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300); };
+
+        // ==========================================
+        // 4. MOTOR DINÁMICO DE REPORTES BLINDADO (10 ROLES EXACTOS)
+        // ==========================================
+        let analiticasInstances = {};
+
+        const configAnaliticas = {
+            'DC': [ 
+                { tipo: 'scatter', titulo: 'Estilo Defensivo', x: 'TklW', y: 'Int', labelX: 'Tackles Ganados / 90', labelY: 'Intercepciones / 90', textos: { TR: ['Élite Defensiva', 'Anticipa y Choca'], TL: ['Líbero', 'Anticipación alta'], BR: ['Stopper', 'Va al choque'], BL: ['Pasivo', 'Poca actividad'] } },
+                { tipo: 'scatter', titulo: 'Salida de Balón', x: 'Cmp%Total', y: 'Prog', labelX: 'Precisión de Pase %', labelY: 'Pases Progresivos / 90', textos: { TR: ['Salida Élite', 'Seguro y Vertical'], TL: ['Vertical', 'Poco preciso'], BR: ['Seguro', 'Poco arriesgado'], BL: ['Salida Pobre', 'Impreciso'] } },
+                { tipo: 'radar', titulo: 'Perfil de Destrucción', labels: ['Tackles', 'Intercep.', 'Despejes', 'Recuperac.'], keys: ['TklW', 'Int', 'Clr', 'Recov'], color: '#B3AF8F' },
+                { tipo: 'radar', titulo: 'Dominio de Área', labels: ['Aéreo %', 'Aéreos Ganados', 'Toques Def', 'Balones Recup.'], keys: ['AerialWon%', 'AerialWon', 'TouchesDef3rd', 'BallRec'], color: '#66999B' }
+            ],
+            'LB_DEF': [ 
+                { tipo: 'scatter', titulo: 'Duelos en Banda', x: 'TklW', y: 'Int', labelX: 'Tackles Ganados / 90', labelY: 'Intercepciones / 90', textos: { TR: ['Muro Exterior', 'Gana todo'], TL: ['Lector', 'Corta pases'], BR: ['Agresivo', 'Fuerte al pie'], BL: ['Frágil', 'Pierde duelos'] } },
+                { tipo: 'scatter', titulo: 'Seguridad en Salida', x: 'Cmp%Total', y: 'PrgDist', labelX: 'Precisión Pase %', labelY: 'Dist. Progresiva (m)', textos: { TR: ['Salida Limpia', 'Seguro y Avanza'], TL: ['Conductor', 'Avanza pero arriesga'], BR: ['Pase de Seguridad', 'Retiene balón'], BL: ['Poca salida', ''] } },
+                { tipo: 'radar', titulo: 'Muro Defensivo', labels: ['Tackles', 'Intercep.', 'Recuperac.', 'Despejes'], keys: ['TklW', 'Int', 'Recov', 'Clr'], color: '#B3AF8F' },
+                { tipo: 'radar', titulo: 'Despliegue Base', labels: ['Aéreo %', 'Pases Prog.', 'Toques Def', 'Balones Recup.'], keys: ['AerialWon%', 'Prog', 'TouchesDef3rd', 'BallRec'], color: '#66999B' }
+            ],
+            'LB_OFF': [ 
+                { tipo: 'scatter', titulo: 'Profundidad y Veneno', x: 'xA', y: 'PPA', labelX: 'Asist. Esperadas (xA)', labelY: 'Pases al Área / 90', textos: { TR: ['Carrilero Élite', 'Genera y Profundiza'], TL: ['Profundo', 'Centra mucho'], BR: ['Generador', 'Asiste de atrás'], BL: ['Defensivo', 'Poco aporte arriba'] } },
+                { tipo: 'scatter', titulo: 'Motor Exterior', x: 'PrgDist', y: 'Prog', labelX: 'Conducción Progresiva (m)', labelY: 'Pases Progresivos / 90', textos: { TR: ['Lateral Moderno', 'Pase y Conducción'], TL: ['Distribuidor', 'Pase progresivo'], BR: ['Carrilero Físico', 'Rompe conduciendo'], BL: ['Estático', ''] } },
+                { tipo: 'radar', titulo: 'Impacto Ofensivo', labels: ['Creación (SCA)', 'Pases Clave', 'Centros (CrsPA)', 'Regates'], keys: ['SCA', 'KP', 'CrsPA', 'DribSucc'], color: '#360568' },
+                { tipo: 'radar', titulo: 'Cumplimiento Defensivo', labels: ['Tackles', 'Intercep.', 'Recuperac.', 'Toques Ataque'], keys: ['TklW', 'Int', 'Recov', 'TouchesAtt3rd'], color: '#B3AF8F' }
+            ],
+            'MC_DEF': [ 
+                { tipo: 'scatter', titulo: 'Escudo del Equipo', x: 'Recov', y: 'TklW', labelX: 'Recuperaciones / 90', labelY: 'Tackles Ganados / 90', textos: { TR: ['Pivote Élite', 'Destruye y Recupera'], TL: ['Agresivo', 'Mucho Tackle'], BR: ['Posicional', 'Recupera suelto'], BL: ['Pasivo', 'Poco filtro'] } },
+                { tipo: 'scatter', titulo: 'Distribución Base', x: 'Cmp%Total', y: 'Prog', labelX: 'Precisión Pase %', labelY: 'Pases Progresivos / 90', textos: { TR: ['Regista', 'Seguro y Vertical'], TL: ['Vertical', 'Poco preciso'], BR: ['Ancla', 'Pase horizontal puro'], BL: ['Errático', ''] } },
+                { tipo: 'radar', titulo: 'Filtro Defensivo', labels: ['Tackles', 'Intercep.', 'Recuperac.', 'Balones Recup.'], keys: ['TklW', 'Int', 'Recov', 'BallRec'], color: '#B3AF8F' },
+                { tipo: 'radar', titulo: 'Posesión y Control', labels: ['Aéreo %', 'Pase %', 'Toques Medio', 'Pases Prog.'], keys: ['AerialWon%', 'Cmp%Total', 'TouchesMid3rd', 'Prog'], color: '#66999B' }
+            ],
+            'MC_ORG': [ 
+                { tipo: 'scatter', titulo: 'Motor de Progresión', x: 'PrgDist', y: 'Prog', labelX: 'Conducción Prog. (m)', labelY: 'Pases Progresivos / 90', textos: { TR: ['Rompe líneas Total', 'Pase y Conducción'], TL: ['Distribuidor', 'Pase progresivo'], BR: ['Trasladador', 'Conducción larga'], BL: ['Estático', 'Juego horizontal'] } },
+                { tipo: 'scatter', titulo: 'Visión y Riesgo', x: 'Cmp%Total', y: 'IntoLast3rd', labelX: 'Precisión Pase %', labelY: 'Pases al Últ. Tercio', textos: { TR: ['Organizador Élite', 'Preciso y vertical'], TL: ['Arriesgado', 'Busca profundidad'], BR: ['Conservador', 'Alta retención'], BL: ['Irregular', 'Falla pases'] } },
+                { tipo: 'radar', titulo: 'Control de Tiempos', labels: ['Pases Prog.', 'Pase Largo', 'Toques Medio', 'Precisión %'], keys: ['Prog', 'LongCmp', 'TouchesMid3rd', 'Cmp%Total'], color: '#66999B' },
+                { tipo: 'radar', titulo: 'Aporte Creativo', labels: ['Creación (SCA)', 'Visión (xA)', 'Peligro (xAG)', 'Pases Clave'], keys: ['SCA', 'xA', 'xAG', 'KP'], color: '#360568' }
+            ],
+            'MC_EST': [ 
+                { tipo: 'scatter', titulo: 'Llegada al Área', x: 'PrgDist', y: 'TouchesAttPen', labelX: 'Conducción Prog. (m)', labelY: 'Toques en Área Rival', textos: { TR: ['B2B Élite', 'Rompe y Pisa Área'], TL: ['Llegador', 'Ocupa el área'], BR: ['Trasladador', 'Sube balón pero no entra'], BL: ['Contenido', 'Se queda atrás'] } },
+                { tipo: 'scatter', titulo: 'Impacto Total', x: 'Recov', y: 'SCA', labelX: 'Recuperaciones / 90', labelY: 'Creación (SCA) / 90', textos: { TR: ['Todocampista', 'Defiende y Crea'], TL: ['Ofensivo', 'Más creación'], BR: ['Defensivo', 'Más recuperación'], BL: ['Gris', 'Poco impacto'] } },
+                { tipo: 'radar', titulo: 'Físico y Despliegue', labels: ['Pases Prog.', 'Dist. Prog.', 'Regates', 'Toques Ataque'], keys: ['Prog', 'PrgDist', 'DribSucc', 'TouchesAtt3rd'], color: '#66999B' },
+                { tipo: 'radar', titulo: 'Determinación', labels: ['Goles', 'Olfato (npxG)', 'Creación (SCA)', 'Visión (xA)'], keys: ['Gls', 'npxG', 'SCA', 'xA'], color: '#FFC482' }
+            ],
+            'AM': [ 
+                { tipo: 'scatter', titulo: 'Playmaking', x: 'xA', y: 'SCA', labelX: 'Visión (xA) / 90', labelY: 'Creación (SCA) / 90', textos: { TR: ['Enganche Élite', 'Crea y Asiste'], TL: ['Pre-asistidor', 'Alto volumen SCA'], BR: ['Último Pase', 'Pase letal'], BL: ['Aislado', 'Poca creación'] } },
+                { tipo: 'scatter', titulo: 'Amenaza Mixta', x: 'TouchesAttPen', y: 'xAG', labelX: 'Toques en Área Rival', labelY: 'Peligro Creado (xAG)', textos: { TR: ['Atacante Total', 'Área y Generación'], TL: ['Asistidor Ext.', 'Peligro de lejos'], BR: ['Llegador', 'Pisa área sin asistir'], BL: ['Poca amenaza', ''] } },
+                { tipo: 'radar', titulo: 'Magia', labels: ['Regates', 'Pases Área', 'Creación', 'Amenaza (xAG)'], keys: ['DribSucc', 'PPA', 'SCA', 'xAG'], color: '#360568' },
+                { tipo: 'radar', titulo: 'Llegada y Gol', labels: ['Goles', 'Olfato (npxG)', 'Pases Clave', 'Toques Ataque'], keys: ['Gls', 'npxG', 'KP', 'TouchesAtt3rd'], color: '#FFC482' }
+            ],
+            'FW_WG': [ 
+                { tipo: 'scatter', titulo: 'Desborde y Centro', x: 'DribSucc', y: 'CrsPA', labelX: 'Regates Exitosos / 90', labelY: 'Centros al Área / 90', textos: { TR: ['Extremo Clásico', 'Regatea y Centra'], TL: ['Centrador', 'Lanza sin regatear'], BR: ['Encarador', 'Regatea hacia adentro'], BL: ['Poco desborde', 'Juego interior'] } },
+                { tipo: 'scatter', titulo: 'Producción Ofensiva', x: 'xAG', y: 'SCA', labelX: 'Peligro Creado (xAG)', labelY: 'Creación (SCA) / 90', textos: { TR: ['Extremo Élite', 'Volumen y Calidad'], TL: ['Volumen', 'Mucha acción, poco peligro real'], BR: ['Calidad', 'Pocas acciones pero letales'], BL: ['Bajo Impacto', ''] } },
+                { tipo: 'radar', titulo: 'Desequilibrio', labels: ['Regates', 'Dist. Prog.', 'Centros (CrsPA)', 'Creación'], keys: ['DribSucc', 'PrgDist', 'CrsPA', 'SCA'], color: '#360568' },
+                { tipo: 'radar', titulo: 'Perfil Goleador', labels: ['Goles', 'Olfato (npxG)', 'Toques Ataque', 'Visión (xA)'], keys: ['Gls', 'npxG', 'TouchesAtt3rd', 'xA'], color: '#FFC482' }
+            ],
+            'FW_ST': [ 
+                { tipo: 'scatter', titulo: 'Letalidad Absoluta', x: 'npxG', y: 'Gls', labelX: 'Goles Esperados (npxG)', labelY: 'Goles Reales / 90', textos: { TR: ['Killer Élite', 'Anota lo que genera'], TL: ['Letal', 'Anota sin generar mucho'], BR: ['Falla', 'Genera pero no anota'], BL: ['Baja Amenaza', 'Poca acción'] } },
+                { tipo: 'scatter', titulo: 'Independencia Ofensiva', x: 'TouchesAttPen', y: 'SCA', labelX: 'Toques Área Rival', labelY: 'Creación Propia (SCA)', textos: { TR: ['Delantero Completo', 'Área y Autosuficiente'], TL: ['Nueve Creador', 'Baja al medio a crear'], BR: ['Cazagoles', 'Solo finaliza en área'], BL: ['Aislado', 'Poca participación'] } },
+                { tipo: 'radar', titulo: 'Perfil de Tiro', labels: ['Goles', 'Olfato (npxG)', 'Letalidad', 'Calidad Tiro'], keys: ['Gls', 'npxG', 'np:G-xG', 'npxG/Sh'], color: '#FFC482' },
+                { tipo: 'radar', titulo: 'Presencia Física', labels: ['Área Rival', 'Duelos Aéreos', 'Participación', 'Regates'], keys: ['TouchesAttPen', 'AerialWon', 'TouchesLive', 'DribSucc'], color: '#360568' }
+            ],
+            'FW_SS': [ 
+                { tipo: 'scatter', titulo: 'Doble Amenaza', x: 'npxG', y: 'xA', labelX: 'Goles Esperados (npxG)', labelY: 'Asist. Esperadas (xA)', textos: { TR: ['Atacante Total', 'Golea y Asiste'], TL: ['Asistidor', 'Poco remate'], BR: ['Finalizador', 'Poca asistencia'], BL: ['Bajo impacto', 'Lejos del gol'] } },
+                { tipo: 'scatter', titulo: 'Asociación en Área', x: 'PPA', y: 'TouchesAttPen', labelX: 'Pases al Área / 90', labelY: 'Toques en Área Rival', textos: { TR: ['Infiltrador', 'Pisa área y filtra'], TL: ['Referencia', 'Espera en área'], BR: ['Lanzador', 'Mete el balón al área'], BL: ['Lejos del área', 'Juega atrás'] } },
+                { tipo: 'radar', titulo: 'Producción', labels: ['Goles', 'Olfato (npxG)', 'Creación (SCA)', 'Peligro (xAG)'], keys: ['Gls', 'npxG', 'SCA', 'xAG'], color: '#FFC482' },
+                { tipo: 'radar', titulo: 'Asociación', labels: ['Pases Clave', 'Pases Área', 'Área Rival', 'Regates'], keys: ['KP', 'PPA', 'TouchesAttPen', 'DribSucc'], color: '#360568' }
+            ]
+        };
+
+        function mostrarError(canvasId, mensaje) {
+            console.error(`❌ Error en ${canvasId}:`, mensaje);
+            document.getElementById(`loader_${canvasId}`).classList.add('hidden');
+            const errDiv = document.getElementById(`error_${canvasId}`);
+            errDiv.classList.remove('hidden');
+            errDiv.querySelector('.error-text').innerText = mensaje;
+        }
+
+       function cargarScatters(rolSolicitado = null) {
+    // Si se pasa un rol desde el botón usa ese, si no, usa el rol principal
+    const rolBase = (rolSolicitado || '{{ jugador.valoracion.rol_principal }}').trim();
+    const grid = document.getElementById('analiticasGrid');
+    grid.innerHTML = ''; 
+
+    let vistas = configAnaliticas[rolBase];
+    if (!vistas) {
+        const prefijo = rolBase.split('_')[0];
+        vistas = configAnaliticas[prefijo] || configAnaliticas['MC_ORG'];
+    }
+
+    vistas.forEach((vista, index) => {
+        const chartId = `analiticaChart_${index}`;
+        grid.innerHTML += `
+            <div class="relative w-full h-[450px] bg-white/10 rounded-xl border border-white/30 p-4 shadow-inner flex flex-col">
+                <h4 class="text-[11px] font-black text-[#496A81] uppercase tracking-widest text-center mb-3 shrink-0">${vista.titulo}</h4>
+                <div id="loader_${chartId}" class="absolute inset-0 flex items-center justify-center bg-white/40 backdrop-blur-sm z-20 rounded-xl">
+                    <i class="ph-bold ph-spinner animate-spin text-3xl text-[#360568]"></i>
+                </div>
+                <div id="error_${chartId}" class="absolute inset-0 flex items-center justify-center bg-red-50 z-30 rounded-xl hidden flex-col">
+                    <i class="ph-bold ph-warning text-3xl text-red-500 mb-2"></i>
+                    <span class="text-xs font-bold text-red-700 text-center px-4 error-text">Error</span>
+                </div>
+                <div class="relative w-full h-[350px]">
+                    <canvas id="${chartId}"></canvas>
+                </div>
+            </div>
+        `;
+    });
+
+    setTimeout(() => {
+        vistas.forEach((vista, index) => {
+            const chartId = `analiticaChart_${index}`;
+            if (vista.tipo === 'scatter') construirScatterDinamico(vista, chartId, rolBase);
+            else if (vista.tipo === 'radar') construirMiniRadar(vista, chartId);
+        });
+    }, 300);
+}
+
+        function construirScatterDinamico(vista, canvasId, rolDinamico = null) {
+    const temporadaActual = "{{ jugador.temporada }}";
+    const rolActual = rolDinamico || "{{ jugador.valoracion.rol_principal }}";
+            const jugadorIdBase = {{ jugador.id }};
+            const loader = document.getElementById(`loader_${canvasId}`);
+            
+            // Petición con el rol exacto codificado correctamente
+            fetch(`/api/scatter_data?x=${encodeURIComponent(vista.x)}&y=${encodeURIComponent(vista.y)}&temporada=${encodeURIComponent(temporadaActual)}&rol=${encodeURIComponent(rolActual)}`)
+                .then(res => {
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    return res.json();
+                })
+                .then(data => {
+                    loader.classList.add('hidden');
+                    if(data.length === 0) return mostrarError(canvasId, "La API devolvió 0 jugadores.");
+
+                    const sumX = data.reduce((acc, curr) => acc + curr.x, 0);
+                    const sumY = data.reduce((acc, curr) => acc + curr.y, 0);
+                    const mediaX = sumX / data.length;
+                    const mediaY = sumY / data.length;
+
+                    const maxX = Math.max(...data.map(d => d.x));
+                    const maxY = Math.max(...data.map(d => d.y));
+                    const minX = Math.min(...data.map(d => d.x));
+                    const minY = Math.min(...data.map(d => d.y));
+
+                    const chartData = data.map(d => {
+                        const esJugadorBase = (d.id == jugadorIdBase); 
+                        return {
+                            x: d.x, y: d.y, jugador: d.nombre, club: d.club, isTarget: esJugadorBase,
+                            backgroundColor: esJugadorBase ? '#360568' : 'rgba(102, 153, 155, 0.4)', 
+                            borderColor: esJugadorBase ? '#FFC482' : 'transparent', borderWidth: esJugadorBase ? 2 : 0, r: esJugadorBase ? 8 : 3 
+                        };
+                    });
+
+                    chartData.sort((a, b) => (a.isTarget === b.isTarget) ? 0 : a.isTarget ? 1 : -1);
+
+                    const ctx = document.getElementById(canvasId).getContext('2d');
+                    if (analiticasInstances[canvasId]) analiticasInstances[canvasId].destroy();
+
+                    try {
+                        analiticasInstances[canvasId] = new Chart(ctx, {
+                            type: 'bubble', 
+                            data: { datasets: [{ data: chartData }] },
+                            options: {
+                                responsive: true, maintainAspectRatio: false, layout: { padding: 20 }, 
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: {
+                                        backgroundColor: 'rgba(54, 5, 104, 0.95)', titleFont: { size: 12, family: "'Outfit', sans-serif" },
+                                        callbacks: { label: (ctx) => { const d = ctx.raw; return [`${d.jugador} (${d.club})`, `${vista.x}: ${d.x.toFixed(2)} | ${vista.y}: ${d.y.toFixed(2)}`]; } }
+                                    },
+                                    annotation: {
+                                        annotations: {
+                                            lineX: { type: 'line', scaleID: 'x', value: mediaX, borderColor: 'rgba(15, 23, 42, 0.2)', borderWidth: 1.5, borderDash: [4, 4] },
+                                            lineY: { type: 'line', scaleID: 'y', value: mediaY, borderColor: 'rgba(15, 23, 42, 0.2)', borderWidth: 1.5, borderDash: [4, 4] },
+                                            labelTR: { type: 'label', xValue: maxX, yValue: maxY, content: vista.textos.TR, color: '#66999B', font: { size: 9, weight: 'bold' }, position: {x: 'start', y: 'start'} },
+                                            labelTL: { type: 'label', xValue: minX, yValue: maxY, content: vista.textos.TL, color: '#B3AF8F', font: { size: 9, weight: 'bold' }, position: {x: 'end', y: 'start'} },
+                                            labelBR: { type: 'label', xValue: maxX, yValue: minY, content: vista.textos.BR, color: '#FFC482', font: { size: 9, weight: 'bold' }, position: {x: 'start', y: 'end'} },
+                                            labelBL: { type: 'label', xValue: minX, yValue: minY, content: vista.textos.BL, color: 'rgba(15, 23, 42, 0.4)', font: { size: 9, weight: 'bold' }, position: {x: 'end', y: 'end'} }
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    x: { title: { display: true, text: vista.labelX, color: '#496A81', font: { size: 9, weight: '900' } }, grid: { display: false } },
+                                    y: { title: { display: true, text: vista.labelY, color: '#496A81', font: { size: 9, weight: '900' } }, grid: { display: false } }
+                                }
+                            }
+                        });
+                    } catch (e) {
+                        mostrarError(canvasId, "Fallo en Chart.js (Scatter): " + e.message);
+                    }
+                })
+                .catch(err => mostrarError(canvasId, "Error Fetch API: " + err.message));
+        }
+
+        function construirMiniRadar(vista, canvasId) {
+            const loader = document.getElementById(`loader_${canvasId}`);
+            loader.classList.add('hidden'); 
+
+            const dataPuntos = vista.keys.map(key => {
                 let valor = playerStats[key] || 0;
                 let max = statMax[key] || Math.max(valor, 1);
                 return Math.min(Math.abs(valor) / max * 100, 100);
             });
 
-            if (radarChart) radarChart.destroy();
+            const dataMedia = vista.keys.map(() => 50);
 
-            radarChart = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: radarConfig.labels,
-                    datasets: [{
-                        label: playerName,
-                        data: dataPuntos,
-                        backgroundColor: radarConfig.bgColor,
-                        borderColor: radarConfig.color,
-                        borderWidth: 2,
-                        pointBackgroundColor: '#fff',
-                        pointBorderColor: radarConfig.color,
-                        pointHoverRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: { color: 'rgba(15, 23, 42, 0.1)' },
-                            grid: { color: 'rgba(15, 23, 42, 0.1)', circular: true },
-                            pointLabels: { font: { size: 10, weight: '600' }, color: 'rgba(15, 23, 42, 0.7)' },
-                            ticks: { display: false, min: 0, max: 100, stepSize: 20 }
-                        }
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        }
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            if (analiticasInstances[canvasId]) analiticasInstances[canvasId].destroy();
 
-        function getEscalaTermica(p) {
-            if (p >= 95) return 'bg-emerald-100 text-emerald-700 border-emerald-300 shadow-sm';
-            if (p >= 80) return 'bg-green-100 text-green-700 border-green-300';
-            if (p >= 65) return 'bg-lime-100 text-lime-700 border-lime-300';
-            if (p >= 50) return 'bg-yellow-100 text-yellow-700 border-yellow-300';
-            if (p >= 35) return 'bg-amber-100 text-amber-700 border-amber-300';
-            if (p >= 20) return 'bg-orange-100 text-orange-700 border-orange-300';
-            return 'bg-red-100 text-red-700 border-red-300';
-        }
-
-        function renderizarBarras(groups) {
-            const container = document.getElementById('stats-container');
-            container.innerHTML = ''; 
-
-            const twColors = {
-                'cyan-500': { bg: 'bg-cyan-500', text: 'text-cyan-700' },
-                'blue-600': { bg: 'bg-blue-500', text: 'text-blue-700' },
-                'emerald-500': { bg: 'bg-emerald-500', text: 'text-emerald-700' },
-                'indigo-500': { bg: 'bg-indigo-500', text: 'text-indigo-700' },
-                'amber-500': { bg: 'bg-amber-500', text: 'text-amber-700' }
+            const hexToRgbA = (hex, alpha) => {
+                let r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+                return `rgba(${r}, ${g}, ${b}, ${alpha})`;
             };
 
-            groups.forEach(grupo => {
-                const colorMap = twColors[grupo.color] || { bg: 'bg-slate-400', text: 'text-slate-700' };
-                
-                let groupHTML = `
-                    <div>
-                        <h4 class="text-xs font-bold ${colorMap.text} uppercase tracking-wider mb-4 border-b border-slate-200 pb-2">${grupo.title}</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                `;
-
-                grupo.keys.forEach(key => {
-                    let valorCrudo = playerStats[key] || 0;
-                    let maxTeorico = statMax[key] || Math.max(Math.abs(valorCrudo), 1);
-                    let porcentaje = Math.min((Math.abs(valorCrudo) / maxTeorico) * 100, 100);
-                    let displayName = statNames[key] || key;
-                    
-                    let barColor = colorMap.bg;
-                    let shadowColor = '';
-                    let extraStyles = '';
-
-                    if (valorCrudo < 0) {
-                        barColor = 'bg-red-500';
-                        shadowColor = '';
-                        extraStyles = 'background-color: #ef4444;';
-                    }
-
-                    let percentilVisual = Math.round(porcentaje);
-                    let badgeStyle = getEscalaTermica(percentilVisual);
-
-                    groupHTML += `
-                        <div class="group">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-slate-600 text-xs truncate pr-2 font-medium">${displayName}</span>
-                                
-                                <div class="flex items-center gap-3 shrink-0">
-                                    <span class="text-[10px] font-black px-1.5 py-0.5 rounded border ${badgeStyle} font-mono tracking-tighter transition-colors">
-                                        P${percentilVisual}
-                                    </span>
-                                    
-                                    <span class="font-mono font-bold text-lg ${valorCrudo < 0 ? 'text-red-600' : 'text-slate-800'}">
-                                        ${Number(valorCrudo).toFixed(2).replace(/\.00$/, '')}${key.includes('%') ? '%' : ''}
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200/50">
-                                <div class="h-full ${barColor} ${shadowColor} transition-all duration-1000" style="width: ${porcentaje}%; ${extraStyles}"></div>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                groupHTML += `</div></div>`;
-                container.innerHTML += groupHTML;
-            });
+            try {
+                analiticasInstances[canvasId] = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: vista.labels,
+                        datasets: [
+                            { label: playerName, data: dataPuntos, backgroundColor: hexToRgbA(vista.color, 0.4), borderColor: vista.color, borderWidth: 2, pointBackgroundColor: vista.color, pointRadius: 2, fill: true, order: 2 },
+                            { label: 'Media División', data: dataMedia, backgroundColor: 'transparent', borderColor: 'rgba(255, 255, 255, 0.8)', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, fill: false, order: 3 }
+                        ]
+                    },
+                    options: {
+    responsive: true, 
+    maintainAspectRatio: false,
+    scales: {
+        r: {
+            // 1. Líneas que van del centro hacia afuera
+            angleLines: { 
+                color: 'rgba(15, 23, 42, 0.25)', // Más oscuro
+                lineWidth: 1.5 
+            },
+            // 2. Los polígonos que marcan la magnitud
+            grid: { 
+                color: 'rgba(15, 23, 42, 0.25)', // Más oscuro
+                circular: false, // Mantiene la forma de telaraña/polígono
+                lineWidth: 1.5 
+            }, 
+            // 3. Los nombres de las estadísticas en las puntas
+            pointLabels: { 
+                font: { size: 10, weight: '900', family: "'Outfit', sans-serif" }, 
+                color: '#2B3A67', // Un azul oscuro fuerte
+                padding: 15
+            }, 
+            // 4. Anillos de magnitud EXACTOS (0 a 100 con pasos de 20)
+            ticks: { 
+                display: false, // Oculta los números 0, 20, 40... para limpiar el diseño
+                min: 0, 
+                max: 100,
+                stepSize: 20 // Crea exactamente 5 anillos concéntricos
+            }
         }
-        
-        cambiarRolVista('{{ jugador.valoracion.rol_principal }}', document.querySelector('.role-btn.active'));
-    });
+    },
+    plugins: { legend: { display: false } }
+}
+                });
+            } catch (e) {
+                mostrarError(canvasId, "Fallo en Chart.js (Radar): " + e.message);
+            }
+        }
+
+        // ==========================================
+        // 5. LLAMADAS INICIALES CON TRY/CATCH
+        // ==========================================
+        try {
+            const historiaDatos = {{ datos_historial | tojson | safe }};
+            const ctxHistory = document.getElementById('historyChart').getContext('2d');
+            new Chart(ctxHistory, {
+                type: 'line',
+                data: {
+                    labels: historiaDatos.labels,
+                    datasets: [
+                        { label: 'Valor SVD (M€)', data: historiaDatos.svd, borderColor: '#B3AF8F', backgroundColor: 'rgba(179, 175, 143, 0.15)', borderWidth: 2.5, tension: 0.4, fill: true },
+                        { label: 'Mercado (M€)', data: historiaDatos.mercado, borderColor: '#66999B', borderWidth: 2, borderDash: [5, 5], tension: 0.4 },
+                        { label: 'RTG Global', data: historiaDatos.rtg, borderColor: '#FFC482', borderWidth: 2.5, tension: 0.4, yAxisID: 'y1' }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false }, plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(15, 23, 42, 0.05)' }, ticks: { font: { weight: 'bold' } } },
+                        y: { type: 'linear', display: true, position: 'left', grid: { color: 'rgba(15, 23, 42, 0.05)' } },
+                        y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, min: 60, max: 100 }
+                    }
+                }
+            });
+        } catch(e) { console.error("Error en Gráfico de Historial:", e); }
+
+        try {
+            const btnActivo = document.querySelector('.role-btn.active');
+            if(btnActivo) cambiarRolVista('{{ jugador.valoracion.rol_principal }}', btnActivo);
+        } catch(e) { console.error("Error en Radar Principal:", e); }
+
+        try {
+            cargarScatters(); 
+        } catch(e) { console.error("Error en Scatters Dinámicos:", e); }
+
+    }); 
 </script>
-{% endblock %}
+{% endblock %}>

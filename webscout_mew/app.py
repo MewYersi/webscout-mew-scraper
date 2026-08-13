@@ -57,7 +57,47 @@ class EstadisticasFBref(db.Model):
     datos_crudos = db.Column(db.JSON)
 
 # ==========================================
-# 2. RUTAS BÁSICAS
+# 2. VARIABLES GLOBALES Y DICCIONARIOS
+# ==========================================
+
+def safe_float(val):
+    try: return float(val)
+    except (ValueError, TypeError): return 0.0
+
+PESOS_JSON = {
+   "DC": { "estadisticas": { "Defensa": {"Int": 0.20, "Clr": 0.20, "Recov": 0.20, "TklW": 0.15, "BallRec": 0.15, "TklDef3rd": 0.10}, "Aerial": {"AerialWon%": 0.60, "AerialWon": 0.40}, "Passing": {"Cmp%Total": 0.25, "PrgDist": 0.20, "Prog": 0.20, "LongCmp": 0.20, "Cmp%Long": 0.15}, "Possession": {"TouchesDef3rd": 0.45, "TouchesMid3rd": 0.25, "dispossesed": 0.30} } },
+   "LB_DEF": { "estadisticas": { "Defensa": {"TklW": 0.25, "Int": 0.25, "Recov": 0.20, "Clr": 0.15, "TklDef3rd": 0.15}, "Passing": {"Cmp%Total": 0.35, "PrgDist": 0.25, "Prog": 0.25, "IntoLast3rd": 0.15}, "Possession": {"TouchesDef3rd": 0.40, "TouchesMid3rd": 0.30, "dispossesed": 0.30}, "Aerial": {"AerialWon%": 0.70, "AerialWon": 0.30} } },
+   "LB_OFF": { "estadisticas": { "Passing": {"xA": 0.30, "CrsPA": 0.25, "KP": 0.20, "Prog": 0.15, "IntoLast3rd": 0.10}, "Possession": {"TouchesAtt3rd": 0.40, "PrgDist": 0.30, "DribSucc": 0.20, "dispossesed": 0.10}, "GAS": {"SCA": 0.60, "SCAPassLive": 0.40}, "Defensa": {"Recov": 0.30, "TklW": 0.30, "Int": 0.25, "BallRec": 0.15} } },
+   "MC_DEF": { "estadisticas": { "Defensa": {"Int": 0.25, "Recov": 0.25, "TklW": 0.15, "BallRec": 0.10, "BallRecProg": 0.10, "TklMid3rd": 0.10, "Tkl": 0.05}, "Passing": {"Cmp%Total": 0.35, "ShortCmp": 0.15, "Cmp%Short": 0.15, "MediumCmp": 0.10, "Prog": 0.10, "PrgDist": 0.10, "LongCmp": 0.05}, "Possession": {"dispossesed": 0.40, "TouchesMid3rd": 0.30, "TouchesDef3rd": 0.20, "BallRec": 0.10}, "Aerial": {"AerialWon%": 1.00}, "GAS": {"SCA": 0.50, "SCAPassLive": 0.50}, "Shooting": {"Gls": 1.0} } },
+   "MC_ORG": { "estadisticas": { "Passing": {"Prog": 0.20, "PrgDist": 0.20, "IntoLast3rd": 0.15, "Cmp%Total": 0.15, "KP": 0.10, "LongCmp": 0.10, "xA": 0.05, "xAG": 0.05}, "Possession": {"PrgDist": 0.30, "TouchesMid3rd": 0.20, "TouchesLive": 0.15, "dispossesed": 0.12, "DribSucc": 0.13, "TouchesDef3rd": 0.10}, "Defensa": {"Recov": 0.35, "Int": 0.30, "BallRec": 0.20, "TklMid3rd": 0.15}, "GAS": {"SCA": 0.60, "SCAPassLive": 0.40}, "Aerial": {"AerialWon%": 1.0}, "Shooting": {"Gls": 0.50, "npxG/Sh": 0.50} } },
+   "MC_EST": { "estadisticas": { "Passing": {"Prog": 0.15, "IntoLast3rd": 0.15, "PrgDist": 0.15, "xA": 0.15, "Cmp%Total": 0.10, "KP": 0.10, "PPA": 0.10, "Ast": 0.10}, "Defensa": {"Recov": 0.25, "TklMid3rd": 0.20, "TklW": 0.20, "Int": 0.15, "BallRec": 0.10, "BallRecProg": 0.10}, "Possession": {"TouchesMid3rd": 0.20, "TouchesAtt3rd": 0.15, "TouchesDef3rd": 0.15, "PrgDist": 0.15, "TouchesAttPen": 0.10, "DribSucc": 0.10, "dispossesed": 0.10, "BallRecProg": 0.05}, "GAS": {"SCA": 0.35, "SCAPassLive": 0.30, "GCA": 0.20, "SCADef": 0.10, "SCADrib": 0.05}, "Aerial": {"AerialWon%": 0.60, "AerialWon": 0.40}, "Shooting": {"Gls": 0.30, "npxG": 0.25, "G-xG": 0.20, "xG": 0.15, "SoT%": 0.10} } },
+   "AM": { "estadisticas": { "Passing": {"xAG": 0.20, "xA": 0.20, "KP": 0.20, "PPA": 0.15, "Prog": 0.15, "IntoLast3rd": 0.10}, "GAS": {"SCA": 0.30, "SCAPassLive": 0.30, "GCA": 0.20, "SCAPassDead": 0.10, "SCADrib": 0.10}, "Shooting": {"Gls": 0.30, "npxG": 0.30, "np:G-xG": 0.20, "npxG/Sh": 0.20}, "Possession": {"TouchesAtt3rd": 0.50, "TouchesAttPen": 0.50} } },
+   "FW_WG": { "estadisticas": { "Possession": {"DribSucc": 0.40, "PrgDist": 0.40, "TouchesAtt3rd": 0.20}, "GAS": {"SCADrib": 0.60, "GCA": 0.30, "SCAFld": 0.10}, "Passing": {"CrsPA": 0.50, "xAG": 0.30, "IntoLast3rd": 0.20}, "Shooting": {"Gls": 0.50, "npxG": 0.50} } },
+   "FW_ST": { "estadisticas": { "Shooting": {"Gls": 0.40, "npxG": 0.30, "np:G-xG": 0.20, "npxG/Sh": 0.10}, "GAS": {"GCA": 0.50, "SCA": 0.50}, "Aerial": {"AerialWon": 0.50, "AerialWon%": 0.50}, "Passing": {"xA": 0.50, "Ast": 0.50} } },
+   "FW_SS": { "estadisticas": { "Shooting": {"Gls": 0.40, "npxG": 0.40, "npxG/Sh": 0.20}, "GAS": {"SCA": 0.50, "SCAPassLive": 0.50}, "Passing": {"PPA": 0.40, "KP": 0.30, "xA": 0.30}, "Possession": {"TouchesAttPen": 0.70, "DribSucc": 0.30} } }
+}
+
+NOMBRES_STATS = {
+    "Int": "Intercepciones", "Clr": "Despejes", "Recov": "Recuperaciones", "TklW": "Tackles Ganados",
+    "BallRec": "Balones Rec.", "TklDef3rd": "Tackles Def 3º", "AerialWon%": "% Duelos Aéreos",
+    "AerialWon": "Aéreos Ganados", "Cmp%Total": "% Pases Comp.", "PrgDist": "Dist. Progresiva",
+    "Prog": "Pases Progresivos", "LongCmp": "Pases Largos Comp.", "Cmp%Long": "% Pases Largos",
+    "TouchesDef3rd": "Toques Def 3º", "TouchesMid3rd": "Toques Med 3º", "dispossesed": "Pérdidas (Inverso)",
+    "IntoLast3rd": "Pases Últ. 3º", "xA": "Asist. Esperadas (xA)", "CrsPA": "Centros al Área",
+    "KP": "Pases Clave", "TouchesAtt3rd": "Toques Ataque 3º", "DribSucc": "Regates Exitosos",
+    "SCA": "Creación (SCA)", "SCAPassLive": "SCA (Pase Vivo)", "BallRecProg": "Recup. Progresivas",
+    "TklMid3rd": "Tackles Med 3º", "Tkl": "Tackles Totales", "ShortCmp": "Pases Cortos",
+    "Cmp%Short": "% Pases Cortos", "MediumCmp": "Pases Medios", "Gls": "Goles/90",
+    "xAG": "Peligro Gen. (xAG)", "TouchesLive": "Toques Vivos", "PPA": "Pases al Área",
+    "Ast": "Asistencias", "TouchesAttPen": "Toques Área Rival", "GCA": "Acciones Gol (GCA)",
+    "SCADef": "SCA (Defensa)", "SCADrib": "SCA (Regate)", "npxG": "Goles Esp. (npxG)",
+    "G-xG": "Rend. Goles (G-xG)", "xG": "Goles Esp. (xG)", "SoT%": "% Tiros a Puerta",
+    "SCAPassDead": "SCA (Balón Parado)", "np:G-xG": "Rend. Sin Penal", "npxG/Sh": "Calidad Tiro (npxG/Sh)",
+    "SCAFld": "SCA (Falta Recibida)"
+}
+
+# ==========================================
+# 3. RUTAS BÁSICAS
 # ==========================================
 
 @app.route('/')
@@ -100,11 +140,9 @@ def dashboard():
 
 @app.route('/jugadores')
 def players():
-    # Obtener temporadas únicas de la base de datos
     temporadas_disponibles = db.session.query(Jugador.temporada).distinct().order_by(Jugador.temporada.desc()).all()
     temporadas_disponibles = [t[0] for t in temporadas_disponibles if t[0]]
     
-    # Traer todos los jugadores
     todos_los_jugadores = Jugador.query.join(Valoracion)\
         .options(joinedload(Jugador.valoracion))\
         .order_by(Valoracion.rtg_principal.desc()).all()
@@ -116,54 +154,111 @@ def player_profile(id):
     jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)
     stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}
     
-    # ¡Cambiado! Ahora buscamos la coincidencia exacta porque la BD ya tiene el año restado
     fichaje = Transferencia.query.filter(
         Transferencia.jugador_nombre == jugador.nombre,
         Transferencia.temporada == str(jugador.temporada) 
     ).first()
 
-    return render_template('profile.html', jugador=jugador, stats=stats, traspaso=fichaje)
+    historial = Jugador.query.join(Valoracion).filter(
+        Jugador.nombre == jugador.nombre
+    ).order_by(Jugador.temporada.asc()).all()
 
+    labels_historial = []
+    data_svd, data_mercado, data_rtg = [], [], []
+
+    for h in historial:
+        labels_historial.append(h.temporada)
+        data_svd.append(round(h.valoracion.valor_deportivo / 1000000, 1) if h.valoracion.valor_deportivo else 0)
+        data_mercado.append(round(h.valoracion.precio_mercado / 1000000, 1) if h.valoracion.precio_mercado else 0)
+        data_rtg.append(round(h.valoracion.rtg_principal, 1))
+
+    datos_historial = {'labels': labels_historial, 'svd': data_svd, 'mercado': data_mercado, 'rtg': data_rtg}
+
+    # =========================================================
+    # MOTOR DE CLONES: SIMILITUD DEL COSENO Y DIVERGENCIA
+    # =========================================================
+    rol = jugador.valoracion.rol_principal
+    role_dict = PESOS_JSON.get(rol, PESOS_JSON.get('MC_ORG'))
+    role_keys = []
+    for cat, stats_dict in role_dict.get('estadisticas', {}).items():
+        role_keys.extend(stats_dict.keys())
+
+    # 1. Filtramos a la población objetivo (Mismo rol, misma temporada)
+    rivales = Jugador.query.join(Valoracion).filter(
+        Jugador.temporada == jugador.temporada,
+        Valoracion.rol_principal == rol
+    ).options(joinedload(Jugador.estadisticas)).all()
+
+    # 2. Creamos matriz de estadísticas para calcular percentiles (Normalización)
+    stats_matrix = {k: [] for k in role_keys}
+    for r in rivales:
+        st = r.estadisticas.datos_crudos if r.estadisticas else {}
+        for k in role_keys:
+            stats_matrix[k].append(safe_float(st.get(k, 0)))
+
+    def get_percentile(val, val_list):
+        if not val_list: return 0
+        return sum(i < val for i in val_list) / len(val_list)
+
+    # 3. Vectorizamos al Jugador Base
+    jugador_st = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}
+    vector_base = np.array([get_percentile(safe_float(jugador_st.get(k, 0)), stats_matrix[k]) for k in role_keys])
+    
+    norm_base = np.linalg.norm(vector_base)
+    if norm_base == 0: norm_base = 1e-10
+
+    lista_similares = []
+    for r in rivales:
+        if r.id == id: continue
+
+        # 4. Vectorizamos al Rival
+        r_st = r.estadisticas.datos_crudos if r.estadisticas else {}
+        vector_rival = np.array([get_percentile(safe_float(r_st.get(k, 0)), stats_matrix[k]) for k in role_keys])
+        
+        norm_rival = np.linalg.norm(vector_rival)
+        if norm_rival == 0: norm_rival = 1e-10
+
+        # 5. Cálculo del Coseno
+        cos_sim = np.dot(vector_base, vector_rival) / (norm_base * norm_rival)
+        match_percentage = max(0, min(100, cos_sim * 100))
+
+        # 6. Cálculo de Divergencia (¿Dónde es mejor/peor el clon?)
+        diff_vector = vector_rival - vector_base
+        max_idx = np.argmax(diff_vector) # Mayor ventaja del clon
+        min_idx = np.argmin(diff_vector) # Mayor debilidad del clon
+
+        stat_pos = NOMBRES_STATS.get(role_keys[max_idx], role_keys[max_idx])
+        stat_neg = NOMBRES_STATS.get(role_keys[min_idx], role_keys[min_idx])
+        
+        val_pos = round(diff_vector[max_idx] * 100)
+        val_neg = round(diff_vector[min_idx] * 100)
+
+        lista_similares.append({
+            'id': r.id,
+            'nombre': r.nombre,
+            'club': r.club,
+            'match': round(match_percentage, 1),
+            'div_pos': {'stat': stat_pos, 'val': f"+{val_pos}%"},
+            'div_neg': {'stat': stat_neg, 'val': f"{val_neg}%"}
+        })
+
+    # Ordenamos por % de Match y nos quedamos con los 4 mejores
+    lista_similares.sort(key=lambda x: x['match'], reverse=True)
+    lista_similares = lista_similares[:4]
+
+    temporadas_jugador = db.session.query(Jugador.temporada, Jugador.id).filter(Jugador.nombre == jugador.nombre).order_by(Jugador.temporada.desc()).all()
+
+    return render_template('profile.html', 
+                           jugador=jugador, 
+                           stats=stats, 
+                           traspaso=fichaje,
+                           datos_historial=datos_historial,
+                           similares=lista_similares,
+                           temporadas_jugador=temporadas_jugador)
 
 # ==========================================
-# 3. RUTAS DEL COMPARADOR AVANZADO
+# 4. RUTAS DEL COMPARADOR AVANZADO Y APIS
 # ==========================================
-
-def safe_float(val):
-    try: return float(val)
-    except (ValueError, TypeError): return 0.0
-
-PESOS_JSON = {
-   "DC": { "estadisticas": { "Defensa": {"Int": 0.20, "Clr": 0.20, "Recov": 0.20, "TklW": 0.15, "BallRec": 0.15, "TklDef3rd": 0.10}, "Aerial": {"AerialWon%": 0.60, "AerialWon": 0.40}, "Passing": {"Cmp%Total": 0.25, "PrgDist": 0.20, "Prog": 0.20, "LongCmp": 0.20, "Cmp%Long": 0.15}, "Possession": {"TouchesDef3rd": 0.45, "TouchesMid3rd": 0.25, "dispossesed": 0.30} } },
-   "LB_DEF": { "estadisticas": { "Defensa": {"TklW": 0.25, "Int": 0.25, "Recov": 0.20, "Clr": 0.15, "TklDef3rd": 0.15}, "Passing": {"Cmp%Total": 0.35, "PrgDist": 0.25, "Prog": 0.25, "IntoLast3rd": 0.15}, "Possession": {"TouchesDef3rd": 0.40, "TouchesMid3rd": 0.30, "dispossesed": 0.30}, "Aerial": {"AerialWon%": 0.70, "AerialWon": 0.30} } },
-   "LB_OFF": { "estadisticas": { "Passing": {"xA": 0.30, "CrsPA": 0.25, "KP": 0.20, "Prog": 0.15, "IntoLast3rd": 0.10}, "Possession": {"TouchesAtt3rd": 0.40, "PrgDist": 0.30, "DribSucc": 0.20, "dispossesed": 0.10}, "GAS": {"SCA": 0.60, "SCAPassLive": 0.40}, "Defensa": {"Recov": 0.30, "TklW": 0.30, "Int": 0.25, "BallRec": 0.15} } },
-   "MC_DEF": { "estadisticas": { "Defensa": {"Int": 0.25, "Recov": 0.25, "TklW": 0.15, "BallRec": 0.10, "BallRecProg": 0.10, "TklMid3rd": 0.10, "Tkl": 0.05}, "Passing": {"Cmp%Total": 0.35, "ShortCmp": 0.15, "Cmp%Short": 0.15, "MediumCmp": 0.10, "Prog": 0.10, "PrgDist": 0.10, "LongCmp": 0.05}, "Possession": {"dispossesed": 0.40, "TouchesMid3rd": 0.30, "TouchesDef3rd": 0.20, "BallRec": 0.10}, "Aerial": {"AerialWon%": 1.00}, "GAS": {"SCA": 0.50, "SCAPassLive": 0.50}, "Shooting": {"Gls": 1.0} } },
-   "MC_ORG": { "estadisticas": { "Passing": {"Prog": 0.20, "PrgDist": 0.20, "IntoLast3rd": 0.15, "Cmp%Total": 0.15, "KP": 0.10, "LongCmp": 0.10, "xA": 0.05, "xAG": 0.05}, "Possession": {"PrgDist": 0.30, "TouchesMid3rd": 0.20, "TouchesLive": 0.15, "dispossesed": 0.12, "DribSucc": 0.13, "TouchesDef3rd": 0.10}, "Defensa": {"Recov": 0.35, "Int": 0.30, "BallRec": 0.20, "TklMid3rd": 0.15}, "GAS": {"SCA": 0.60, "SCAPassLive": 0.40}, "Aerial": {"AerialWon%": 1.0}, "Shooting": {"Gls": 0.50, "npxG/Sh": 0.50} } },
-   "MC_EST": { "estadisticas": { "Passing": {"Prog": 0.15, "IntoLast3rd": 0.15, "PrgDist": 0.15, "xA": 0.15, "Cmp%Total": 0.10, "KP": 0.10, "PPA": 0.10, "Ast": 0.10}, "Defensa": {"Recov": 0.25, "TklMid3rd": 0.20, "TklW": 0.20, "Int": 0.15, "BallRec": 0.10, "BallRecProg": 0.10}, "Possession": {"TouchesMid3rd": 0.20, "TouchesAtt3rd": 0.15, "TouchesDef3rd": 0.15, "PrgDist": 0.15, "TouchesAttPen": 0.10, "DribSucc": 0.10, "dispossesed": 0.10, "BallRecProg": 0.05}, "GAS": {"SCA": 0.35, "SCAPassLive": 0.30, "GCA": 0.20, "SCADef": 0.10, "SCADrib": 0.05}, "Aerial": {"AerialWon%": 0.60, "AerialWon": 0.40}, "Shooting": {"Gls": 0.30, "npxG": 0.25, "G-xG": 0.20, "xG": 0.15, "SoT%": 0.10} } },
-   "AM": { "estadisticas": { "Passing": {"xAG": 0.20, "xA": 0.20, "KP": 0.20, "PPA": 0.15, "Prog": 0.15, "IntoLast3rd": 0.10}, "GAS": {"SCA": 0.30, "SCAPassLive": 0.30, "GCA": 0.20, "SCAPassDead": 0.10, "SCADrib": 0.10}, "Shooting": {"Gls": 0.30, "npxG": 0.30, "np:G-xG": 0.20, "npxG/Sh": 0.20}, "Possession": {"TouchesAtt3rd": 0.50, "TouchesAttPen": 0.50} } },
-   "FW_WG": { "estadisticas": { "Possession": {"DribSucc": 0.40, "PrgDist": 0.40, "TouchesAtt3rd": 0.20}, "GAS": {"SCADrib": 0.60, "GCA": 0.30, "SCAFld": 0.10}, "Passing": {"CrsPA": 0.50, "xAG": 0.30, "IntoLast3rd": 0.20}, "Shooting": {"Gls": 0.50, "npxG": 0.50} } },
-   "FW_ST": { "estadisticas": { "Shooting": {"Gls": 0.40, "npxG": 0.30, "np:G-xG": 0.20, "npxG/Sh": 0.10}, "GAS": {"GCA": 0.50, "SCA": 0.50}, "Aerial": {"AerialWon": 0.50, "AerialWon%": 0.50}, "Passing": {"xA": 0.50, "Ast": 0.50} } },
-   "FW_SS": { "estadisticas": { "Shooting": {"Gls": 0.40, "npxG": 0.40, "npxG/Sh": 0.20}, "GAS": {"SCA": 0.50, "SCAPassLive": 0.50}, "Passing": {"PPA": 0.40, "KP": 0.30, "xA": 0.30}, "Possession": {"TouchesAttPen": 0.70, "DribSucc": 0.30} } }
-}
-
-NOMBRES_STATS = {
-    "Int": "Intercepciones", "Clr": "Despejes", "Recov": "Recuperaciones", "TklW": "Tackles Ganados",
-    "BallRec": "Balones Rec.", "TklDef3rd": "Tackles Def 3º", "AerialWon%": "% Duelos Aéreos",
-    "AerialWon": "Aéreos Ganados", "Cmp%Total": "% Pases Comp.", "PrgDist": "Dist. Progresiva",
-    "Prog": "Pases Progresivos", "LongCmp": "Pases Largos Comp.", "Cmp%Long": "% Pases Largos",
-    "TouchesDef3rd": "Toques Def 3º", "TouchesMid3rd": "Toques Med 3º", "dispossesed": "Pérdidas (Inverso)",
-    "IntoLast3rd": "Pases Últ. 3º", "xA": "Asist. Esperadas (xA)", "CrsPA": "Centros al Área",
-    "KP": "Pases Clave", "TouchesAtt3rd": "Toques Ataque 3º", "DribSucc": "Regates Exitosos",
-    "SCA": "Creación (SCA)", "SCAPassLive": "SCA (Pase Vivo)", "BallRecProg": "Recup. Progresivas",
-    "TklMid3rd": "Tackles Med 3º", "Tkl": "Tackles Totales", "ShortCmp": "Pases Cortos",
-    "Cmp%Short": "% Pases Cortos", "MediumCmp": "Pases Medios", "Gls": "Goles/90",
-    "xAG": "Peligro Gen. (xAG)", "TouchesLive": "Toques Vivos", "PPA": "Pases al Área",
-    "Ast": "Asistencias", "TouchesAttPen": "Toques Área Rival", "GCA": "Acciones Gol (GCA)",
-    "SCADef": "SCA (Defensa)", "SCADrib": "SCA (Regate)", "npxG": "Goles Esp. (npxG)",
-    "G-xG": "Rend. Goles (G-xG)", "xG": "Goles Esp. (xG)", "SoT%": "% Tiros a Puerta",
-    "SCAPassDead": "SCA (Balón Parado)", "np:G-xG": "Rend. Sin Penal", "npxG/Sh": "Calidad Tiro (npxG/Sh)",
-    "SCAFld": "SCA (Falta Recibida)"
-}
 
 @app.route('/comparar')
 def compare():
@@ -186,10 +281,19 @@ def api_scatter_data():
     )
 
     if rol_filter != 'ALL':
-        if rol_filter == 'DF': query = query.filter(Valoracion.rol_principal.in_(['DC', 'LB_DEF', 'LB_OFF']))
-        elif rol_filter == 'MC': query = query.filter(Valoracion.rol_principal.in_(['MC_DEF', 'MC_ORG', 'MC_EST']))
-        elif rol_filter == 'AM': query = query.filter(Valoracion.rol_principal == 'AM')
-        elif rol_filter == 'FW': query = query.filter(Valoracion.rol_principal.in_(['FW_WG', 'FW_ST', 'FW_SS']))
+        # Mapeo de agrupaciones generales
+        familias_roles = {
+            'DF': ['DC', 'LB_DEF', 'LB_OFF'],
+            'MC': ['MC_DEF', 'MC_ORG', 'MC_EST'],
+            'AM': ['AM'],
+            'FW': ['FW_WG', 'FW_ST', 'FW_SS']
+        }
+        
+        if rol_filter in familias_roles:
+            query = query.filter(Valoracion.rol_principal.in_(familias_roles[rol_filter]))
+        else:
+            # Filtrado por ROL EXACTO (ej. 'FW_WG', 'MC_ORG', 'DC', etc.)
+            query = query.filter(Valoracion.rol_principal == rol_filter)
 
     jugadores = query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).all()
 
@@ -217,7 +321,7 @@ def api_scatter_data():
 def api_buscar_jugador():
     query = request.args.get('q', '').lower()
     temporada = request.args.get('temporada', '')
-    rol_exacto = request.args.get('rol_exacto', '') # Captura la restricción de rol
+    rol_exacto = request.args.get('rol_exacto', '') 
     
     if len(query) < 2: return jsonify([])
     
@@ -226,7 +330,6 @@ def api_buscar_jugador():
         Jugador.temporada == temporada
     )
     
-    # Si ya hay un jugador seleccionado, filtramos el buscador
     if rol_exacto:
         q_filter = q_filter.filter(Valoracion.rol_principal == rol_exacto)
         
@@ -240,11 +343,11 @@ def api_rivales_similares(id):
     temp = jugador.temporada
     rol = jugador.valoracion.rol_principal if jugador.valoracion else 'MC'
     
-    rivales = Jugador.query.join(Valoracion).filter(
+    rivales = Jugador.query.join(Valoracion).filter(+
         Jugador.temporada == temp, 
         Valoracion.rol_principal == rol,
         Jugador.id != id
-    ).order_by(Valoracion.rtg_principal.desc()).all() # <-- Eliminado el límite
+    ).order_by(Valoracion.rtg_principal.desc()).all() 
     
     return jsonify([{
         'id': r.id,
@@ -269,8 +372,6 @@ def api_radar_contexto(id):
     jugador_st = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}
     prefijo = rol.split('_')[0] if '_' in rol else rol
 
-    # ESTRUCTURA MAESTRA: Definimos todas las configuraciones aquí. 
-    # Si el prefijo no existe, usamos 'MC' como estándar seguro.
     ALL_PLANTILLAS = {
         'FW': {
             'completo': {'keys': ['Gls', 'npxG', 'Ast', 'xA', 'SoT', 'KP'], 'labels': ['Goles', 'npxG', 'Asistencias', 'xA', 'Tiros Puerta', 'Pases Clave']},
@@ -294,7 +395,6 @@ def api_radar_contexto(id):
         }
     }
 
-    # Lógica de respaldo infalible
     config_rol = ALL_PLANTILLAS.get(prefijo, ALL_PLANTILLAS['MC'])
     template = config_rol.get(plantilla_solicitada, config_rol['completo'])
     
@@ -312,9 +412,8 @@ def api_radar_contexto(id):
             perc_mejor = (sum(i < val_mejor for i in lista_rivales) / len(lista_rivales) * 100) if lista_rivales else 0
             val_promedio = np.mean(lista_rivales) if lista_rivales else 0
                 
-            # ... dentro del bucle de calc_stats_block ...
             bloque.append({
-                'key': k, # ESTO ES LO QUE NECESITA EL JS PARA BUSCAR
+                'key': k, 
                 'label': label, 
                 'raw_jugador': val_jugador, 'perc_jugador': round(perc, 1),
                 'raw_promedio': round(val_promedio, 2), 
@@ -336,6 +435,100 @@ def api_radar_contexto(id):
         'nombre': jugador.nombre, 'club': jugador.club, 'rol': rol, 'prefijo_rol': prefijo, 
         'poblacion': len(rivales), 'stats': radar_stats, 'role_stats': tabla_roles_stats
     })
+
+@app.route('/test_charts')
+def test_charts():
+    # Buscamos a Vinicius Junior (2021)
+    jugador = Jugador.query.filter(
+        Jugador.nombre.contains('Vinicius'), 
+        Jugador.temporada == '2021'
+    ).options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).first()
+    
+    # Si por algún motivo no existe en tu BD, cogemos al primer atacante que encontremos
+    if not jugador:
+        jugador = Jugador.query.join(Valoracion).filter(
+            Valoracion.rol_principal == 'FW_WG'
+        ).options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).first()
+
+    stats = jugador.estadisticas.datos_crudos if jugador and jugador.estadisticas else {}
+    
+    return render_template('test_charts.html', jugador=jugador, stats=stats)
+
+
+@app.route('/api/jugador_stats/<int:id>')
+def api_jugador_stats(id):
+    jugador = Jugador.query.options(joinedload(Jugador.estadisticas)).get_or_404(id)
+    stats = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}
+    return jsonify(stats)
+
+@app.route('/api/cazar_clones/<int:id>')
+def api_cazar_clones(id):
+    sim_min = float(request.args.get('similitud', 85))
+    edad_max = int(request.args.get('edad', 23))
+    precio_max = float(request.args.get('precio', 15)) * 1000000 # Convertimos Millones a valor real
+
+    jugador = Jugador.query.options(joinedload(Jugador.valoracion), joinedload(Jugador.estadisticas)).get_or_404(id)
+    rol = jugador.valoracion.rol_principal
+    
+    role_dict = PESOS_JSON.get(rol, PESOS_JSON.get('MC_ORG'))
+    role_keys = []
+    for cat, stats_dict in role_dict.get('estadisticas', {}).items():
+        role_keys.extend(stats_dict.keys())
+
+    rivales = Jugador.query.join(Valoracion).filter(
+        Jugador.temporada == jugador.temporada,
+        Valoracion.rol_principal == rol
+    ).options(joinedload(Jugador.estadisticas)).all()
+
+    stats_matrix = {k: [] for k in role_keys}
+    for r in rivales:
+        st = r.estadisticas.datos_crudos if r.estadisticas else {}
+        for k in role_keys:
+            stats_matrix[k].append(safe_float(st.get(k, 0)))
+
+    def get_percentile(val, val_list):
+        if not val_list: return 0
+        return sum(i < val for i in val_list) / len(val_list)
+
+    jugador_st = jugador.estadisticas.datos_crudos if jugador.estadisticas else {}
+    vector_base = np.array([get_percentile(safe_float(jugador_st.get(k, 0)), stats_matrix[k]) for k in role_keys])
+    norm_base = np.linalg.norm(vector_base)
+    if norm_base == 0: norm_base = 1e-10
+
+    resultados = []
+    for r in rivales:
+        if r.id == id: continue
+
+        # Filtros básicos: Edad y Precio
+        r_edad = r.edad if r.edad else 99
+        r_precio = r.valoracion.precio_mercado if r.valoracion and r.valoracion.precio_mercado else 0
+        
+        if r_edad > edad_max or r_precio > precio_max:
+            continue
+
+        r_st = r.estadisticas.datos_crudos if r.estadisticas else {}
+        vector_rival = np.array([get_percentile(safe_float(r_st.get(k, 0)), stats_matrix[k]) for k in role_keys])
+        norm_rival = np.linalg.norm(vector_rival)
+        if norm_rival == 0: norm_rival = 1e-10
+
+        # Cálculo del Coseno
+        cos_sim = np.dot(vector_base, vector_rival) / (norm_base * norm_rival)
+        match_percentage = max(0, min(100, cos_sim * 100))
+
+        if match_percentage >= sim_min:
+            resultados.append({
+                'id': r.id,
+                'nombre': r.nombre,
+                'club': r.club,
+                'edad': r_edad,
+                'precio_m': round(r_precio / 1000000, 1),
+                'match': round(match_percentage, 1)
+            })
+
+    # Ordenamos de mayor a menor similitud
+    resultados.sort(key=lambda x: x['match'], reverse=True)
+    return jsonify(resultados)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

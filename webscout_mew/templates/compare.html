@@ -6,143 +6,151 @@
 <main class="flex-1 h-full flex flex-col relative overflow-hidden">
     <div class="flex-1 overflow-y-auto no-scrollbar p-6 flex flex-col gap-6 z-10">
         
+        <!-- HEADER -->
         <header class="flex flex-col md:flex-row justify-between items-center gap-4 shrink-0">
             <div>
-                <h1 class="text-3xl font-bold tracking-tight">Scouting: Comparativa Avanzada</h1>
-                <p class="text-white/50 text-sm mt-1">Evalúa jugadores vs Población Continental</p>
+                <h1 class="text-3xl font-black tracking-tight text-[#360568]">Scouting: Comparativa Avanzada</h1>
+                <p class="text-[#496A81] text-sm mt-1 font-bold">Evalúa jugadores vs Población Continental</p>
             </div>
             <div class="glass-panel h-12 px-4 !rounded-full flex items-center gap-2 relative z-20">
-                <i class="ph-bold ph-calendar text-white/50"></i>
-                <select id="seasonSelect" class="bg-transparent appearance-none outline-none text-white text-sm cursor-pointer pr-4 font-bold">
+                <i class="ph-bold ph-calendar text-[#496A81]"></i>
+                <select id="seasonSelect" class="bg-transparent appearance-none outline-none text-[#360568] text-sm cursor-pointer pr-4 font-black">
                     {% for t in temporadas %}
-                        <option value="{{ t }}" class="text-black">{{ t }}</option>
+                        <option value="{{ t }}">{{ t }}</option>
                     {% endfor %}
                 </select>
             </div>
         </header>
 
+        <!-- SLOTS DE JUGADORES -->
         <div id="player-slots-container" class="grid grid-cols-2 lg:grid-cols-4 gap-4 shrink-0 animate-fade-in">
-            </div>
+        </div>
 
-        <div class="flex gap-4 border-b border-white/10 shrink-0 mb-2">
-            <button onclick="switchTab('radar')" id="btnTabRadar" class="pb-3 text-sm font-bold text-brand-pink border-b-2 border-brand-pink transition-all">
+        <!-- TABS -->
+        <div class="flex gap-4 border-b border-white/60 shrink-0 mb-2">
+            <button onclick="switchTab('radar')" id="btnTabRadar" class="pb-3 text-sm font-black text-[#360568] border-b-2 border-[#360568] transition-all">
                 <i class="ph-bold ph-radar mr-1"></i> Radar de Contexto
             </button>
-            <button onclick="switchTab('scatter')" id="btnTabScatter" class="pb-3 text-sm font-bold text-white/50 hover:text-white transition-all">
+            <button onclick="switchTab('scatter')" id="btnTabScatter" class="pb-3 text-sm font-bold text-slate-400 hover:text-[#496A81] transition-all">
                 <i class="ph-bold ph-chart-scatter mr-1"></i> Cazador (Scatter)
             </button>
         </div>
 
+        <!-- TAB 1: RADAR (SISTEMA BENTO GRID) -->
         <div id="tabRadar" class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0 animate-fade-in">
-            <div class="lg:col-span-5 flex flex-col gap-6">
-                <div class="glass-panel rounded-[2rem] p-6 flex flex-col flex-1 min-h-[500px] relative border-t border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.3)]">
-                    <div class="flex flex-col gap-4 mb-2 z-10">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-sm font-bold text-white/80 uppercase tracking-wider flex items-center gap-2">
-                                <i class="ph-bold ph-radar text-brand-pink"></i> Huella de Rendimiento
-                            </h3>
-                            <div id="contextInfo" class="text-[9px] text-brand-pink bg-brand-pink/10 px-2 py-1 rounded font-bold uppercase tracking-wider border border-brand-pink/20 hidden"></div>
-                        </div>
-                        
-                        <div class="relative w-full bg-black/20 rounded-xl border border-white/5 p-1 transition-all hover:bg-black/30">
-                            <select id="templateSelect" disabled class="w-full bg-transparent px-3 py-2 text-white/90 text-xs font-bold outline-none cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed appearance-none text-center tracking-wide">
-                                <option value="completo" class="text-black">Análisis Completo</option>
-                                <option value="opcion1" class="text-black">Opción 1</option>
-                                <option value="opcion2" class="text-black">Opción 2</option>
-                            </select>
-                            <i class="ph-bold ph-caret-down absolute right-4 top-3 text-white/50 text-[10px] pointer-events-none"></i>
-                        </div>
+            
+            <!-- Columna Izquierda: Radar Gráfico (Fondo Oscuro Indigo) -->
+            <div class="lg:col-span-4 flex flex-col gap-6">
+                <!-- Cambiamos el glass-panel por un panel oscuro y elegante -->
+                <div class="bg-gradient-to-b from-[#360568] to-[#1e0338] rounded-[2rem] p-6 flex flex-col flex-1 min-h-[500px] relative shadow-[0_15px_35px_rgba(54,5,104,0.3)] border border-white/10">
+                    
+                    <div class="flex justify-between items-center z-10 mb-4 border-b border-white/10 pb-4">
+                        <h3 class="text-sm font-black text-[#FFC482] uppercase tracking-widest flex items-center gap-2">
+                            <i class="ph-fill ph-radar"></i> Matriz Táctica
+                        </h3>
                     </div>
                     
-                    <div class="relative w-full aspect-square max-h-[440px] mx-auto mt-4 mb-4">
+                    <!-- Píldora del selector integrada al panel oscuro -->
+                    <div class="relative w-full bg-white/5 rounded-xl border border-white/10 p-1 transition-all hover:bg-white/10 shadow-sm z-10 mb-2">
+                        <select id="templateSelect" disabled class="w-full bg-transparent px-3 py-2 text-[#66999B] text-xs font-black outline-none cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed appearance-none text-center tracking-widest uppercase">
+                            <option value="completo">Análisis Completo</option>
+                            <option value="opcion1">Opción 1</option>
+                            <option value="opcion2">Opción 2</option>
+                        </select>
+                        <i class="ph-bold ph-caret-down absolute right-4 top-3 text-[#66999B] text-[10px] pointer-events-none"></i>
+                    </div>
+                    
+                    <div class="relative w-full flex-1 min-h-[300px] mx-auto mt-4 mb-8 flex items-center justify-center">
                         <canvas id="contextRadar"></canvas>
                     </div>
 
-                    <div class="flex justify-center gap-6 mt-auto pt-4 border-t border-white/10 hidden">
-                        <input type="checkbox" id="toggleAvg" checked onchange="toggleReferenceLines()">
-                        <input type="checkbox" id="toggleTop" checked onchange="toggleReferenceLines()">
-                    </div>
+                    <!-- Leyenda movida al pie -->
+                    <div id="contextInfo" class="mt-auto text-center text-[9px] text-[#496A81] font-black uppercase tracking-widest border-t border-white/10 pt-4 hidden"></div>
                 </div>
             </div>
 
-            <div class="lg:col-span-7 glass-panel rounded-[2rem] flex flex-col h-[600px] lg:h-auto overflow-hidden">
-                <div class="flex justify-between items-center px-6 pt-6 pb-4 shrink-0 border-b border-white/10 bg-white/5">
-                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="ph-fill ph-list-dashes text-brand-accent"></i> Perfil de Rol Completo
-                    </h3>
-                    </div>
+            <!-- Columna Derecha: Sistema Bento Grid -->
+            <div class="lg:col-span-8 flex flex-col h-full lg:h-auto overflow-hidden relative">
                 
-                <div class="grid grid-cols-12 gap-4 px-6 py-2 border-b border-white/5 text-[10px] font-bold text-white/40 uppercase tracking-wider bg-black/20">
-                    <div class="col-span-6 pl-4">Estadística (Rol)</div>
-                    <div class="col-span-6 text-right pr-6">Valor Real (Percentil)</div>
+                <div class="flex justify-between items-center mb-6 shrink-0 z-10 px-2">
+                    <h3 class="text-xl font-black text-[#360568] flex items-center gap-2">
+                        <i class="ph-fill ph-circles-four text-[#496A81]"></i> Desglose de Percentiles
+                    </h3>
                 </div>
 
-                <div id="stats-breakdown-container" class="flex-1 overflow-y-auto no-scrollbar pb-6 flex flex-col">
-                    <div class="flex flex-col items-center justify-center h-full opacity-50 mt-10">
-                        <i class="ph-bold ph-users text-4xl mb-2"></i>
-                        <p class="text-sm font-bold">Añade jugadores para iniciar</p>
+                <!-- Bento Container (Grid de 2 columnas) -->
+                <div id="stats-breakdown-container" class="flex-1 overflow-y-auto no-scrollbar pb-6 grid grid-cols-1 md:grid-cols-2 gap-4 auto-rows-max items-start">
+                    
+                    <div class="col-span-full flex flex-col items-center justify-center h-64 text-slate-400 mt-10 glass-panel rounded-3xl">
+                        <i class="ph-duotone ph-users-three text-6xl mb-4 text-[#496A81]/50"></i>
+                        <p class="text-sm font-black text-[#360568] uppercase tracking-widest">Añade jugadores para iniciar</p>
                     </div>
+
                 </div>
             </div>
         </div>
 
-        <div id="tabScatter" class="hidden flex-1 flex-col animate-fade-in gap-4 h-full min-h-[600px]">
-            <div class="glass-panel p-4 rounded-[1.5rem] flex flex-wrap gap-4 items-center shrink-0 border-t border-white/10 z-20">
+        <!-- TAB 2: SCATTER -->
+        <div id="tabScatter" class="hidden flex-col animate-fade-in space-y-8 h-auto pb-10">
+            <div class="glass-panel p-5 rounded-[1.5rem] flex flex-wrap gap-5 items-center shrink-0 border-t border-white/60 z-20 shadow-sm">
                 <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-bold text-brand-pink uppercase">Eje X:</span>
-                    <select id="scatterX" class="bg-black/40 border border-white/10 rounded-lg px-2 py-1 text-xs text-white/90 outline-none w-40 cursor-pointer">
+                    <span class="text-[10px] font-black text-[#496A81] uppercase">Eje X:</span>
+                    <select id="scatterX" class="bg-white/50 border border-white/60 rounded-lg px-2 py-1.5 text-xs text-slate-800 outline-none w-40 cursor-pointer shadow-sm">
                         {% for s in stats_list %}<option value="{{ s.key }}" {% if s.key == 'xG' %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-bold text-brand-accent uppercase">Eje Y:</span>
-                    <select id="scatterY" class="bg-black/40 border border-white/10 rounded-lg px-2 py-1 text-xs text-white/90 outline-none w-40 cursor-pointer">
+                    <span class="text-[10px] font-black text-[#360568] uppercase">Eje Y:</span>
+                    <select id="scatterY" class="bg-white/50 border border-white/60 rounded-lg px-2 py-1.5 text-xs text-slate-800 outline-none w-40 cursor-pointer shadow-sm">
                         {% for s in stats_list %}<option value="{{ s.key }}" {% if s.key == 'Gls' %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
                     </select>
                 </div>
-                <div class="w-px h-6 bg-white/10 mx-1 hidden md:block"></div>
+                <div class="w-px h-8 bg-slate-300 mx-2 hidden md:block"></div>
                 <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-bold text-white/50 uppercase">Posición:</span>
-                    <select id="scatterRol" class="bg-black/40 border border-white/10 rounded-lg px-2 py-1 text-xs text-white/90 outline-none cursor-pointer">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase">Posición:</span>
+                    <select id="scatterRol" class="bg-white/50 border border-white/60 rounded-lg px-2 py-1.5 text-xs text-slate-800 outline-none cursor-pointer shadow-sm">
                         <option value="ALL">Todas</option><option value="FW">Atacantes (FW)</option><option value="AM">Mediapuntas (AM)</option><option value="MC">Mediocentros (MC)</option><option value="DF">Defensas (DF/LB)</option>
                     </select>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-bold text-white/50 uppercase">Min. Minutos:</span>
-                    <input type="number" id="scatterMinutos" value="500" step="100" class="bg-black/40 border border-white/10 rounded-lg px-2 py-1 text-xs text-white/90 w-16 outline-none text-center">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase">Min. Minutos:</span>
+                    <input type="number" id="scatterMinutos" value="500" step="100" class="bg-white/50 border border-white/60 rounded-lg px-2 py-1.5 text-xs text-slate-800 w-20 outline-none text-center shadow-sm">
                 </div>
-                <button onclick="loadScatterData()" class="ml-auto bg-brand-accent/20 border border-brand-accent/50 hover:bg-brand-accent hover:text-white text-brand-accent text-xs font-bold px-4 py-1.5 rounded-lg transition-all shadow-[0_0_15px_rgba(110,68,255,0.2)] hover:shadow-[0_0_20px_rgba(110,68,255,0.6)]">
+                <button onclick="loadScatterData()" class="ml-auto bg-[#360568] hover:bg-[#360568]/90 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-md">
                     <i class="ph-bold ph-arrows-clockwise mr-1"></i> Analizar
                 </button>
             </div>
-            <div class="glass-panel flex-1 rounded-[2rem] p-6 relative flex flex-col min-h-[500px]">
-                <h3 class="text-sm font-bold text-white/80 uppercase tracking-wider flex items-center gap-2 mb-2 shrink-0">
-                    <i class="ph-bold ph-chart-scatter text-brand-accent"></i> Matriz de Dispersión
-                    <span id="scatterPoblacion" class="text-[10px] font-normal text-white/40 ml-2"></span>
+            
+            <!-- Título del Scatter -->
+            <div class="glass-panel flex-1 rounded-[2rem] p-8 relative flex flex-col min-h-[700px] shadow-sm mb-6">
+                <h3 class="text-sm font-black text-[#360568] uppercase tracking-wider flex items-center gap-2 mb-4 shrink-0">
+                    <i class="ph-bold ph-chart-scatter text-[#66999B]"></i> Matriz de Dispersión
+                    <span id="scatterPoblacion" class="text-[10px] font-bold text-[#496A81] ml-2 bg-white/60 px-2 py-0.5 rounded-full border border-white"></span>
                 </h3>
                 <div class="relative flex-1 w-full h-full">
                     <canvas id="scatterChart"></canvas>
-                    <div id="scatterTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-200 z-50 glass-dark border border-white/10 rounded-xl p-3 shadow-[0_10px_30px_rgba(0,0,0,0.8)] flex flex-col gap-2 w-52" style="transform: translate(-50%, -100%); margin-top: -15px;"></div>
+                    <div id="scatterTooltip" class="absolute pointer-events-none opacity-0 transition-opacity duration-200 z-50 glass-panel border border-white/60 rounded-xl p-3 shadow-lg flex flex-col gap-2 w-52" style="transform: translate(-50%, -100%); margin-top: -15px;"></div>
                 </div>
             </div>
         </div>
     </div>
 </main>
 
-<div id="searchModal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 hidden flex flex-col items-center pt-32 px-4 transition-opacity opacity-0">
+<!-- SEARCH MODAL -->
+<div id="searchModal" class="fixed inset-0 bg-slate-900/30 backdrop-blur-md z-50 hidden flex flex-col items-center pt-32 px-4 transition-opacity opacity-0">
     <div class="w-full max-w-2xl flex flex-col gap-4 relative">
-        <button onclick="closeSearchModal()" class="absolute -top-12 right-0 text-white/50 hover:text-white text-3xl transition-colors"><i class="ph-bold ph-x"></i></button>
+        <button onclick="closeSearchModal()" class="absolute -top-12 right-0 text-white/70 hover:text-white text-3xl transition-colors"><i class="ph-bold ph-x"></i></button>
         
-        <div class="glass-panel h-16 w-full !rounded-2xl flex items-center px-6 gap-4 shadow-2xl border-white/20 focus-within:border-brand-pink transition-colors">
-            <i class="ph-bold ph-magnifying-glass text-2xl text-brand-pink"></i>
-            <input type="text" id="modalSearchInput" placeholder="Busca un jugador para comparar..." autocomplete="off" class="bg-transparent border-none outline-none text-white placeholder-white/30 w-full h-full text-xl font-bold">
+        <div class="bg-white/80 backdrop-blur-xl h-16 w-full rounded-2xl flex items-center px-6 gap-4 shadow-xl border border-white focus-within:ring-2 focus-within:ring-[#66999B] transition-all">
+            <i class="ph-bold ph-magnifying-glass text-2xl text-[#496A81]"></i>
+            <input type="text" id="modalSearchInput" placeholder="Busca un jugador para comparar..." autocomplete="off" class="bg-transparent border-none outline-none text-[#360568] placeholder-slate-400 w-full h-full text-xl font-bold">
         </div>
 
-        <div id="modalSearchResults" class="glass-dark rounded-2xl overflow-hidden shadow-2xl border border-white/10 hidden flex-col"></div>
+        <div id="modalSearchResults" class="bg-white/80 backdrop-blur-xl rounded-2xl overflow-hidden shadow-xl border border-white hidden flex-col"></div>
         
         <div id="modalSuggestions" class="mt-4 hidden animate-fade-in flex flex-col items-center w-full">
-            <span class="text-xs font-bold text-white/50 uppercase tracking-wider mb-3">Todos los Rivales de este Rol</span>
-            <div id="modalSuggestionsList" class="flex flex-wrap justify-center gap-2 max-h-[300px] overflow-y-auto no-scrollbar w-full p-2 border-t border-b border-white/5"></div>
+            <span class="text-xs font-bold text-slate-800 bg-white/60 px-3 py-1 rounded-full uppercase tracking-wider mb-3 shadow-sm border border-white">Sugerencias por Similitud</span>
+            <div id="modalSuggestionsList" class="flex flex-wrap justify-center gap-2 max-h-[300px] overflow-y-auto no-scrollbar w-full p-2"></div>
         </div>
     </div>
 </div>
@@ -152,32 +160,28 @@
 let compareList = []; 
 const MAX_PLAYERS = 4;
 
+// 1. Paleta de colores SVD oficial
 const playerColors = [
-    { hex: '#d6409f', bg: 'rgba(214, 64, 159, 0.4)' },
-    { hex: '#22d3ee', bg: 'rgba(34, 211, 238, 0.4)' },
-    { hex: '#34d399', bg: 'rgba(52, 211, 153, 0.4)' },
-    { hex: '#fb923c', bg: 'rgba(251, 146, 60, 0.4)' }
+    { hex: '#FFC482', bg: 'rgba(255, 196, 130, 0.2)' },// Jugador 1: Peach Glow
+    { hex: '#66999B', bg: 'rgba(102, 153, 155, 0.2)' },// Jugador 2: Pacific Blue
+    { hex: '#B3AF8F', bg: 'rgba(179, 175, 143, 0.2)' }, // Jugador 3: Dry Sage
+    { hex: '#496A81', bg: 'rgba(73, 106, 129, 0.2)' }   // Jugador 4: Blue Slate
 ];
-
-function getPercentileColor(p) {
-    if (p >= 90) return 'text-green-400 bg-green-400/10 border-green-400/20';
-    if (p >= 75) return 'text-lime-400 bg-lime-400/10 border-lime-400/20';
-    if (p >= 50) return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
-    if (p >= 25) return 'text-orange-400 bg-orange-400/10 border-orange-400/20';
-    return 'text-red-400 bg-red-400/10 border-red-400/20';
-}
 
 function switchTab(tab) {
     document.getElementById('tabRadar').classList.toggle('hidden', tab !== 'radar');
     document.getElementById('tabScatter').classList.toggle('hidden', tab !== 'scatter');
-    document.getElementById('btnTabRadar').className = tab === 'radar' ? "pb-3 text-sm font-bold text-brand-pink border-b-2 border-brand-pink transition-all" : "pb-3 text-sm font-bold text-white/50 hover:text-white transition-all";
-    document.getElementById('btnTabScatter').className = tab === 'scatter' ? "pb-3 text-sm font-bold text-brand-accent border-b-2 border-brand-accent transition-all" : "pb-3 text-sm font-bold text-white/50 hover:text-white transition-all";
+    document.getElementById('btnTabRadar').className = tab === 'radar' ? "pb-3 text-sm font-black text-[#360568] border-b-2 border-[#360568] transition-all" : "pb-3 text-sm font-bold text-slate-400 hover:text-[#496A81] transition-all";
+    document.getElementById('btnTabScatter').className = tab === 'scatter' ? "pb-3 text-sm font-black text-[#360568] border-b-2 border-[#360568] transition-all" : "pb-3 text-sm font-bold text-slate-400 hover:text-[#496A81] transition-all";
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('contextRadar').getContext('2d');
-    Chart.defaults.color = 'rgba(255, 255, 255, 0.5)';
+    
+    // Configuración para que Chart.js se vea bien sobre fondo oscuro
+    Chart.defaults.color = 'rgba(255, 255, 255, 0.6)'; 
     Chart.defaults.font.family = "'Outfit', sans-serif";
+    
     let radarChart = null;
     let suggestedRivals = [];
 
@@ -211,15 +215,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 const p = compareList[i];
                 const colorHex = playerColors[i].hex;
                 container.innerHTML += `
-                    <div class="glass-panel p-3 rounded-2xl border border-white/10 flex items-center justify-between shadow-lg relative overflow-hidden group">
-                        <div class="absolute left-0 top-0 bottom-0 w-1" style="background-color: ${colorHex}"></div>
-                        <div class="flex items-center gap-3 pl-2 w-full">
-                            <img src="https://ui-avatars.com/api/?name=${p.data.nombre}&background=random&color=fff&bold=true" class="w-10 h-10 rounded-full border border-white/20 shrink-0">
+                    <div class="glass-panel p-3 rounded-2xl border border-white/60 flex items-center justify-between shadow-sm relative overflow-hidden group">
+                        <div class="absolute left-0 top-0 bottom-0 w-2" style="background-color: ${colorHex}"></div>
+                        <div class="flex items-center gap-3 pl-3 w-full">
+                            <img src="https://ui-avatars.com/api/?name=${p.data.nombre}&background=F4F1EA&color=360568&bold=true" class="w-10 h-10 rounded-full border border-white shadow-sm shrink-0">
                             <div class="min-w-0 flex-1">
-                                <p class="text-sm font-bold text-white truncate leading-tight">${p.data.nombre}</p>
-                                <p class="text-[10px] text-white/50 truncate leading-tight">${p.data.club}</p>
+                                <p class="text-sm font-bold text-[#360568] truncate leading-tight">${p.data.nombre}</p>
+                                <p class="text-[10px] font-bold text-[#496A81] truncate leading-tight uppercase tracking-wider">${p.data.club}</p>
                             </div>
-                            <button onclick="removePlayer(${p.id})" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:bg-red-500/20 hover:text-red-400 transition-colors shrink-0">
+                            <button onclick="removePlayer(${p.id})" class="w-8 h-8 rounded-full bg-white/50 flex items-center justify-center text-[#496A81] hover:bg-[#360568] hover:text-white transition-colors shrink-0 border border-white">
                                 <i class="ph-bold ph-trash"></i>
                             </button>
                         </div>
@@ -227,9 +231,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
             } else {
                 container.innerHTML += `
-                    <button onclick="openSearchModal()" class="glass-panel p-3 rounded-2xl border border-dashed border-white/20 hover:border-brand-pink/50 hover:bg-white/5 flex flex-col items-center justify-center gap-1 transition-all h-[66px] opacity-60 hover:opacity-100">
-                        <i class="ph-bold ph-plus text-lg text-white/50"></i>
-                        <span class="text-[10px] font-bold text-white/50 uppercase">Añadir Jugador</span>
+                    <button onclick="openSearchModal()" class="glass-panel p-3 rounded-2xl border border-dashed border-white hover:border-[#66999B] hover:bg-white/50 flex flex-col items-center justify-center gap-1 transition-all h-[66px] opacity-60 hover:opacity-100 shadow-sm">
+                        <i class="ph-bold ph-plus text-lg text-[#496A81]"></i>
+                        <span class="text-[10px] font-bold text-[#360568] uppercase">Añadir Jugador</span>
                     </button>
                 `;
             }
@@ -240,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
         compareList = [];
         suggestedRivals = [];
         if (radarChart) radarChart.destroy();
-        document.getElementById('stats-breakdown-container').innerHTML = '<div class="flex flex-col items-center justify-center h-full opacity-50 mt-10"><i class="ph-bold ph-users text-4xl mb-2"></i><p class="text-sm font-bold">Añade jugadores para iniciar</p></div>';
+        document.getElementById('stats-breakdown-container').innerHTML = '<div class="col-span-full flex flex-col items-center justify-center h-64 text-slate-400 mt-10 glass-panel rounded-3xl"><i class="ph-duotone ph-users-three text-6xl mb-4 text-[#496A81]/50"></i><p class="text-sm font-black text-[#360568] uppercase tracking-widest">Añade jugadores para iniciar</p></div>';
         document.getElementById('contextInfo').classList.add('hidden');
         templateSelect.disabled = true;
         renderSlots();
@@ -274,17 +278,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(data => {
                     modalSearchResults.innerHTML = '';
                     if (data.length === 0) {
-                        modalSearchResults.innerHTML = '<div class="p-6 text-sm text-white/50 text-center">No encontramos a ese jugador, o no pertenece a este rol exacto.</div>';
+                        modalSearchResults.innerHTML = '<div class="p-6 text-sm text-[#496A81] font-bold text-center">No encontramos a ese jugador, o no pertenece a este rol exacto.</div>';
                     } else {
                         data.forEach(j => {
                             const div = document.createElement('div');
-                            div.className = 'p-4 hover:bg-brand-pink/20 cursor-pointer border-b border-white/5 flex justify-between items-center transition-colors group';
+                            div.className = 'p-4 hover:bg-[#66999B]/10 cursor-pointer border-b border-white/60 flex justify-between items-center transition-colors group';
                             div.innerHTML = `
                                 <div>
-                                    <p class="text-base font-bold text-white group-hover:text-brand-pink transition-colors">${j.nombre}</p>
-                                    <p class="text-xs text-white/50">${j.club}</p>
+                                    <p class="text-base font-black text-[#360568] group-hover:text-[#66999B] transition-colors">${j.nombre}</p>
+                                    <p class="text-xs font-bold text-[#496A81] uppercase tracking-wider">${j.club}</p>
                                 </div>
-                                <span class="text-[10px] bg-white/10 px-2 py-1 rounded font-bold text-white/70">${j.rol}</span>
+                                <span class="text-[10px] bg-white/60 px-2 py-1 rounded font-black text-[#496A81] border border-white shadow-sm">${j.rol}</span>
                             `;
                             div.onclick = () => {
                                 const currentTemplate = compareList.length > 0 ? templateSelect.value : 'completo';
@@ -332,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (compareList.length === 0) {
             suggestedRivals = [];
             if (radarChart) radarChart.destroy();
-            document.getElementById('stats-breakdown-container').innerHTML = '<div class="flex flex-col items-center justify-center h-full opacity-50 mt-10"><i class="ph-bold ph-users text-4xl mb-2"></i><p class="text-sm font-bold">Añade jugadores para iniciar</p></div>';
+            document.getElementById('stats-breakdown-container').innerHTML = '<div class="col-span-full flex flex-col items-center justify-center h-64 text-slate-400 mt-10 glass-panel rounded-3xl"><i class="ph-duotone ph-users-three text-6xl mb-4 text-[#496A81]/50"></i><p class="text-sm font-black text-[#360568] uppercase tracking-widest">Añade jugadores para iniciar</p></div>';
             document.getElementById('contextInfo').classList.add('hidden');
             templateSelect.disabled = true;
         } else {
@@ -368,9 +372,9 @@ document.addEventListener('DOMContentLoaded', function() {
         availableSuggestions.forEach(s => {
             list.innerHTML += `
                 <button onclick="loadPlayerContext(${s.id}, document.getElementById('templateSelect').value)" 
-                        class="glass-panel px-4 py-2 flex flex-col items-center gap-1 rounded-xl border border-white/10 hover:border-brand-pink hover:bg-brand-pink/10 transition-all shrink-0">
-                    <span class="text-xs font-bold text-white">${s.nombre.split(' ').slice(-2).join(' ')}</span>
-                    <span class="text-[10px] text-[#facc15] font-mono font-bold"><i class="ph-fill ph-star"></i> ${s.rtg}</span>
+                        class="bg-white/80 backdrop-blur-md px-4 py-2 flex flex-col items-center gap-1 rounded-xl border border-white hover:border-[#66999B] hover:bg-white transition-all shrink-0 shadow-sm">
+                    <span class="text-xs font-black text-[#360568]">${s.nombre.split(' ').slice(-2).join(' ')}</span>
+                    <span class="text-[10px] text-[#FFC482] font-mono font-black drop-shadow-sm"><i class="ph-fill ph-star"></i> ${s.rtg}</span>
                 </button>
             `;
         });
@@ -380,11 +384,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateTemplateOptions(prefijo) {
         const opts = templateSelect.options;
         if (prefijo === 'FW') { 
-            opts[1].text = "Finalización Pura"; opts[2].text = "Creación / Desborde"; 
+            opts[1].text = "Finalización"; opts[2].text = "Creación / Desborde"; 
         } else if (prefijo === 'MC' || prefijo === 'AM') { 
-            opts[1].text = "Creación y Pase"; opts[2].text = "Muro Defensivo"; 
+            opts[1].text = "Pase"; opts[2].text = "Acciones Defensivas"; 
         } else { 
-            opts[1].text = "Salida de Balón"; opts[2].text = "Muro Defensivo"; 
+            opts[1].text = "Salida de Balón"; opts[2].text = " Acciones Defensivas"; 
         }
     }
 
@@ -395,7 +399,7 @@ document.addEventListener('DOMContentLoaded', function() {
         infoDiv.classList.remove('hidden');
 
         renderContextRadar(baseData);
-        renderContextTable(baseData);
+        renderContextTable(baseData); // Esta función es la que construirá el Bento Grid
     }
 
     function renderContextRadar(baseData) {
@@ -409,15 +413,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 data: dataJugador,
                 backgroundColor: 'transparent',
                 borderColor: playerColors[index].hex,
-                borderWidth: 2.5,
+                borderWidth: 3,
                 pointBackgroundColor: playerColors[index].hex,
+                pointBorderColor: '#1e0338', // Borde oscuro para resaltar en el fondo
                 pointHoverRadius: 6,
                 fill: false
             });
         });
-
-        // Solo mantenemos la línea del mejor RTG (oculta por defecto si lo deseas, pero el checkbox no está)
-        // Eliminada la línea del promedio para no saturar.
 
         if (radarChart) radarChart.destroy();
 
@@ -429,8 +431,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 scales: {
                     r: {
                         angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
-                        grid: { color: 'rgba(255, 255, 255, 0.15)' },
-                        pointLabels: { font: { size: 11, weight: '600' }, color: 'rgba(255, 255, 255, 0.8)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        pointLabels: { font: { size: 10, weight: '600', family: "'Outfit', sans-serif" }, color: 'rgba(255, 255, 255, 0.8)' },
                         ticks: { display: false, min: 0, max: 100 }
                     }
                 },
@@ -444,7 +446,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 
                                 if (dsIndex < compareList.length) {
                                     const pStat = compareList[dsIndex].data.stats[statIndex];
-                                    return `${compareList[dsIndex].data.nombre}: ${pStat.raw_jugador.toFixed(2)} (Percentil ${pStat.perc_jugador})`;
+                                    return `${compareList[dsIndex].data.nombre}: ${pStat.raw_jugador.toFixed(2)} (P${pStat.perc_jugador})`;
                                 }
                             }
                         }
@@ -454,7 +456,56 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // PLUGIN Y SCATTER... (Permanece igual)
+    // ==========================================
+    // SISTEMA BENTO GRID PARA STATS
+    // ==========================================
+    function renderContextTable(baseData) {
+        const container = document.getElementById('stats-breakdown-container');
+        container.innerHTML = '';
+        
+        if (!baseData.role_stats || baseData.role_stats.length === 0) return;
+
+        // Por cada estadística, creamos una tarjeta de Bento
+        baseData.role_stats.forEach((statObj) => {
+            const statKey = statObj.key;
+
+            let playersHtml = compareList.map((p, pIndex) => {
+                const pStat = p.data.role_stats.find(s => s.key === statKey) || { raw_jugador: 0, perc_jugador: 0 };
+                const colorHex = playerColors[pIndex].hex;
+                
+                return `
+                    <div class="flex items-center justify-between mb-3 w-full group">
+                        
+                        <div class="flex items-center gap-2 w-32 shrink-0">
+                            <span class="w-3 h-3 rounded-full shadow-sm" style="background-color: ${colorHex};"></span>
+                            <span class="text-[11px] font-bold text-[#360568] truncate" title="${p.data.nombre}">${p.data.nombre}</span>
+                        </div>
+                        
+                        <div class="flex-1 px-4 relative flex items-center justify-end group-hover:scale-[1.02] transition-transform origin-right">
+                            <div class="w-full h-1.5 bg-[#496A81]/10 rounded-full overflow-hidden absolute right-4 top-1/2 -translate-y-1/2 border border-white/50">
+                                <div class="h-full rounded-full transition-all duration-1000 ease-out" style="width: ${pStat.perc_jugador}%; background-color: ${colorHex};"></div>
+                            </div>
+                        </div>
+
+                        <div class="w-10 text-right shrink-0">
+                            <span class="text-xs font-black text-[#360568]">${pStat.raw_jugador.toFixed(2).replace(/\.00$/, '')}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML += `
+                <div class="glass-panel p-5 rounded-3xl flex flex-col shadow-sm border border-white/80 hover:shadow-md transition-shadow">
+                    <h4 class="text-[10px] font-black text-[#496A81] uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <i class="ph-bold ph-chart-line-up text-[#66999B]"></i> ${statObj.label}
+                    </h4>
+                    <div class="flex flex-col w-full">${playersHtml}</div>
+                </div>
+            `;
+        });
+    }
+
+    // --- LOGICA DE SCATTER CHART (SE MANTIENE IGUAL, SOLO COLORES) ---
     let scatterChart = null;
 
     const crosshairPlugin = {
@@ -475,7 +526,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.save();
             ctx.beginPath();
             ctx.lineWidth = 1;
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.strokeStyle = 'rgba(54, 5, 104, 0.2)'; // Punteado Indigo
             ctx.setLineDash([4, 4]);
 
             if (xPos >= left && xPos <= right) { ctx.moveTo(xPos, top); ctx.lineTo(xPos, bottom); }
@@ -484,7 +535,7 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.stroke();
             ctx.restore();
 
-            ctx.fillStyle = 'rgba(255,255,255,0.4)';
+            ctx.fillStyle = 'rgba(73, 106, 129, 0.8)'; // Texto Blue Slate
             ctx.font = '9px Outfit';
             ctx.fillText(`Promedio X: ${avgX.toFixed(2)}`, xPos + 5, bottom - 5);
             ctx.fillText(`Promedio Y: ${avgY.toFixed(2)}`, left + 5, top + 15);
@@ -505,22 +556,22 @@ document.addEventListener('DOMContentLoaded', function() {
             const yLabel = document.getElementById('scatterY').options[document.getElementById('scatterY').selectedIndex].text;
 
             tooltipEl.innerHTML = `
-                <div class="flex items-center gap-3 border-b border-white/10 pb-2 mb-2">
-                    <img src="https://ui-avatars.com/api/?name=${p.nombre}&background=060b28&color=fff&bold=true" class="w-8 h-8 rounded-full border border-white/20">
+                <div class="flex items-center gap-3 border-b border-white/60 pb-2 mb-2">
+                    <img src="https://ui-avatars.com/api/?name=${p.nombre}&background=F4F1EA&color=360568&bold=true" class="w-8 h-8 rounded-full border border-white shadow-sm">
                     <div class="flex flex-col min-w-0">
-                        <span class="text-xs font-bold text-white leading-tight truncate">${p.nombre}</span>
-                        <span class="text-[9px] text-white/50 leading-tight truncate">${p.club}</span>
+                        <span class="text-xs font-black text-[#360568] leading-tight truncate">${p.nombre}</span>
+                        <span class="text-[9px] font-bold text-[#496A81] uppercase leading-tight truncate">${p.club}</span>
                     </div>
                 </div>
                 <div class="flex justify-between items-center text-[10px] mb-1">
-                    <span class="text-[#facc15] font-bold bg-[#facc15]/10 px-1.5 py-0.5 rounded border border-[#facc15]/20"><i class="ph-fill ph-star"></i> ${p.rtg} RTG</span>
-                    <span class="bg-white/10 px-1.5 py-0.5 rounded text-white/70">${p.rol}</span>
+                    <span class="text-[#FFC482] font-black bg-white/60 px-1.5 py-0.5 rounded border border-white shadow-sm"><i class="ph-fill ph-star"></i> ${p.rtg} RTG</span>
+                    <span class="bg-white/60 px-1.5 py-0.5 rounded font-black text-[#496A81] border border-white shadow-sm">${p.rol}</span>
                 </div>
-                <div class="flex flex-col gap-1 mt-2 text-[10px] font-mono bg-black/30 p-2 rounded-lg border border-white/5">
-                    <div class="flex justify-between items-center"><span class="text-white/60 truncate mr-2">${xLabel}:</span> <span class="text-brand-pink font-bold">${p.x.toFixed(2)}</span></div>
-                    <div class="flex justify-between items-center"><span class="text-white/60 truncate mr-2">${yLabel}:</span> <span class="text-brand-accent font-bold">${p.y.toFixed(2)}</span></div>
+                <div class="flex flex-col gap-1 mt-2 text-[10px] font-mono bg-white/40 p-2 rounded-lg border border-white/60 shadow-sm">
+                    <div class="flex justify-between items-center"><span class="text-[#496A81] font-bold truncate mr-2">${xLabel}:</span> <span class="text-[#360568] font-black">${p.x.toFixed(2)}</span></div>
+                    <div class="flex justify-between items-center"><span class="text-[#496A81] font-bold truncate mr-2">${yLabel}:</span> <span class="text-[#360568] font-black">${p.y.toFixed(2)}</span></div>
                 </div>
-                <div class="text-[8px] text-center text-white/30 mt-2 uppercase tracking-widest">Clic para analizar</div>
+                <div class="text-[8px] text-center text-[#66999B] font-bold mt-2 uppercase tracking-widest">Clic para analizar</div>
             `;
         }
 
@@ -552,9 +603,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     data: {
                         datasets: [{
                             label: 'Jugadores', data: data,
-                            backgroundColor: 'rgba(110, 68, 255, 0.6)', borderColor: 'rgba(110, 68, 255, 1)',
-                            borderWidth: 1, pointRadius: 4, pointHoverRadius: 7,
-                            hoverBackgroundColor: '#d6409f', hoverBorderColor: '#fff'
+                            backgroundColor: 'rgba(102, 153, 155, 0.75)', borderColor: '#66999B', // Pacific Blue
+                            borderWidth: 1, pointRadius: 5, pointHoverRadius: 8,
+                            hoverBackgroundColor: '#360568', hoverBorderColor: '#fff' // Indigo Hover
                         }]
                     },
                     options: {
@@ -568,8 +619,16 @@ document.addEventListener('DOMContentLoaded', function() {
                             }
                         },
                         scales: {
-                            x: { title: { display: true, text: xLabel, color: 'rgba(255,255,255,0.5)', font: { size: 10, weight: 'bold' } }, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: 'rgba(255, 255, 255, 0.4)' } },
-                            y: { title: { display: true, text: yLabel, color: 'rgba(255,255,255,0.5)', font: { size: 10, weight: 'bold' } }, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: 'rgba(255, 255, 255, 0.4)' } }
+                            x: { 
+                                title: { display: true, text: xLabel, color: 'rgba(54, 5, 104, 0.8)', font: { size: 12, weight: 'bold' } }, 
+                                grid: { color: 'rgba(54, 5, 104, 0.08)' }, 
+                                ticks: { color: 'rgba(73, 106, 129, 0.8)', font: { size: 11, weight: 'bold' } } 
+                            },
+                            y: { 
+                                title: { display: true, text: yLabel, color: 'rgba(54, 5, 104, 0.8)', font: { size: 12, weight: 'bold' } }, 
+                                grid: { color: 'rgba(54, 5, 104, 0.08)' }, 
+                                ticks: { color: 'rgba(73, 106, 129, 0.8)', font: { size: 11, weight: 'bold' } } 
+                            }
                         },
                         plugins: { legend: { display: false }, tooltip: { enabled: false, external: externalTooltipHandler, mode: 'nearest', intersect: true } }
                     }
@@ -579,44 +638,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     setTimeout(() => { if(document.getElementById('tabScatter')) loadScatterData(); renderSlots(); }, 500);
 
-    // TABLA REDISEÑADA: MUESTRA VALOR BRUTO Y PERCENTIL SIMULTÁNEAMENTE
-    function renderContextTable(baseData) {
-        const container = document.getElementById('stats-breakdown-container');
-        container.innerHTML = '';
-        
-        if (!baseData.role_stats || baseData.role_stats.length === 0) return;
-
-        baseData.role_stats.forEach((statObj) => {
-            const statKey = statObj.key;
-
-            let playersHtml = compareList.map((p, pIndex) => {
-                // Buscamos la stat de forma segura por su llave (key)
-                const pStat = p.data.role_stats.find(s => s.key === statKey) || { raw_jugador: 0, perc_jugador: 0 };
-                const colorHex = playerColors[pIndex].hex;
-                const colorClass = getPercentileColor(pStat.perc_jugador);
-                
-                return `
-                    <div class="grid grid-cols-12 gap-2 items-center py-2 hover:bg-white/5 transition-colors pl-4 pr-6">
-                        <div class="col-span-6 flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full shadow-[0_0_8px_currentColor]" style="background-color: ${colorHex}; color: ${colorHex}"></span>
-                            <span class="text-xs font-bold text-white/90 truncate">${p.data.nombre}</span>
-                        </div>
-                        <div class="col-span-6 flex items-center justify-end gap-4">
-                            <span class="text-sm font-mono font-bold text-white">${pStat.raw_jugador.toFixed(2)}</span>
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded ${colorClass} text-black/90 w-12 text-center shadow-md">P${pStat.perc_jugador}</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            container.innerHTML += `
-                <div class="border-b border-white/5 py-3">
-                    <h4 class="text-xs font-bold text-white/60 uppercase tracking-wider mb-2 pl-4 border-l-2 border-brand-pink/50">${statObj.label}</h4>
-                    <div class="flex flex-col gap-1">${playersHtml}</div>
-                </div>
-            `;
-        });
-    }
 });
 </script>
 {% endblock %}
