@@ -30,7 +30,7 @@ body {
   /* (Ajustado para refractar los colores del fondo) */
   .glass-panel {
     
-    background: rgba(255, 255, 255, 0.70);  /* Dejamos pasar más color del fondo */
+    background: rgba(255, 255, 255, 0.30);  /* Dejamos pasar más color del fondo */
         backdrop-filter: blur(60px);            /* Desenfoque brutal para no perder legibilidad */
         -webkit-backdrop-filter: blur(28px);
         
