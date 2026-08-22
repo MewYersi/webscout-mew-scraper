@@ -2,7 +2,7 @@
 
 > **Nota del Autor:** Este es un proyecto de tesis de carácter exploratorio y analítico. Aunque la plataforma base es completamente funcional, el sistema sigue en desarrollo (Work in Progress). SVD está abierto a sugerencias, mejoras y contribuciones de la comunidad con interes por la ciencia de datos en el fútbol.
 
-Una plataforma avanzada construida para evaluar, comparar y descubrir talento futbolístico. SVD procesa datos de más de 1,500 jugadores de las grandes ligas utilizando un algoritmo propio basado en percentiles y estadística avanzada. Su objetivo principal es calcular el rendimiento real en el campo frente al valor de mercado, facilitando decisiones estratégicas y procesos de scouting.
+Una plataforma avanzada construida para evaluar, comparar y descubrir talento futbolístico. SVD procesa mas de 10,000 datos de más de 1,500 jugadores de las grandes ligas utilizando un algoritmo propio basado en percentiles y estadística avanzada. Su objetivo principal es calcular el rendimiento real en el campo frente al valor de mercado, facilitando decisiones estratégicas y procesos de scouting.
 
 ## 🌟 Funcionalidades Detalladas
 
